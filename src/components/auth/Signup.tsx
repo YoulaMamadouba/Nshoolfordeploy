@@ -273,7 +273,7 @@ export default function SignupForm({
                         type="submit"
                         className="w-full bg-gradient-to-r from-amber-500 to-amber-600 text-white hover:from-amber-600 hover:to-amber-700 shadow-md py-1 h-9 text-sm transition-all duration-300"
                       >
-                        S'inscrire
+                        S&apos;inscrire
                       </Button>
                     </motion.div>
                   </motion.div>

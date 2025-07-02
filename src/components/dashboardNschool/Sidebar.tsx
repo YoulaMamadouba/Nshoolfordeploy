@@ -14,7 +14,7 @@ import {
   ChevronRightIcon,
 } from '@heroicons/react/24/outline';
 
-type CurrentView = 'overview' | 'tenants' | 'plans' | 'payments';
+type CurrentView = 'overview' | 'tenants' | 'plans' | 'payments' | 'domains';
 
 interface SidebarProps {
   onNavigation: (view: CurrentView) => void;
@@ -26,7 +26,7 @@ const Sidebar = ({ onNavigation }: SidebarProps) => {
   const navItems = [
     { name: 'Dashboard', icon: HomeIcon, onClick: () => onNavigation('overview') },
     { name: 'Gestion Tenants', icon: BuildingOffice2Icon, onClick: () => onNavigation('tenants') },
-    { name: 'Gestion Domaines', icon: GlobeAltIcon, onClick: () => console.log('Domaines clicked') },
+    { name: 'Gestion Domaines', icon: GlobeAltIcon, onClick: () => onNavigation('domains') },
     { 
       name: 'Abonnements', 
       icon: CreditCardIcon, 

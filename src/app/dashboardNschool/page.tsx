@@ -6,8 +6,9 @@ import Overview from '@/components/dashboardNschool/overview';
 import ManageTenants from '@/components/dashboardNschool/ManageTenants';
 import PlansManagement from '@/components/dashboardNschool/Abonnements/PlansManagement';
 import PaymentsManagement from '@/components/dashboardNschool/Paiements/PaymentsManagement';
+import DomainManage from '@/components/dashboardNschool/DomainManage/DomainManage';
 
-type CurrentView = 'overview' | 'tenants' | 'plans' | 'payments';
+type CurrentView = 'overview' | 'tenants' | 'plans' | 'payments' | 'domains';
 
 export default function DashboardPage() {
   const [currentView, setCurrentView] = useState<CurrentView>('overview');
@@ -35,6 +36,7 @@ export default function DashboardPage() {
               {currentView === 'tenants' && <ManageTenants />}
               {currentView === 'plans' && <PlansManagement onBack={() => setCurrentView('overview')} />}
               {currentView === 'payments' && <PaymentsManagement onBack={() => setCurrentView('overview')} />}
+              {currentView === 'domains' && <DomainManage />}
             </div>
           </div>
         </main>
