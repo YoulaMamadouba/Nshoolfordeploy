@@ -77,23 +77,8 @@ export default function Footer() {
   return (
     <footer 
       ref={ref}
-      className="relative overflow-hidden bg-gradient-to-b from-[#2b4a6a] via-white to-white py-20 mt-16"
+      className="relative overflow-hidden bg-[#2b4a6a] py-20 mt-16"
     >
-      {/* Taches bleues floues */}
-      <div className="absolute inset-0 overflow-hidden opacity-5">
-        <motion.div
-          className="absolute left-1/4 top-0 h-[400px] w-[400px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-gradient-to-r from-[#2b4a6a] to-[#7ba1c9] blur-3xl"
-          variants={splatterVariants}
-          animate="animate"
-        />
-        <motion.div
-          className="absolute right-1/4 bottom-0 h-[400px] w-[400px] translate-x-1/2 translate-y-1/2 rounded-full bg-gradient-to-r from-[#2b4a6a] to-[#7ba1c9] blur-3xl"
-          variants={splatterVariants}
-          animate="animate"
-          transition={{ duration: 5, delay: 1 }}
-        />
-      </div>
-
       <div className="relative mx-auto max-w-7xl px-6 lg:px-12">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* Colonne 1 : Nom et description */}
@@ -109,7 +94,7 @@ export default function Footer() {
                 animate={isInView ? 'animate' : {}}
               >
                 <span className="bg-gradient-to-r from-[#f57c00] to-amber-400 bg-clip-text text-transparent">N</span>
-                <span className="text-[#151f28]"> School</span>
+                <span className="text-white"> School</span>
               </motion.h3>
               {/* Particules scintillantes */}
               {[0, 1, 2, 3].map((i) => (
@@ -122,7 +107,7 @@ export default function Footer() {
                 />
               ))}
             </div>
-            <p className="mt-4 text-base text-gray-700">
+            <p className="mt-4 text-base text-white/80">
               Révolutionner la gestion scolaire en Afrique avec des solutions adaptées et accessibles.
             </p>
           </motion.div>
@@ -139,7 +124,7 @@ export default function Footer() {
                 <li key={i}>
                   <Link
                     href={`/${item.toLowerCase()}`}
-                    className="text-[#151f28] hover:text-[#f57c00] transition-colors"
+                    className="text-white hover:text-[#f57c00] transition-colors"
                   >
                     {item}
                   </Link>
@@ -157,19 +142,19 @@ export default function Footer() {
             <h4 className="text-xl font-bold text-white">Contact</h4>
             <ul className="mt-4 space-y-2">
               <li className="flex items-center gap-2 group">
-                <Mail className="h-5 w-5 text-[#151f28] group-hover:text-[#f57c00] transition-colors" />
+                <Mail className="h-5 w-5 text-white group-hover:text-[#f57c00] transition-colors" />
                 <a
                   href="mailto:contact@nschool.education"
-                  className="text-[#151f28] hover:text-[#f57c00] transition-colors"
+                  className="text-white hover:text-[#f57c00] transition-colors"
                 >
                   contact@nschool.education
                 </a>
               </li>
               <li className="flex items-center gap-2 group">
-                <Phone className="h-5 w-5 text-[#151f28] group-hover:text-[#f57c00] transition-colors" />
+                <Phone className="h-5 w-5 text-white group-hover:text-[#f57c00] transition-colors" />
                 <a
                   href="tel:+2250712345678"
-                  className="text-[#151f28] hover:text-[#f57c00] transition-colors"
+                  className="text-white hover:text-[#f57c00] transition-colors"
                 >
                   +225 07 12 34 56 78
                 </a>
@@ -188,7 +173,7 @@ export default function Footer() {
               <motion.a
                 href="https://linkedin.com"
                 target="_blank"
-                className="text-[#151f28] hover:text-[#f57c00] transition-colors"
+                className="text-white hover:text-[#f57c00] transition-colors"
                 whileHover={{ y: -3, scale: 1.2 }}
               >
                 <Linkedin className="h-6 w-6" />
@@ -196,7 +181,7 @@ export default function Footer() {
               <motion.a
                 href="https://twitter.com"
                 target="_blank"
-                className="text-[#151f28] hover:text-[#f57c00] transition-colors"
+                className="text-white hover:text-[#f57c00] transition-colors"
                 whileHover={{ y: -3, scale: 1.2 }}
               >
                 <Twitter className="h-6 w-6" />
@@ -210,11 +195,10 @@ export default function Footer() {
             >
               <Link
                 href="/contact"
-                className="inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-[#f57c00] to-amber-400 px-6 py-3 text-lg font-bold text-white shadow-xl hover:shadow-orange-500/50 transition-all duration-500"
-                whileHover={{ scale: 1.05 }}
+                className="inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-[#f57c00] to-amber-400 px-4 py-2 text-base font-bold text-white shadow-xl hover:shadow-orange-500/50 transition-all duration-500"
               >
                 Contactez-nous
-                <ArrowRight className="h-5 w-5" />
+                <ArrowRight className="h-4 w-4" />
               </Link>
             </motion.div>
           </motion.div>
@@ -225,9 +209,9 @@ export default function Footer() {
           initial={{ opacity: 0 }}
           animate={isInView ? { opacity: 1 } : {}}
           transition={{ duration: 0.6, delay: 1 }}
-          className="mt-12 border-t border-gray-200/20 pt-6 text-center"
+          className="mt-12 border-t border-white/20 pt-6 text-center"
         >
-          <p className="text-base text-gray-700">
+          <p className="text-base text-white/80">
             © 2025{' '}
             <span className="relative inline-block">
               <motion.span
@@ -236,7 +220,7 @@ export default function Footer() {
                 animate={isInView ? 'animate' : {}}
               >
                 <span className="bg-gradient-to-r from-[#f57c00] to-amber-400 bg-clip-text text-transparent">N</span>
-                <span className="text-[#151f28]"> School</span>
+                <span className="text-white"> School</span>
               </motion.span>
               {[0, 1].map((i) => (
                 <motion.div

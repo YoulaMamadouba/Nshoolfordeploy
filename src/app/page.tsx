@@ -7,6 +7,7 @@ import Hero from '@/components/home/HeroSection';
 import Features from '@/components/home/Features';
 import Pricing from '@/components/home/Pricing';
 import Testimonials from '@/components/home/Testimonials';
+import FAQ from '@/components/home/FAQ';
 import WhyUs from '@/components/home/WhyUs';
 import Team from '@/components/home/Team';
 import Footer from '@/components/layout/Footer';
@@ -19,6 +20,7 @@ export default function HomePage() {
       <Features />
       <Pricing />
       <Testimonials />
+      <FAQ />
       <WhyUs/>
       <Team/>
       <Footer/>

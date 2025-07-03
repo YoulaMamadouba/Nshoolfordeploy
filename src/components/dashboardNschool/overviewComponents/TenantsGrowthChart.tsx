@@ -48,7 +48,7 @@ const TenantsGrowthChart = ({ data }: TenantsGrowthChartProps) => {
         variants={cardVariants}
         initial="hidden"
         animate="visible"
-        className="relative bg-white/80 rounded-2xl p-4 shadow-sm border border-gray-100/50 backdrop-blur-sm overflow-hidden max-w-[800px] w-full min-w-0"
+        className="relative bg-gradient-to-br from-white/95 to-gray-50/90 rounded-3xl p-8 shadow-xl border border-[#f57c00]/20 backdrop-blur-sm overflow-hidden w-full min-w-0"
       >
         <p className="text-sm text-gray-500 text-center">Aucune donnée disponible pour le graphique</p>
       </motion.div>
@@ -143,11 +143,14 @@ const TenantsGrowthChart = ({ data }: TenantsGrowthChartProps) => {
         padding: { bottom: 20 },
       },
       tooltip: {
-        backgroundColor: '#2b4a6a',
-        titleFont: { size: 14, weight: 'bold' },
-        bodyFont: { size: 12 },
-        padding: 10,
-        cornerRadius: 8,
+        backgroundColor: 'rgba(43, 74, 106, 0.95)',
+        titleFont: { size: 13, weight: 'bold' },
+        bodyFont: { size: 11 },
+        padding: 12,
+        cornerRadius: 10,
+        borderColor: '#f57c00',
+        borderWidth: 2,
+        displayColors: true,
         callbacks: {
           label: (context) => `${context.dataset.label}: ${context.raw} nouveaux tenants`,
         },
@@ -209,9 +212,9 @@ const TenantsGrowthChart = ({ data }: TenantsGrowthChartProps) => {
       variants={cardVariants}
       initial="hidden"
       animate="visible"
-      className="relative bg-white/80 rounded-2xl p-4 shadow-sm border border-gray-100/50 backdrop-blur-sm overflow-hidden max-w-[800px] w-full min-w-0"
+      className="relative bg-gradient-to-br from-white/95 to-gray-50/90 rounded-3xl p-8 shadow-xl border border-[#f57c00]/20 backdrop-blur-sm overflow-hidden w-full min-w-0"
     >
-      <div className="w-full h-96">
+      <div className="w-full h-[500px]">
         <Line data={chartData} options={options} />
       </div>
     </motion.div>

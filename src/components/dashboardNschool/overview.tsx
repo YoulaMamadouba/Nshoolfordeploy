@@ -6,6 +6,7 @@ import SubscriptionDistributionChart from '@/components/dashboardNschool/overvie
 import PlanRevenueChart from '@/components/dashboardNschool/overviewComponents/PlanRevenueChart';
 import AlertsCenter from '@/components/dashboardNschool/overviewComponents/AlertsCenter';
 import ActivityLog from '@/components/dashboardNschool/overviewComponents/ActivityLog';
+import AlertsCards from '@/components/dashboardNschool/overviewComponents/AlertsCards';
 import {
   UsersIcon,
   BuildingOffice2Icon,
@@ -153,20 +154,28 @@ const Overview = () => {
         />
       </div>
 
-      {/* Tenants Growth and Subscription Distribution Charts */}
-      <div className="max-w-full w-full flex flex-col lg:flex-row gap-4 mb-8 items-stretch justify-between">
+      {/* Tenants Growth Chart - Full Width */}
+      <div className="w-full mb-8">
         <TenantsGrowthChart data={data?.tenantsGrowth ?? { months: [], schools: [], universities: [], admins: [] }} />
-        <SubscriptionDistributionChart
-          data={data?.subscriptionDistribution ?? { free: 0, starter: 0, basic: 0, premium: 0, enterprise: 0 }}
-        />
       </div>
 
-      {/* Plan Revenue and Alerts Center */}
-      <div className="max-w-full w-full flex flex-col lg:flex-row gap-4 mb-8 items-stretch justify-between">
-        <PlanRevenueChart
-          data={data?.planRevenue ?? { months: [], free: [], starter: [], basic: [], premium: [], enterprise: [] }}
-        />
-        <AlertsCenter
+      {/* Revenue and Subscription Distribution Charts */}
+      <div className="w-full flex flex-col lg:flex-row gap-8 mb-8 items-stretch">
+        <div className="flex-1 min-w-0">
+          <PlanRevenueChart
+            data={data?.planRevenue ?? { months: [], free: [], starter: [], basic: [], premium: [], enterprise: [] }}
+          />
+        </div>
+        <div className="flex-1 min-w-0">
+          <SubscriptionDistributionChart
+            data={data?.subscriptionDistribution ?? { free: 0, starter: 0, basic: 0, premium: 0, enterprise: 0 }}
+          />
+        </div>
+      </div>
+
+      {/* Alerts Cards (nouveau centre d'alertes) */}
+      <div className="mb-8">
+        <AlertsCards
           alerts={data?.alertsCenter.alerts ?? []}
           actions={data?.alertsCenter.actions ?? []}
         />

@@ -42,20 +42,22 @@ export default function Pricing() {
   ];
 
   return (
-    <section className="relative overflow-hidden bg-gradient-to-b from-[#2b4a6a] via-white to-white py-20 md:py-28">
-      {/* Taches bleues floues */}
+    <section className="relative overflow-visible bg-gradient-to-b from-white via-orange-50/30 to-orange-100/50 pt-20 pb-20 md:pt-28 md:pb-28">
+      {/* Background inversé par rapport à HeroSection */}
       <div className="absolute inset-0 overflow-hidden opacity-5">
-        <motion.div
-          animate={{ y: [0, -15, 0] }}
-          transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
-          className="absolute left-1/4 top-0 h-[400px] w-[400px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-gradient-to-r from-[#2b4a6a] to-[#7ba1c9] blur-3xl"
-        />
-        <motion.div
-          animate={{ y: [0, 15, 0] }}
-          transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut', delay: 1 }}
-          className="absolute right-1/4 bottom-0 h-[400px] w-[400px] translate-x-1/2 translate-y-1/2 rounded-full bg-gradient-to-r from-[#2b4a6a] to-[#7ba1c9] blur-3xl"
-        />
+        <div className="absolute left-1/4 top-0 h-[500px] w-[500px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-gradient-to-r from-amber-400 to-orange-500 blur-3xl"></div>
+        <div className="absolute right-1/4 bottom-0 h-[500px] w-[500px] translate-x-1/2 translate-y-1/2 rounded-full bg-gradient-to-r from-amber-400 to-orange-500 blur-3xl"></div>
       </div>
+      <motion.div
+        animate={{ y: [0, -15, 0] }}
+        transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
+        className="absolute left-10 top-1/4 h-16 w-16 rounded-full bg-amber-400/20 blur-xl"
+      />
+      <motion.div
+        animate={{ y: [0, 15, 0] }}
+        transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut', delay: 1 }}
+        className="absolute right-10 top-2/4 h-20 w-20 rounded-full bg-orange-500/20 blur-xl"
+      />
 
       <div className="relative mx-auto max-w-7xl px-6 lg:px-12">
         {/* Titre */}
@@ -72,7 +74,7 @@ export default function Pricing() {
               adaptés à vos besoins
             </span>
           </h2>
-          <p className="mt-6 max-w-2xl mx-auto text-lg leading-8 text-gray-200">
+          <p className="mt-6 max-w-2xl mx-auto text-lg leading-8 text-gray-600">
             Choisissez la solution qui convient à votre école, université ou organisation.
           </p>
         </motion.div>

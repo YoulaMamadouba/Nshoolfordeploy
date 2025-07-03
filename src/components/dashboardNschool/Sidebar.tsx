@@ -18,10 +18,17 @@ type CurrentView = 'overview' | 'tenants' | 'plans' | 'payments' | 'domains';
 
 interface SidebarProps {
   onNavigation: (view: CurrentView) => void;
+  onCollapseChange?: (isCollapsed: boolean) => void;
 }
 
-const Sidebar = ({ onNavigation }: SidebarProps) => {
+const Sidebar = ({ onNavigation, onCollapseChange }: SidebarProps) => {
   const [expandedSection, setExpandedSection] = useState<string | null>(null);
+  const [isCollapsed, setIsCollapsed] = useState(false);
+
+  // Notifier le parent du changement d'état
+  React.useEffect(() => {
+    onCollapseChange?.(isCollapsed);
+  }, [isCollapsed, onCollapseChange]);
 
   const navItems = [
     { name: 'Dashboard', icon: HomeIcon, onClick: () => onNavigation('overview') },
@@ -55,21 +62,50 @@ const Sidebar = ({ onNavigation }: SidebarProps) => {
       initial={{ y: 50, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.6, ease: 'easeOut' }}
-      className="fixed left-0 top-0 bg-[#2b4a6a] text-white h-screen w-64 z-30 backdrop-blur-sm bg-opacity-90 shadow-[0_0_15px_rgba(245,124,0,0.2)]"
+      className={`fixed left-0 top-0 bg-[#2b4a6a] text-white h-screen z-30 backdrop-blur-sm bg-opacity-90 shadow-[0_0_15px_rgba(245,124,0,0.2)] transition-all duration-300 ease-in-out ${
+        isCollapsed ? 'w-16' : 'w-64'
+      }`}
     >
       <div className="flex flex-col h-full">
         {/* Sidebar Header */}
-        <div className="p-4 flex items-center justify-center border-b border-[#f57c00]/20">
+        <div className="p-4 flex items-center justify-center border-b border-[#f57c00]/20 relative">
           <motion.div
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.5 }}
+            className={`transition-all duration-300 ${isCollapsed ? 'scale-75' : ''}`}
           >
             <h2 className="text-xl font-bold tracking-tight">
-              <span className="bg-gradient-to-r from-orange-600 to-amber-500 bg-clip-text text-transparent">N</span>
-              <span className="text-white"> School</span>
+              {isCollapsed ? (
+                <span className="bg-gradient-to-r from-orange-600 to-amber-500 bg-clip-text text-transparent">N</span>
+              ) : (
+                <>
+                  <span className="bg-gradient-to-r from-orange-600 to-amber-500 bg-clip-text text-transparent">N</span>
+                  <span className="text-white"> School</span>
+                </>
+              )}
             </h2>
           </motion.div>
+          {/* Bouton innovant de réduction */}
+          <motion.button
+            whileHover={{ scale: 1.15, rotate: 90 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={() => setIsCollapsed(!isCollapsed)}
+            className="absolute right-2 top-2 w-9 h-9 flex items-center justify-center rounded-full bg-gradient-to-br from-[#f57c00]/80 to-[#2b4a6a]/80 shadow-lg border-2 border-white/30 hover:shadow-2xl transition-all duration-300 group"
+            title={isCollapsed ? "Agrandir la sidebar" : "Réduire la sidebar"}
+          >
+            <span className="sr-only">Réduire la sidebar</span>
+            <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg" className="transition-transform duration-300 group-hover:rotate-180">
+              <circle cx="11" cy="11" r="10" stroke="#fff" strokeWidth="2" fill="url(#sidebarBtnGradient)" />
+              <path d={isCollapsed ? "M7 11h8 M11 7v8" : "M7 11h8"} stroke="#fff" strokeWidth="2" strokeLinecap="round" />
+              <defs>
+                <linearGradient id="sidebarBtnGradient" x1="0" y1="0" x2="22" y2="22" gradientUnits="userSpaceOnUse">
+                  <stop stopColor="#f57c00" />
+                  <stop offset="1" stopColor="#2b4a6a" />
+                </linearGradient>
+              </defs>
+            </svg>
+          </motion.button>
         </div>
 
         {/* Navigation */}
@@ -82,6 +118,7 @@ const Sidebar = ({ onNavigation }: SidebarProps) => {
                 animate={{ x: 0, opacity: 1 }}
                 transition={{ duration: 0.5, delay: index * 0.1, ease: 'easeOut' }}
                 className="relative flex items-center justify-between p-2.5 rounded-md text-white hover:bg-[#f57c00]/10 group transition-all duration-300 w-full text-left"
+                title={isCollapsed ? item.name : undefined}
               >
                 <div className="flex items-center space-x-3">
                   <motion.div
@@ -95,9 +132,15 @@ const Sidebar = ({ onNavigation }: SidebarProps) => {
                       className="absolute inset-0 bg-[#f57c00]/20 rounded-full blur-sm"
                     />
                   </motion.div>
-                  <span className="text-sm font-semibold text-white">{item.name}</span>
+                  <motion.span 
+                    className="text-sm font-semibold text-white"
+                    animate={{ opacity: isCollapsed ? 0 : 1, width: isCollapsed ? 0 : 'auto' }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    {item.name}
+                  </motion.span>
                 </div>
-                {item.hasSubmenu && (
+                {item.hasSubmenu && !isCollapsed && (
                   <motion.div
                     animate={{ rotate: expandedSection === item.name ? 90 : 0 }}
                     transition={{ duration: 0.3 }}
@@ -114,7 +157,7 @@ const Sidebar = ({ onNavigation }: SidebarProps) => {
               </motion.button>
 
               {/* Submenu */}
-              {item.hasSubmenu && (
+              {item.hasSubmenu && !isCollapsed && (
                 <AnimatePresence>
                   {expandedSection === item.name && (
                     <motion.div
@@ -172,10 +215,14 @@ const Sidebar = ({ onNavigation }: SidebarProps) => {
                 className="absolute inset-0 bg-[#f57c00]/20 rounded-md blur-sm"
               />
             </motion.div>
-            <div className="text-xs">
+            <motion.div 
+              className="text-xs"
+              animate={{ opacity: isCollapsed ? 0 : 1, width: isCollapsed ? 0 : 'auto' }}
+              transition={{ duration: 0.3 }}
+            >
               <p className="font-semibold text-white">Admin</p>
               <p className="text-[#f57c00]/60">admin@nschool.com</p>
-            </div>
+            </motion.div>
           </motion.div>
         </div>
       </div>

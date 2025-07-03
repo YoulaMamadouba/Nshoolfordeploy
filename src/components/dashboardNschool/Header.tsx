@@ -11,7 +11,11 @@ import {
   MoonIcon
 } from '@heroicons/react/24/outline';
 
-const DashboardHeader = () => {
+interface DashboardHeaderProps {
+  isSidebarCollapsed?: boolean;
+}
+
+const DashboardHeader = ({ isSidebarCollapsed = false }: DashboardHeaderProps) => {
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const [notificationOpen, setNotificationOpen] = useState(false);
   const [searchFocused, setSearchFocused] = useState(false);
@@ -33,7 +37,9 @@ const DashboardHeader = () => {
       initial={{ y: -20, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.5 }}
-      className="bg-white/95 backdrop-blur-sm border-b border-orange-100 sticky top-0 z-40 ml-64"
+      className={`bg-white/95 backdrop-blur-sm border-b border-orange-100 sticky top-0 z-40 transition-all duration-300 ${
+        isSidebarCollapsed ? 'ml-16' : 'ml-64'
+      }`}
     >
       <div className="px-4 py-2.5">
         <div className="flex items-center justify-between">

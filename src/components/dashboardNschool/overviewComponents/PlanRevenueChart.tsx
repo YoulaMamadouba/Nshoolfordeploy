@@ -107,35 +107,46 @@ const PlanRevenueChart = ({ data }: PlanRevenueChartProps) => {
   const options: ChartOptions<'bar'> = {
     indexAxis: 'y',
     responsive: true,
+    maintainAspectRatio: false,
     animation: {
-      duration: 2000,
-      easing: 'easeOutCubic',
+      duration: 2500,
+      easing: 'easeOutQuart',
+      delay: (ctx) => ctx.dataIndex * 80,
+    },
+    layout: {
+      padding: {
+        top: 15,
+        bottom: 15,
+        left: 8,
+        right: 8,
+      },
     },
     plugins: {
       legend: {
         position: 'top',
+        align: 'center',
         labels: {
           font: {
-            size: 12,
+            size: 11,
             family: 'Inter, sans-serif',
-            weight: 'bold',
+            weight: '600',
           },
           color: '#2b4a6a',
-          boxWidth: 14,
-          padding: 10,
+          boxWidth: 16,
+          padding: 12,
           usePointStyle: true,
-          boxPadding: 4,
+          pointStyle: 'rect',
           generateLabels: (chart) => {
             const { data } = chart;
             return data.datasets.map((dataset, i) => ({
               text: dataset.label,
               fillStyle: dataset.backgroundColor as string,
               strokeStyle: dataset.borderColor as string,
-              lineWidth: 1,
-              pointStyle: 'circle',
+              lineWidth: 2,
+              pointStyle: 'rect',
               fontColor: '#2b4a6a',
-              padding: 8,
-              boxWidth: 12,
+              padding: 10,
+              boxWidth: 16,
             }));
           },
         },
@@ -144,21 +155,22 @@ const PlanRevenueChart = ({ data }: PlanRevenueChartProps) => {
         display: true,
         text: 'Revenus par Plan (6 derniers mois)',
         font: {
-          size: 16,
+          size: 15,
           family: 'Inter, sans-serif',
-          weight: 'bold',
+          weight: '700',
         },
         color: '#2b4a6a',
-        padding: { bottom: 12, top: 8 },
+        padding: { bottom: 15, top: 10 },
       },
       tooltip: {
-        backgroundColor: 'rgba(43, 74, 106, 0.9)',
-        titleFont: { size: 14, weight: 'bold' },
-        bodyFont: { size: 12 },
-        padding: 10,
-        cornerRadius: 8,
+        backgroundColor: 'rgba(43, 74, 106, 0.95)',
+        titleFont: { size: 13, weight: 'bold' },
+        bodyFont: { size: 11 },
+        padding: 12,
+        cornerRadius: 10,
         borderColor: '#f57c00',
-        borderWidth: 1,
+        borderWidth: 2,
+        displayColors: true,
         callbacks: {
           label: (context) => `${context.dataset.label}: $${context.raw}`,
         },
@@ -170,16 +182,19 @@ const PlanRevenueChart = ({ data }: PlanRevenueChartProps) => {
           display: true,
           text: 'Revenus ($)',
           color: '#2b4a6a',
-          font: { size: 14, weight: 'bold' },
+          font: { size: 12, weight: '600' },
+          padding: { top: 8 },
         },
         grid: {
-          color: 'rgba(229, 231, 235, 0.5)',
-          borderColor: '#2b4a6a',
+          color: 'rgba(229, 231, 235, 0.3)',
+          borderColor: 'rgba(43, 74, 106, 0.1)',
+          drawBorder: false,
         },
         stacked: true,
         ticks: {
-          font: { size: 12 },
+          font: { size: 11, weight: '500' },
           color: '#2b4a6a',
+          padding: 6,
         },
       },
       y: {
@@ -187,15 +202,17 @@ const PlanRevenueChart = ({ data }: PlanRevenueChartProps) => {
           display: true,
           text: 'Mois',
           color: '#2b4a6a',
-          font: { size: 14, weight: 'bold' },
+          font: { size: 12, weight: '600' },
+          padding: { bottom: 8 },
         },
         grid: {
           display: false,
         },
         stacked: true,
         ticks: {
-          font: { size: 12 },
+          font: { size: 11, weight: '500' },
           color: '#2b4a6a',
+          padding: 6,
         },
       },
     },
@@ -206,9 +223,9 @@ const PlanRevenueChart = ({ data }: PlanRevenueChartProps) => {
       variants={cardVariants}
       initial="hidden"
       animate="visible"
-      className="relative bg-gradient-to-br from-white/90 to-gray-50/80 rounded-2xl p-3 shadow-sm border border-[#f57c00]/30 backdrop-blur-sm overflow-visible max-w-[650px] w-full min-w-0"
+      className="relative bg-gradient-to-br from-white/90 to-gray-50/80 rounded-2xl p-4 shadow-sm border border-[#f57c00]/30 backdrop-blur-sm overflow-visible w-full min-w-0"
     >
-      <div className="w-full h-80">
+      <div className="w-full h-[450px]">
         <Bar data={chartData} options={options} />
       </div>
     </motion.div>

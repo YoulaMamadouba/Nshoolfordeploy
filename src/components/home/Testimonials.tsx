@@ -1,214 +1,329 @@
-// components/sections/Testimonials.tsx
-'use client';
-import { motion, useInView } from 'framer-motion';
-import { useRef, useState } from 'react';
-import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/solid';
+"use client";
+
+import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { ChevronLeft, ChevronRight, Star, Quote } from "lucide-react";
+
+const testimonials = [
+  {
+    id: 1,
+    name: "Sarah Johnson",
+    role: "Directrice d'école",
+    content: "Nschool a révolutionné notre gestion administrative. L'interface est intuitive et nous fait gagner un temps précieux chaque jour.",
+    rating: 5,
+    avatar: "/images/shawn.jpeg",
+    category: "Administration"
+  },
+  {
+    id: 2,
+    name: "Michael Chen",
+    role: "Enseignant",
+    content: "En tant qu'enseignant, je peux facilement suivre les progrès de mes élèves et communiquer avec les parents. Un outil indispensable !",
+    rating: 5,
+    avatar: "/images/shawn.jpeg",
+    category: "Enseignement"
+  },
+  {
+    id: 3,
+    name: "Emma Rodriguez",
+    role: "Parent d'élève",
+    content: "Grâce à Nschool, je suis toujours informée des activités de mon enfant. La transparence et la facilité d'utilisation sont remarquables.",
+    rating: 5,
+    avatar: "/images/shawn.jpeg",
+    category: "Parents"
+  },
+  {
+    id: 4,
+    name: "David Thompson",
+    role: "Directeur technique",
+    content: "L'intégration technique est parfaite. L'API est bien documentée et l'équipe support est réactive. Je recommande vivement !",
+    rating: 5,
+    avatar: "/images/shawn.jpeg",
+    category: "Technique"
+  },
+  {
+    id: 5,
+    name: "Lisa Wang",
+    role: "Responsable pédagogique",
+    content: "La plateforme nous permet de personnaliser l'apprentissage pour chaque élève. Les résultats sont visibles dès les premiers mois.",
+    rating: 5,
+    avatar: "/images/shawn.jpeg",
+    category: "Pédagogie"
+  }
+];
 
 export default function Testimonials() {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, amount: 0.1 });
+  const [isAutoPlaying, setIsAutoPlaying] = useState(true);
+  const [hoveredCard, setHoveredCard] = useState<number | null>(null);
 
-  const testimonials = [
-    {
-      quote: "Depuis l'adoption de N School, notre établissement a gagné un temps précieux. La gestion des emplois du temps complexes pour nos 32 classes est maintenant un jeu d'enfant. La plateforme s'intègre parfaitement à notre contexte local.",
-      author: "Dr. Fatou Ndiaye",
-      role: "Directrice, Lycée Scientifique de Dakar (Sénégal)",
-      avatar: "https://randomuser.me/api/portraits/women/44.jpg",
-      stats: "+80% d'efficacité administrative"
-    },
-    {
-      quote: "La communication avec les parents d'élèves a radicalement changé. Finis les carnets perdus ou les rendez-vous manqués. Les notifications en temps réel et le suivi des absences ont amélioré l'assiduité de nos élèves de 40%.",
-      author: "M. Kwame Adjei",
-      role: "Proviseur, Collège Moderne d'Abidjan (Côte d'Ivoire)",
-      avatar: "https://randomuser.me/api/portraits/men/32.jpg",
-      stats: "95% de parents satisfaits"
-    },
-    {
-      quote: "En tant qu'enseignante dans une classe de 50 élèves, N School m'a sauvé la vie. La saisie des notes est intuitive et le calcul des moyennes automatique. Je gagne près de 10 heures par semaine !",
-      author: "Mme Amina Bello",
-      role: "Enseignante, Groupe Scolaire Étoile (Bénin)",
-      avatar: "https://randomuser.me/api/portraits/women/63.jpg",
-      stats: "30h/mois économisées"
-    },
-    {
-      quote: "Nous avons testé plusieurs solutions avant de choisir N School. Son adaptation aux réalités africaines (coupures internet, multi-langues, prise en compte des spécificités locales) fait toute la différence.",
-      author: "Prof. Issa Diop",
-      role: "Doyen, Université Cheikh Anta Diop (Sénégal)",
-      avatar: "https://randomuser.me/api/portraits/men/45.jpg",
-      stats: "100% recommandation"
-    },
-    {
-      quote: "La gestion financière intégrée a révolutionné notre école privée. Les paiements des frais scolaires sont maintenant tracés et sécurisés, avec des rapports automatiques pour notre comptabilité.",
-      author: "M. Olivier Kouamé",
-      role: "Directeur, Complexe Scolaire Les Pionniers (Côte d'Ivoire)",
-      avatar: "https://randomuser.me/api/portraits/men/68.jpg",
-      stats: "Paiements 100% tracés"
-    }
-  ];
+  // Auto-play avec pause au hover
+  useEffect(() => {
+    if (!isAutoPlaying) return;
+    
+    const interval = setInterval(() => {
+      setCurrentIndex((prev) => (prev + 1) % testimonials.length);
+    }, 5000);
+    
+    return () => clearInterval(interval);
+  }, [isAutoPlaying]);
 
   const nextTestimonial = () => {
-    setCurrentIndex((prev) => (prev === testimonials.length - 1 ? 0 : prev + 1));
+    setCurrentIndex((prev) => (prev + 1) % testimonials.length);
   };
 
   const prevTestimonial = () => {
-    setCurrentIndex((prev) => (prev === 0 ? testimonials.length - 1 : prev - 1));
+    setCurrentIndex((prev) => (prev - 1 + testimonials.length) % testimonials.length);
+  };
+
+  const goToTestimonial = (index: number) => {
+    setCurrentIndex(index);
   };
 
   return (
-    <section 
-      ref={ref}
-      className="relative py-28 overflow-hidden bg-white"
-    >
-      {/* Fond scolaire créé avec CSS - version améliorée */}
-      <div className="absolute inset-0 opacity-10"
-           style={{
-             backgroundImage: `
-               linear-gradient(to right, #f57c0010 1px, transparent 1px),
-               linear-gradient(to bottom, #f57c0010 1px, transparent 1px),
-               repeating-linear-gradient(0deg, #151f2805 0px, #151f2805 1px, transparent 1px, transparent 40px),
-               repeating-linear-gradient(90deg, #151f2805 0px, #151f2805 1px, transparent 1px, transparent 40px)
-             `,
-             backgroundSize: '40px 40px'
-           }}>
+    <section className="py-20 bg-gradient-to-br from-slate-50 via-white to-slate-50 relative overflow-hidden">
+      {/* Background Elements */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-gradient-to-br from-amber-400/5 to-orange-500/5 rounded-full blur-3xl" />
+        <div className="absolute bottom-0 right-1/4 w-80 h-80 bg-gradient-to-tl from-blue-400/5 to-cyan-500/5 rounded-full blur-3xl" />
       </div>
 
-      <div className="relative mx-auto max-w-7xl px-6">
-        {/* Titre */}
-        <motion.h2
+      <div className="container mx-auto px-4">
+        <motion.div
           initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
-          className="text-center text-4xl md:text-5xl font-bold text-[#151f28]"
+          className="text-center mb-16"
         >
-          Ils <span className="text-[#f57c00]">témoignent</span>
-        </motion.h2>
-        <motion.p
-          initial={{ opacity: 0 }}
-          animate={isInView ? { opacity: 1 } : {}}
-          transition={{ duration: 0.8, delay: 0.3 }}
-          className="mt-4 text-center text-lg text-gray-600 max-w-2xl mx-auto"
-        >
-          Découvrez comment N School transforme les établissements éducatifs en Afrique
-        </motion.p>
+          <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+            Ce que disent nos utilisateurs
+          </h2>
+          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+            Découvrez les témoignages de ceux qui ont transformé leur expérience éducative avec Nschool
+          </p>
+        </motion.div>
 
-        {/* Conteneur du carrousel */}
-        <div className="mt-16 relative px-12">
-          {/* Flèche gauche - style amélioré */}
-          <button 
-            onClick={prevTestimonial}
-            className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white p-4 rounded-full shadow-lg border border-gray-200 hover:bg-[#f57c00] hover:border-[#f57c00] group transition-all"
-            aria-label="Témoignage précédent"
-          >
-            <ChevronLeftIcon className="h-6 w-6 text-[#f57c00] group-hover:text-white transition-colors" />
-          </button>
+        {/* Système Cinématique Immersif */}
+        <div className="relative max-w-6xl mx-auto">
+          {/* Grille de cartes - Mur vivant */}
+          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-8">
+            {testimonials.map((testimonial, index) => (
+              <motion.div
+                key={testimonial.id}
+                className={`relative cursor-pointer group ${
+                  index === currentIndex ? 'md:col-span-3 lg:col-span-3' : ''
+                }`}
+                onMouseEnter={() => {
+                  setHoveredCard(index);
+                  setIsAutoPlaying(false);
+                }}
+                onMouseLeave={() => {
+                  setHoveredCard(null);
+                  setIsAutoPlaying(true);
+                }}
+                onClick={() => goToTestimonial(index)}
+                whileHover={{ scale: 1.02 }}
+                transition={{ duration: 0.3 }}
+              >
+                <motion.div
+                  className={`relative overflow-hidden rounded-2xl transition-all duration-500 ${
+                    index === currentIndex
+                      ? 'bg-white shadow-2xl ring-2 ring-amber-400/20'
+                      : 'bg-white/80 backdrop-blur-sm shadow-lg hover:shadow-xl'
+                  }`}
+                  layoutId={`card-${index}`}
+                >
+                  {/* Effet de spotlight pour la carte active */}
+                  {index === currentIndex && (
+                    <motion.div
+                      className="absolute inset-0 bg-gradient-to-br from-amber-400/10 via-orange-500/5 to-transparent"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ duration: 0.5 }}
+                    />
+                  )}
 
-          {/* Témoignage actif */}
-          <div className="mx-auto max-w-3xl">
+                  <div className="p-6">
+                    {/* En-tête de la carte */}
+                    <div className="flex items-center gap-4 mb-4">
+                      <motion.div
+                        className="relative"
+                        whileHover={{ rotate: 5 }}
+                        transition={{ duration: 0.3 }}
+                      >
+                        <div className="w-12 h-12 rounded-full overflow-hidden ring-2 ring-amber-400/30">
+                          <img
+                            src={testimonial.avatar}
+                            alt={testimonial.name}
+                            className="w-full h-full object-cover"
+                          />
+                        </div>
+                        {/* Badge de catégorie */}
+                        <div className="absolute -top-1 -right-1 w-5 h-5 bg-gradient-to-r from-amber-400 to-orange-500 rounded-full flex items-center justify-center">
+                          <span className="text-xs text-white font-bold">
+                            {testimonial.category.charAt(0)}
+                          </span>
+                        </div>
+                      </motion.div>
+                      
+                      <div className="flex-1">
+                        <h4 className="font-semibold text-gray-900">{testimonial.name}</h4>
+                        <p className="text-sm text-gray-600">{testimonial.role}</p>
+                      </div>
+                      
+                      {/* Rating */}
+                      <div className="flex gap-1">
+                        {[...Array(testimonial.rating)].map((_, i) => (
+                          <Star
+                            key={i}
+                            className="w-4 h-4 fill-amber-400 text-amber-400"
+                          />
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Contenu du témoignage */}
+                    <div className="relative">
+                      <Quote className="absolute -top-2 -left-2 w-6 h-6 text-amber-400/30" />
+                      <p className={`text-gray-700 leading-relaxed ${
+                        index === currentIndex ? 'text-base' : 'text-sm line-clamp-3'
+                      }`}>
+                        {testimonial.content}
+                      </p>
+                    </div>
+
+                    {/* Indicateur de carte active */}
+                    {index === currentIndex && (
+                      <motion.div
+                        className="absolute bottom-2 right-2 w-3 h-3 bg-gradient-to-r from-amber-400 to-orange-500 rounded-full"
+                        initial={{ scale: 0 }}
+                        animate={{ scale: 1 }}
+                        transition={{ duration: 0.3 }}
+                      />
+                    )}
+                  </div>
+                </motion.div>
+              </motion.div>
+            ))}
+          </div>
+
+          {/* Témoignage principal - Effet Glass Morphism */}
+          <AnimatePresence mode="wait">
             <motion.div
               key={currentIndex}
-              initial={{ opacity: 0, x: 50 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -50 }}
-              transition={{ duration: 0.5 }}
-              className="bg-white border border-gray-200 rounded-2xl p-8 shadow-xl hover:shadow-2xl transition-all relative overflow-hidden"
+              initial={{ opacity: 0, y: 50, scale: 0.95 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: -50, scale: 0.95 }}
+              transition={{ duration: 0.6, ease: "easeOut" }}
+              className="relative"
             >
-              {/* Marquage scolaire en fond de carte */}
-              <div className="absolute -right-4 -top-4 opacity-5 text-[#f57c00] text-9xl">
-                {currentIndex % 3 === 0 ? "📚" : currentIndex % 3 === 1 ? "✏️" : "🏫"}
-              </div>
-
-              {/* Contenu du témoignage */}
-              <div className="relative z-10">
-                {/* Citation */}
-                <blockquote className="text-gray-700 text-lg leading-relaxed italic relative pl-8">
-                  <span className="absolute left-0 top-0 text-5xl text-[#f57c00] leading-none">"</span>
-                  {testimonials[currentIndex].quote}
-                </blockquote>
-
-                {/* Auteur */}
-                <div className="mt-8 flex items-center gap-4">
-                  {/* Avatar en cercle - style amélioré */}
-                  <div className="relative h-16 w-16 rounded-full border-2 border-[#f57c00] p-0.5 shadow-md">
-                    <img 
-                      src={testimonials[currentIndex].avatar} 
-                      alt={testimonials[currentIndex].author}
-                      className="rounded-full h-full w-full object-cover"
-                    />
+              <div className="bg-white/90 backdrop-blur-xl rounded-3xl shadow-2xl ring-1 ring-amber-400/20 p-8 md:p-12">
+                {/* Effet de fresnel en arrière-plan */}
+                <div className="absolute inset-0 bg-gradient-to-br from-amber-400/5 via-transparent to-orange-500/5 rounded-3xl" />
+                
+                <div className="relative z-10">
+                  <div className="flex items-start gap-6 mb-8">
+                    <motion.div
+                      className="relative"
+                      whileHover={{ rotate: 10, scale: 1.05 }}
+                      transition={{ duration: 0.3 }}
+                    >
+                      <div className="w-20 h-20 rounded-2xl overflow-hidden ring-4 ring-amber-400/30 shadow-lg">
+                        <img
+                          src={testimonials[currentIndex].avatar}
+                          alt={testimonials[currentIndex].name}
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                      {/* Badge de catégorie premium */}
+                      <div className="absolute -top-2 -right-2 w-8 h-8 bg-gradient-to-r from-amber-400 to-orange-500 rounded-full flex items-center justify-center shadow-lg">
+                        <span className="text-sm text-white font-bold">
+                          {testimonials[currentIndex].category.charAt(0)}
+                        </span>
+                      </div>
+                    </motion.div>
+                    
+                    <div className="flex-1">
+                      <div className="flex items-center gap-3 mb-2">
+                        <h3 className="text-2xl font-bold text-gray-900">
+                          {testimonials[currentIndex].name}
+                        </h3>
+                        <span className="px-3 py-1 bg-gradient-to-r from-amber-400/20 to-orange-500/20 text-amber-700 text-sm font-medium rounded-full">
+                          {testimonials[currentIndex].category}
+                        </span>
+                      </div>
+                      <p className="text-lg text-gray-600 mb-3">
+                        {testimonials[currentIndex].role}
+                      </p>
+                      <div className="flex gap-1">
+                        {[...Array(testimonials[currentIndex].rating)].map((_, i) => (
+                          <motion.div
+                            key={i}
+                            initial={{ scale: 0, rotate: -180 }}
+                            animate={{ scale: 1, rotate: 0 }}
+                            transition={{ duration: 0.5, delay: i * 0.1 }}
+                          >
+                            <Star className="w-5 h-5 fill-amber-400 text-amber-400" />
+                          </motion.div>
+                        ))}
+                      </div>
+                    </div>
                   </div>
-                  <div>
-                    <p className="font-bold text-[#151f28] text-lg">{testimonials[currentIndex].author}</p>
-                    <p className="text-gray-500 text-sm mt-1">{testimonials[currentIndex].role}</p>
-                  </div>
-                </div>
 
-                {/* Badge de stat - style amélioré */}
-                <div className="mt-6 inline-flex items-center px-4 py-2 rounded-full bg-[#f57c00]/10 text-[#f57c00] text-sm font-semibold border border-[#f57c00]/20">
-                  <span className="mr-2">📈</span>
-                  {testimonials[currentIndex].stats}
+                  <motion.div
+                    className="relative"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.5, delay: 0.2 }}
+                  >
+                    <Quote className="absolute -top-4 -left-4 w-12 h-12 text-amber-400/30" />
+                    <blockquote className="text-xl md:text-2xl text-gray-800 leading-relaxed font-medium pl-8">
+                      "{testimonials[currentIndex].content}"
+                    </blockquote>
+                  </motion.div>
                 </div>
               </div>
             </motion.div>
-          </div>
+          </AnimatePresence>
 
-          {/* Flèche droite - style amélioré */}
-          <button 
-            onClick={nextTestimonial}
-            className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white p-4 rounded-full shadow-lg border border-gray-200 hover:bg-[#f57c00] hover:border-[#f57c00] group transition-all"
-            aria-label="Témoignage suivant"
-          >
-            <ChevronRightIcon className="h-6 w-6 text-[#f57c00] group-hover:text-white transition-colors" />
-          </button>
+          {/* Contrôles de navigation */}
+          <div className="flex justify-center items-center gap-4 mt-8">
+            <motion.button
+              onClick={prevTestimonial}
+              className="p-3 rounded-full bg-white shadow-lg hover:shadow-xl ring-1 ring-gray-200 hover:ring-amber-400/30 transition-all duration-300 group"
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <ChevronLeft className="w-6 h-6 text-gray-600 group-hover:text-amber-600 transition-colors" />
+            </motion.button>
 
-          {/* Indicateurs de position - style amélioré */}
-          <div className="flex justify-center mt-8 space-x-2">
-            {testimonials.map((_, index) => (
-              <button
-                key={index}
-                onClick={() => setCurrentIndex(index)}
-                className={`h-2 w-8 rounded-full transition-all ${currentIndex === index ? 'bg-[#f57c00]' : 'bg-gray-300'}`}
-                aria-label={`Aller au témoignage ${index + 1}`}
-              />
-            ))}
+            {/* Indicateurs de progression */}
+            <div className="flex gap-2">
+              {testimonials.map((_, index) => (
+                <motion.button
+                  key={index}
+                  onClick={() => goToTestimonial(index)}
+                  className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                    index === currentIndex
+                      ? 'bg-gradient-to-r from-amber-400 to-orange-500 scale-125'
+                      : 'bg-gray-300 hover:bg-amber-300'
+                  }`}
+                  whileHover={{ scale: 1.2 }}
+                  whileTap={{ scale: 0.9 }}
+                />
+              ))}
+            </div>
+
+            <motion.button
+              onClick={nextTestimonial}
+              className="p-3 rounded-full bg-white shadow-lg hover:shadow-xl ring-1 ring-gray-200 hover:ring-amber-400/30 transition-all duration-300 group"
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <ChevronRight className="w-6 h-6 text-gray-600 group-hover:text-amber-600 transition-colors" />
+            </motion.button>
           </div>
         </div>
-
-        {/* Éléments décoratifs scolaires animés - gauche et droite */}
-        <motion.div
-          animate={{ 
-            rotate: [0, 360],
-            transition: { duration: 25, repeat: Infinity, ease: "linear" } 
-          }}
-          className="absolute -left-20 top-1/3 opacity-5 text-[#f57c00] hidden md:block"
-        >
-          <svg width="180" height="180" viewBox="0 0 100 100">
-            <circle cx="50" cy="50" r="45" fill="none" stroke="currentColor" strokeWidth="1" strokeDasharray="5,5" />
-            <path 
-              d="M20,50 Q50,20 80,50 Q50,80 20,50" 
-              fill="none" 
-              stroke="currentColor" 
-              strokeWidth="1"
-            />
-          </svg>
-        </motion.div>
-
-        <motion.div
-          animate={{ 
-            rotate: [360, 0],
-            transition: { duration: 30, repeat: Infinity, ease: "linear" } 
-          }}
-          className="absolute -right-20 top-1/4 opacity-5 text-[#f57c00] hidden md:block"
-        >
-          <svg width="200" height="200" viewBox="0 0 100 100">
-            <circle cx="50" cy="50" r="45" fill="none" stroke="currentColor" strokeWidth="1" strokeDasharray="3,7" />
-            <path 
-              d="M30,30 L70,30 L70,70 L30,70 Z" 
-              fill="none" 
-              stroke="currentColor" 
-              strokeWidth="1"
-            />
-          </svg>
-        </motion.div>
       </div>
     </section>
   );

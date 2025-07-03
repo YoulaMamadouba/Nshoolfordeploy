@@ -19,6 +19,57 @@ const globalStyles = `
   .gradient-pulse stop:nth-child(2) {
     animation: gradientPulse 3s ease-in-out infinite reverse;
   }
+  
+  @keyframes iceShimmer {
+    0% { 
+      stroke-dashoffset: 0;
+      opacity: 0.6;
+    }
+    50% { 
+      stroke-dashoffset: -20;
+      opacity: 1;
+    }
+    100% { 
+      stroke-dashoffset: -40;
+      opacity: 0.6;
+    }
+  }
+  
+  @keyframes iceGlow {
+    0%, 100% { 
+      filter: drop-shadow(0 0 8px rgba(125, 211, 252, 0.4)) drop-shadow(0 0 16px rgba(59, 130, 246, 0.2));
+    }
+    50% { 
+      filter: drop-shadow(0 0 12px rgba(125, 211, 252, 0.8)) drop-shadow(0 0 24px rgba(59, 130, 246, 0.4));
+    }
+  }
+  
+  @keyframes icePulse {
+    0%, 100% { 
+      stroke-width: 2;
+      opacity: 0.8;
+    }
+    50% { 
+      stroke-width: 3;
+      opacity: 1;
+    }
+  }
+  
+  .ice-line {
+    animation: iceShimmer 3s ease-in-out infinite, iceGlow 4s ease-in-out infinite;
+  }
+  
+  .ice-line-vertical {
+    animation: iceShimmer 2.5s ease-in-out infinite reverse, iceGlow 3.5s ease-in-out infinite;
+  }
+  
+  .ice-line-horizontal {
+    animation: iceShimmer 3.5s ease-in-out infinite, iceGlow 4.5s ease-in-out infinite;
+  }
+  
+  .ice-pulse {
+    animation: icePulse 2s ease-in-out infinite;
+  }
 `;
 
 // Hook pour le compteur animé avec IntersectionObserver
@@ -38,32 +89,32 @@ function useAnimatedCounter(finalValue: string, duration: number = 2000): UseAni
       ([entry]) => {
         if (!entry.isIntersecting) return;
 
-        const numberMatch = finalValue.match(/\d+/);
-        const suffixMatch = finalValue.replace(/\d/g, '');
+    const numberMatch = finalValue.match(/\d+/);
+    const suffixMatch = finalValue.replace(/\d/g, '');
         const targetNumber = numberMatch ? parseInt(numberMatch[0], 10) : 0;
-        setSuffix(suffixMatch || '');
+    setSuffix(suffixMatch || '');
 
-        if (targetNumber === 0) {
-          setCount(finalValue);
-          return;
-        }
+    if (targetNumber === 0) {
+      setCount(finalValue);
+      return;
+    }
 
-        let startTime: number | null = null;
+    let startTime: number | null = null;
         const animate = (currentTime: number) => {
-          if (!startTime) startTime = currentTime;
+      if (!startTime) startTime = currentTime;
           const progress = Math.min((currentTime - startTime) / duration, 1);
           const currentCount = Math.floor(targetNumber * progress);
-          setCount(currentCount);
+      setCount(currentCount);
 
           if (progress < 1) {
             requestAnimationFrame(animate);
-          } else {
-            setCount(targetNumber);
-          }
-        };
+      } else {
+        setCount(targetNumber);
+      }
+    };
 
         const animationId = requestAnimationFrame(animate);
-        return () => cancelAnimationFrame(animationId);
+    return () => cancelAnimationFrame(animationId);
       },
       { threshold: 0.1, rootMargin: '0px' }
     );
@@ -79,7 +130,7 @@ function useAnimatedCounter(finalValue: string, duration: number = 2000): UseAni
     };
   }, [finalValue, duration]);
 
-  return { count, suffix, ref: elementRef };
+  return { count, suffix, ref: elementRef as React.RefObject<HTMLDivElement> };
 }
 
 // Composant pour une carte de statistique
@@ -204,14 +255,14 @@ export default function Hero() {
             >
               <Link
                 href="/register"
-                className="relative overflow-hidden group rounded-xl bg-gradient-to-r from-amber-500 to-orange-600 px-8 py-4 text-lg font-bold text-white shadow-lg hover:shadow-orange-500/30 hover:from-amber-600 hover:to-orange-700 transition-all duration-500"
+                className="relative overflow-hidden group rounded-xl bg-gradient-to-r from-amber-500 to-orange-600 px-6 py-3 text-lg font-bold text-white shadow-lg hover:shadow-orange-500/30 hover:from-amber-600 hover:to-orange-700 transition-all duration-500"
               >
                 <span className="relative z-10 flex items-center gap-2">
                   Commencer maintenant <ArrowRightIcon className="h-5 w-5" />
                 </span>
                 <span className="absolute inset-0 bg-gradient-to-r from-amber-600 to-orange-700 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></span>
               </Link>
-              <button className="flex items-center gap-2 rounded-xl bg-white px-6 py-4 text-lg font-medium text-gray-900 shadow-md hover:bg-gray-50 transition-all duration-300 group">
+              <button className="flex items-center gap-2 rounded-xl bg-white px-4 py-3 text-lg font-medium text-gray-900 shadow-md hover:bg-gray-50 transition-all duration-300 group">
                 <PlayCircleIcon className="h-6 w-6 text-orange-500 group-hover:text-orange-600 transition-colors" />
                 <span>Voir la démo</span>
               </button>
@@ -250,17 +301,20 @@ export default function Hero() {
             </motion.div>
           </div>
           <div className="relative w-full max-w-[1500px] mx-auto -mx-6 lg:-mx-12 lg:max-w-none lg:justify-self-end lg:-mt-4 overflow-visible">
-            <motion.div
+                        <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1, y: [0, -8, 0] }}
+              animate={{ 
+                opacity: 1, 
+                scale: 1,
+                y: [0, -8, 0]
+              }}
               transition={{
                 opacity: { duration: 0.8, delay: 0.3 },
                 scale: { duration: 0.8, delay: 0.3 },
-                y: { duration: 4, repeat: Infinity, ease: 'easeInOut' },
+                y: { duration: 6, repeat: Infinity, ease: "easeInOut" }
               }}
               className="relative"
               style={{ willChange: 'transform' }}
-              // style={{ border: '1px solid blue' }} // Décommenter pour déboguer
             >
               <Image
                 src="/images/bg1.png"
@@ -273,158 +327,107 @@ export default function Hero() {
                 priority
                 onError={handleImageError}
               />
-              <motion.svg
-                className="absolute bottom-[-8px] left-0 w-full h-20"
-                viewBox="0 0 1500 80"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-                style={{ zIndex: 50, pointerEvents: 'none', willChange: 'transform, opacity' }}
-                initial={{ opacity: 0 }}
-                animate={{
-                  opacity: 1,
-                  y: [0, -3, 0],
-                  scale: [1, 1.05, 1],
-                }}
-                transition={{
-                  opacity: { duration: 0.8, delay: 0.5 },
-                  y: { duration: 3.5, repeat: Infinity, ease: 'easeInOut' },
-                  scale: { duration: 3.5, repeat: Infinity, ease: 'easeInOut' },
-                }}
-              >
-                <motion.path
-                  d="M0 80 C375 80, 750 40, 1125 80, 1500 80"
-                  stroke="url(#gradient-horizontal)"
-                  strokeWidth="12"
-                  strokeLinecap="round"
-                  strokeDasharray="20 10"
-                  animate={{ strokeDashoffset: [0, -30, 0] }}
-                  transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
+              
+              {/* Effet Fresnel Light Move - Ultra Premium */}
+              <div className="absolute inset-0 pointer-events-none overflow-hidden">
+                {/* Halo lumineux pulsé */}
+                <motion.div
+                  className="absolute right-0 top-1/4 w-64 h-64 bg-gradient-to-br from-amber-400/20 via-orange-500/15 to-transparent rounded-full blur-3xl"
+                  animate={{
+                    scale: [1, 1.2, 1],
+                    opacity: [0.3, 0.6, 0.3],
+                    rotate: [0, 180, 360],
+                  }}
+                  transition={{
+                    scale: { duration: 4, repeat: Infinity, ease: "easeInOut" },
+                    opacity: { duration: 3, repeat: Infinity, ease: "easeInOut" },
+                    rotate: { duration: 20, repeat: Infinity, ease: "linear" },
+                  }}
                 />
-                <circle cx="200" cy="40" r="5" fill="url(#gradient-horizontal)" />
-                <motion.circle
-                  cx="400"
-                  cy="40"
-                  r="4"
-                  fill="url(#gradient-horizontal)"
-                  animate={{ y: [0, -15, 0], opacity: [0, 0.9, 0], scale: [0.5, 1.2, 0.5] }}
-                  transition={{ duration: 2, repeat: Infinity, ease: 'easeOut', delay: 0.2 }}
+                
+                {/* Ligne de lumière traversante verticale */}
+                <motion.div
+                  className="absolute right-1/4 top-0 w-px h-full bg-gradient-to-b from-transparent via-amber-400/60 to-transparent"
+                  animate={{
+                    opacity: [0, 1, 0],
+                    scaleY: [0, 1, 0],
+                  }}
+                  transition={{
+                    duration: 3,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                    delay: 1,
+                  }}
                 />
-                <motion.circle
-                  cx="600"
-                  cy="40"
-                  r="6"
-                  fill="url(#gradient-horizontal)"
-                  animate={{ y: [0, -20, 0], opacity: [0, 0.8, 0], scale: [0.4, 1.3, 0.4] }}
-                  transition={{ duration: 2.5, repeat: Infinity, ease: 'easeOut', delay: 0.4 }}
+                
+                {/* Reflet en verre animé */}
+                <motion.div
+                  className="absolute right-0 top-0 w-32 h-full bg-gradient-to-l from-white/20 via-transparent to-transparent"
+                  animate={{
+                    x: [0, -20, 0],
+                    opacity: [0, 0.8, 0],
+                  }}
+                  transition={{
+                    duration: 4,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                    delay: 2,
+                  }}
                 />
-                <motion.circle
-                  cx="900"
-                  cy="40"
-                  r="3"
-                  fill="url(#gradient-horizontal)"
-                  animate={{ y: [0, 15, 0], opacity: [0, 0.9, 0], scale: [0.5, 1.2, 0.5] }}
-                  transition={{ duration: 2, repeat: Infinity, ease: 'easeOut', delay: 0.6 }}
+                
+                {/* Particules de lumière verticales */}
+                {[...Array(6)].map((_, i) => (
+                  <motion.div
+                    key={i}
+                    className="absolute w-1 h-1 bg-gradient-to-b from-amber-400 to-orange-500 rounded-full"
+                    style={{
+                      right: `${20 + (i * 15)}%`,
+                      top: `${10 + (i * 15)}%`,
+                    }}
+                    animate={{
+                      y: [0, -30, 0],
+                      opacity: [0, 1, 0],
+                      scale: [0, 1.5, 0],
+                    }}
+                    transition={{
+                      duration: 2 + i * 0.5,
+                      repeat: Infinity,
+                      ease: "easeInOut",
+                      delay: i * 0.3,
+                    }}
+                  />
+                ))}
+                
+                {/* Effet de fresnel - Ligne de lumière horizontale */}
+                <motion.div
+                  className="absolute right-0 top-1/3 w-full h-px bg-gradient-to-r from-transparent via-amber-400/80 to-transparent"
+                  animate={{
+                    scaleX: [0, 1, 0],
+                    opacity: [0, 1, 0],
+                  }}
+                  transition={{
+                    duration: 3,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                    delay: 1.5,
+                  }}
                 />
-                <motion.circle
-                  cx="1200"
-                  cy="40"
-                  r="5"
-                  fill="url(#gradient-horizontal)"
-                  animate={{ y: [0, -20, 0], opacity: [0, 0.8, 0], scale: [0.4, 1.3, 0.4] }}
-                  transition={{ duration: 2.5, repeat: Infinity, ease: 'easeOut', delay: 0.8 }}
+                
+                {/* Halo secondaire - Effet de profondeur */}
+                <motion.div
+                  className="absolute right-10 bottom-1/4 w-40 h-40 bg-gradient-to-tl from-orange-500/10 via-amber-400/5 to-transparent rounded-full blur-2xl"
+                  animate={{
+                    scale: [1, 1.3, 1],
+                    opacity: [0.2, 0.4, 0.2],
+                  }}
+                  transition={{
+                    duration: 5,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                    delay: 2.5,
+                  }}
                 />
-                <motion.circle
-                  cx="1400"
-                  cy="40"
-                  r="4"
-                  fill="url(#gradient-horizontal)"
-                  animate={{ y: [0, 25, 0], opacity: [0, 0.9, 0], scale: [0.5, 1.2, 0.5] }}
-                  transition={{ duration: 2, repeat: Infinity, ease: 'easeOut', delay: 1 }}
-                />
-                <defs>
-                  <linearGradient id="gradient-horizontal" x1="0%" y1="0%" x2="100%" y2="0%" className="gradient-pulse">
-                    <stop offset="0%" style={{ stopColor: '#7dd3fc' }} />
-                    <stop offset="50%" style={{ stopColor: '#bae6fd' }} />
-                    <stop offset="100%" style={{ stopColor: '#7dd3fc' }} />
-                  </linearGradient>
-                </defs>
-              </motion.svg>
-              <motion.svg
-                className="absolute right-0 bottom-[75px] h-[350px] w-16"
-                viewBox="0 0 64 350"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-                style={{ zIndex: 100, pointerEvents: 'none', willChange: 'transform, opacity' }}
-                initial={{ opacity: 0 }}
-                animate={{
-                  opacity: 1,
-                  x: [0, -3, 0],
-                  scale: [1, 1.05, 1],
-                }}
-                transition={{
-                  opacity: { duration: 0.8, delay: 0.5 },
-                  x: { duration: 3.5, repeat: Infinity, ease: 'easeInOut' },
-                  scale: { duration: 3.5, repeat: Infinity, ease: 'easeInOut' },
-                }}
-              >
-                <motion.path
-                  d="M32 0 L32 350"
-                  stroke="url(#gradient-vertical)"
-                  strokeWidth="12"
-                  strokeLinecap="round"
-                  strokeDasharray="20 10"
-                  animate={{ strokeDashoffset: [0, -30, 0] }}
-                  transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
-                />
-                <circle cx="32" cy="50" r="5" fill="url(#gradient-vertical)" />
-                <motion.circle
-                  cx="32"
-                  cy="100"
-                  r="4"
-                  fill="url(#gradient-vertical)"
-                  animate={{ y: [0, -20, 0], opacity: [0, 0.9, 0], scale: [0.5, 1.2, 0.5] }}
-                  transition={{ duration: 2, repeat: Infinity, ease: 'easeOut', delay: 0.2 }}
-                />
-                <motion.circle
-                  cx="32"
-                  cy="150"
-                  r="6"
-                  fill="url(#gradient-vertical)"
-                  animate={{ y: [0, -25, 0], opacity: [0, 0.8, 0], scale: [0.4, 1.3, 0.4] }}
-                  transition={{ duration: 2.5, repeat: Infinity, ease: 'easeOut', delay: 0.4 }}
-                />
-                <motion.circle
-                  cx="32"
-                  cy="200"
-                  r="3"
-                  fill="url(#gradient-vertical)"
-                  animate={{ y: [0, 20, 0], opacity: [0, 0.9, 0], scale: [0.5, 1.2, 0.5] }}
-                  transition={{ duration: 2, repeat: Infinity, ease: 'easeOut', delay: 0.6 }}
-                />
-                <motion.circle
-                  cx="32"
-                  cy="250"
-                  r="5"
-                  fill="url(#gradient-vertical)"
-                  animate={{ y: [0, -20, 0], opacity: [0, 0.8, 0], scale: [0.4, 1.3, 0.4] }}
-                  transition={{ duration: 2.5, repeat: Infinity, ease: 'easeOut', delay: 0.8 }}
-                />
-                <motion.circle
-                  cx="32"
-                  cy="300"
-                  r="4"
-                  fill="url(#gradient-vertical)"
-                  animate={{ y: [0, 25, 0], opacity: [0, 0.9, 0], scale: [0.5, 1.2, 0.5] }}
-                  transition={{ duration: 2, repeat: Infinity, ease: 'easeOut', delay: 1 }}
-                />
-                <defs>
-                  <linearGradient id="gradient-vertical" x1="0%" y1="0%" x2="0%" y2="100%" className="gradient-pulse">
-                    <stop offset="0%" style={{ stopColor: '#7dd3fc' }} />
-                    <stop offset="50%" style={{ stopColor: '#bae6fd' }} />
-                    <stop offset="100%" style={{ stopColor: '#7dd3fc' }} />
-                  </linearGradient>
-                </defs>
-              </motion.svg>
+              </div>
             </motion.div>
           </div>
         </div>

@@ -39,14 +39,6 @@ const cardVariants: Variants = {
 };
 
 const SubscriptionDistributionChart: React.FC<SubscriptionDistributionChartProps> = ({ data }) => {
-  const [hoveredSection, setHoveredSection] = useState<{
-    label: string;
-    value: number;
-    percentage: string;
-    color: string;
-    x: number;
-    y: number;
-  } | null>(null);
 
   const total = data.free + data.starter + data.basic + data.premium + data.enterprise;
 
@@ -80,24 +72,34 @@ const SubscriptionDistributionChart: React.FC<SubscriptionDistributionChartProps
     responsive: true,
     maintainAspectRatio: false,
     animation: {
-      duration: 2000,
-      easing: 'easeOutCubic',
+      duration: 2500,
+      easing: 'easeOutQuart',
       animateScale: true,
       animateRotate: true,
+    },
+    layout: {
+      padding: {
+        top: 12,
+        bottom: 12,
+        left: 8,
+        right: 8,
+      },
     },
     plugins: {
       legend: {
         position: 'top',
+        align: 'center',
         labels: {
           font: {
-            size: 10,
+            size: 11,
             family: 'Inter, sans-serif',
-            weight: 'bold',
+            weight: '600',
           },
           color: '#2b4a6a',
-          boxWidth: 14,
-          padding: 8,
+          boxWidth: 18,
+          padding: 10,
           usePointStyle: true,
+          pointStyle: 'rect',
           generateLabels: (chart) => {
             const data = chart.data;
             if (data.labels && data.datasets.length) {
@@ -109,7 +111,7 @@ const SubscriptionDistributionChart: React.FC<SubscriptionDistributionChartProps
                   fillStyle: data.datasets[0].backgroundColor![i] as string,
                   strokeStyle: '#fff',
                   lineWidth: 2,
-                  pointStyle: 'circle',
+                  pointStyle: 'rect',
                   fontColor: '#2b4a6a',
                 };
               });
@@ -122,85 +124,81 @@ const SubscriptionDistributionChart: React.FC<SubscriptionDistributionChartProps
         display: true,
         text: 'Répartition des Abonnements',
         font: {
-          size: 12,
+          size: 14,
           family: 'Inter, sans-serif',
-          weight: 'bold',
+          weight: '700',
         },
         color: '#2b4a6a',
-        padding: { bottom: 10, top: 5 },
+        padding: { bottom: 12, top: 8 },
       },
       tooltip: {
-        enabled: false,
+        enabled: true,
+        backgroundColor: 'rgba(43, 74, 106, 0.95)',
+        titleFont: { size: 13, weight: 'bold' },
+        bodyFont: { size: 11 },
+        padding: 12,
+        cornerRadius: 8,
+        borderColor: '#f57c00',
+        borderWidth: 2,
+        displayColors: true,
+        callbacks: {
+          label: (context) => {
+            const value = context.raw as number;
+            const percentage = ((value / total) * 100).toFixed(1);
+            return `${context.label}: ${value} (${percentage}%)`;
+          },
+        },
+        custom: (tooltipModel) => {
+          if (tooltipModel.opacity === 0) {
+            return;
+          }
+          
+          const position = tooltipModel.chart.canvas.getBoundingClientRect();
+          const ctx = tooltipModel.chart.ctx;
+          
+          // Style du tooltip personnalisé
+          ctx.save();
+          ctx.fillStyle = 'rgba(43, 74, 106, 0.95)';
+          ctx.strokeStyle = '#f57c00';
+          ctx.lineWidth = 2;
+          ctx.shadowColor = 'rgba(0, 0, 0, 0.3)';
+          ctx.shadowBlur = 10;
+          ctx.shadowOffsetX = 0;
+          ctx.shadowOffsetY = 4;
+          
+          // Rectangle arrondi pour le tooltip
+          const tooltipWidth = 120;
+          const tooltipHeight = 60;
+          const x = position.left + tooltipModel.caretX - tooltipWidth / 2;
+          const y = position.top + tooltipModel.caretY - tooltipHeight - 10;
+          
+          // Dessiner le rectangle avec coins arrondis
+          ctx.beginPath();
+          ctx.roundRect(x, y, tooltipWidth, tooltipHeight, 8);
+          ctx.fill();
+          ctx.stroke();
+          
+          // Texte du tooltip
+          ctx.fillStyle = '#ffffff';
+          ctx.font = 'bold 12px Inter, sans-serif';
+          ctx.textAlign = 'center';
+          
+          if (tooltipModel.body) {
+            const body = tooltipModel.body[0];
+            const lines = body.lines;
+            const label = lines[0];
+            const value = lines[1] || '';
+            
+            ctx.fillText(label, x + tooltipWidth / 2, y + 20);
+            ctx.font = '11px Inter, sans-serif';
+            ctx.fillText(value, x + tooltipWidth / 2, y + 40);
+          }
+          
+          ctx.restore();
+        }
       },
     },
-    onHover: (event, chartElements) => {
-      if (chartElements.length > 0) {
-        const element = chartElements[0];
-        const index = element.index;
-        const dataset = chartData.datasets[0];
-        const label = chartData.labels![index] as string;
-        const value = dataset.data[index] as number;
-        const percentage = ((value / total) * 100).toFixed(1);
-        const color = dataset.backgroundColor![index] as string;
 
-        const chart = element.element as any;
-        const { startAngle, endAngle } = chart;
-        const midAngle = (startAngle + endAngle) / 2;
-        const { x: centerX, y: centerY } = chart.getCenterPoint();
-        const radius = chart.outerRadius;
-
-        // Positionnement spécifique pour chaque section
-        let popupX, popupY;
-        const baseOffset = 10;
-
-        if (label === 'Free') {
-          // Positionnement au-dessus de la section grise
-          const angleOffset = -Math.PI / 2;
-          const adjustedAngle = midAngle + angleOffset;
-          popupX = centerX + (radius * 0.7) * Math.cos(adjustedAngle);
-          popupY = centerY + (radius * 0.7) * Math.sin(adjustedAngle) - 20;
-        } else {
-          // Positionnement standard pour les autres sections
-          popupX = centerX + (radius + baseOffset) * Math.cos(midAngle);
-          popupY = centerY + (radius + baseOffset) * Math.sin(midAngle);
-        }
-
-        // Ajustements spécifiques pour Premium (orange) et Enterprise (violet)
-        if (label === 'Premium') {
-          popupY -= 15;
-        } else if (label === 'Enterprise') {
-          popupX += 5;
-          popupY -= 10;
-        }
-
-        // Contraintes pour rester dans le conteneur
-        const containerWidth = 318;
-        const containerHeight = 288;
-        const popupWidth = 80;
-        const popupHeight = 80;
-        const margin = 20;
-        
-        const boundedX = Math.max(
-          margin + popupWidth / 2,
-          Math.min(popupX, containerWidth - margin - popupWidth / 2)
-        );
-        const boundedY = Math.max(
-          margin + popupHeight / 2,
-          Math.min(popupY, containerHeight - margin - popupHeight / 2)
-        );
-
-        setHoveredSection({
-          label,
-          value,
-          percentage,
-          color,
-          x: boundedX,
-          y: boundedY,
-        });
-      } else {
-        setHoveredSection(null);
-      }
-    },
   };
 
   return (
@@ -208,44 +206,10 @@ const SubscriptionDistributionChart: React.FC<SubscriptionDistributionChartProps
       variants={cardVariants}
       initial="hidden"
       animate="visible"
-      className="relative bg-white/80 rounded-2xl p-4 shadow-sm border border-gray-100/50 backdrop-blur-sm overflow-hidden max-w-[318px] w-full min-w-0"
+      className="relative bg-white/80 rounded-2xl p-4 shadow-sm border border-gray-100/50 backdrop-blur-sm overflow-hidden w-full min-w-0"
     >
-      <div className="w-full h-72 relative">
+      <div className="w-full h-[450px] relative">
         <Pie data={chartData} options={options} />
-        {hoveredSection && (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.8 }}
-            transition={{ 
-              type: 'spring', 
-              stiffness: 200, 
-              damping: 10,
-              delay: hoveredSection.label === 'Premium' || hoveredSection.label === 'Enterprise' ? 0.1 : 0
-            }}
-            className="absolute rounded-full shadow-lg p-4 text-xs text-white flex flex-col items-center justify-center"
-            style={{
-              background: `radial-gradient(circle, ${hoveredSection.color} 0%, ${hoveredSection.color}cc 70%, transparent 100%)`,
-              boxShadow: `0 4px 15px ${hoveredSection.color}80, 0 0 20px ${hoveredSection.color}40`,
-              width: '80px',
-              height: '80px',
-              top: `${hoveredSection.y}px`,
-              left: `${hoveredSection.x}px`,
-              transform: 'translate(-50%, -50%)',
-              zIndex: 20,
-              textShadow: '0 0 2px rgba(0, 0, 0, 0.5)',
-            }}
-          >
-            <motion.div
-              animate={{ scale: [1, 1.05, 1] }}
-              transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}
-            >
-              <p className="font-bold text-center">{hoveredSection.label}</p>
-              <p className="text-center">Valeur: {hoveredSection.value}</p>
-              <p className="text-center">Pourcentage: {hoveredSection.percentage}%</p>
-            </motion.div>
-          </motion.div>
-        )}
       </div>
     </motion.div>
   );
