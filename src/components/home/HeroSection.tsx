@@ -216,16 +216,6 @@ export default function Hero() {
         <div className="absolute left-1/4 top-0 h-[500px] w-[500px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-gradient-to-r from-amber-400 to-orange-500 blur-3xl"></div>
         <div className="absolute right-1/4 bottom-0 h-[500px] w-[500px] translate-x-1/2 translate-y-1/2 rounded-full bg-gradient-to-r from-amber-400 to-orange-500 blur-3xl"></div>
       </div>
-      <motion.div
-        animate={{ y: [0, -15, 0] }}
-        transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
-        className="absolute left-10 top-1/4 h-16 w-16 rounded-full bg-amber-400/20 blur-xl"
-      />
-      <motion.div
-        animate={{ y: [0, 15, 0] }}
-        transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut', delay: 1 }}
-        className="absolute right-10 top-2/4 h-20 w-20 rounded-full bg-orange-500/20 blur-xl"
-      />
       <div className="relative mx-auto max-w-7xl px-6 lg:px-12">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-start">
           <div className="text-center lg:text-left">
@@ -328,82 +318,59 @@ export default function Hero() {
                 onError={handleImageError}
               />
               
-              {/* Effet Fresnel Light Move - Ultra Premium */}
+              {/* Effet Fresnel Light Move - Ultra Premium Enhanced */}
               <div className="absolute inset-0 pointer-events-none overflow-hidden">
-                {/* Halo lumineux pulsé */}
+                {/* Halo lumineux principal intensifié */}
                 <motion.div
-                  className="absolute right-0 top-1/4 w-64 h-64 bg-gradient-to-br from-amber-400/20 via-orange-500/15 to-transparent rounded-full blur-3xl"
+                  className="absolute right-0 top-1/4 w-80 h-80 bg-gradient-to-br from-amber-400/30 via-orange-500/25 to-transparent rounded-full blur-3xl"
                   animate={{
-                    scale: [1, 1.2, 1],
-                    opacity: [0.3, 0.6, 0.3],
+                    scale: [1, 1.4, 1],
+                    opacity: [0.4, 0.8, 0.4],
                     rotate: [0, 180, 360],
                   }}
                   transition={{
-                    scale: { duration: 4, repeat: Infinity, ease: "easeInOut" },
-                    opacity: { duration: 3, repeat: Infinity, ease: "easeInOut" },
-                    rotate: { duration: 20, repeat: Infinity, ease: "linear" },
+                    scale: { duration: 3, repeat: Infinity, ease: "easeInOut" },
+                    opacity: { duration: 2.5, repeat: Infinity, ease: "easeInOut" },
+                    rotate: { duration: 15, repeat: Infinity, ease: "linear" },
                   }}
                 />
                 
-                {/* Ligne de lumière traversante verticale */}
+                {/* Halo secondaire pour plus de profondeur */}
                 <motion.div
-                  className="absolute right-1/4 top-0 w-px h-full bg-gradient-to-b from-transparent via-amber-400/60 to-transparent"
+                  className="absolute right-20 top-1/3 w-60 h-60 bg-gradient-to-br from-orange-500/20 via-amber-400/15 to-transparent rounded-full blur-2xl"
+                  animate={{
+                    scale: [1, 1.2, 1],
+                    opacity: [0.3, 0.6, 0.3],
+                    rotate: [0, -180, -360],
+                  }}
+                  transition={{
+                    scale: { duration: 4, repeat: Infinity, ease: "easeInOut", delay: 1 },
+                    opacity: { duration: 3, repeat: Infinity, ease: "easeInOut", delay: 1 },
+                    rotate: { duration: 18, repeat: Infinity, ease: "linear" },
+                  }}
+                />
+                
+                {/* Ligne de lumière traversante verticale intensifiée */}
+                <motion.div
+                  className="absolute right-1/4 top-0 w-0.5 h-full bg-gradient-to-b from-transparent via-amber-400/80 to-transparent"
                   animate={{
                     opacity: [0, 1, 0],
                     scaleY: [0, 1, 0],
                   }}
                   transition={{
-                    duration: 3,
+                    duration: 2.5,
                     repeat: Infinity,
                     ease: "easeInOut",
-                    delay: 1,
+                    delay: 0.5,
                   }}
                 />
                 
-                {/* Reflet en verre animé */}
+                {/* Ligne de lumière secondaire */}
                 <motion.div
-                  className="absolute right-0 top-0 w-32 h-full bg-gradient-to-l from-white/20 via-transparent to-transparent"
+                  className="absolute right-1/3 top-0 w-0.5 h-full bg-gradient-to-b from-transparent via-orange-500/60 to-transparent"
                   animate={{
-                    x: [0, -20, 0],
-                    opacity: [0, 0.8, 0],
-                  }}
-                  transition={{
-                    duration: 4,
-                    repeat: Infinity,
-                    ease: "easeInOut",
-                    delay: 2,
-                  }}
-                />
-                
-                {/* Particules de lumière verticales */}
-                {[...Array(6)].map((_, i) => (
-                  <motion.div
-                    key={i}
-                    className="absolute w-1 h-1 bg-gradient-to-b from-amber-400 to-orange-500 rounded-full"
-                    style={{
-                      right: `${20 + (i * 15)}%`,
-                      top: `${10 + (i * 15)}%`,
-                    }}
-                    animate={{
-                      y: [0, -30, 0],
-                      opacity: [0, 1, 0],
-                      scale: [0, 1.5, 0],
-                    }}
-                    transition={{
-                      duration: 2 + i * 0.5,
-                      repeat: Infinity,
-                      ease: "easeInOut",
-                      delay: i * 0.3,
-                    }}
-                  />
-                ))}
-                
-                {/* Effet de fresnel - Ligne de lumière horizontale */}
-                <motion.div
-                  className="absolute right-0 top-1/3 w-full h-px bg-gradient-to-r from-transparent via-amber-400/80 to-transparent"
-                  animate={{
-                    scaleX: [0, 1, 0],
                     opacity: [0, 1, 0],
+                    scaleY: [0, 1, 0],
                   }}
                   transition={{
                     duration: 3,
@@ -413,18 +380,80 @@ export default function Hero() {
                   }}
                 />
                 
-                {/* Halo secondaire - Effet de profondeur */}
+                {/* Reflet en verre animé amélioré */}
                 <motion.div
-                  className="absolute right-10 bottom-1/4 w-40 h-40 bg-gradient-to-tl from-orange-500/10 via-amber-400/5 to-transparent rounded-full blur-2xl"
+                  className="absolute right-0 top-0 w-40 h-full bg-gradient-to-l from-white/30 via-transparent to-transparent"
                   animate={{
-                    scale: [1, 1.3, 1],
-                    opacity: [0.2, 0.4, 0.2],
+                    x: [0, -30, 0],
+                    opacity: [0, 0.9, 0],
+                  }}
+                  transition={{
+                    duration: 3.5,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                    delay: 1,
+                  }}
+                />
+                
+
+                
+                {/* Effet de fresnel - Ligne de lumière horizontale principale */}
+                <motion.div
+                  className="absolute right-0 top-1/3 w-full h-0.5 bg-gradient-to-r from-transparent via-amber-400/90 to-transparent"
+                  animate={{
+                    scaleX: [0, 1, 0],
+                    opacity: [0, 1, 0],
+                  }}
+                  transition={{
+                    duration: 2.5,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                    delay: 1,
+                  }}
+                />
+                
+                {/* Ligne de lumière horizontale secondaire */}
+                <motion.div
+                  className="absolute right-0 top-2/3 w-full h-0.5 bg-gradient-to-r from-transparent via-orange-500/70 to-transparent"
+                  animate={{
+                    scaleX: [0, 1, 0],
+                    opacity: [0, 1, 0],
+                  }}
+                  transition={{
+                    duration: 3,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                    delay: 2,
+                  }}
+                />
+                
+                {/* Halo de profondeur amélioré */}
+                <motion.div
+                  className="absolute right-10 bottom-1/4 w-48 h-48 bg-gradient-to-tl from-orange-500/15 via-amber-400/10 to-transparent rounded-full blur-2xl"
+                  animate={{
+                    scale: [1, 1.4, 1],
+                    opacity: [0.3, 0.6, 0.3],
+                  }}
+                  transition={{
+                    duration: 4,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                    delay: 2,
+                  }}
+                />
+                
+                {/* Effet de brillance traversant */}
+                <motion.div
+                  className="absolute right-0 top-0 w-20 h-full bg-gradient-to-l from-white/40 via-transparent to-transparent"
+                  animate={{
+                    x: [0, -50, 0],
+                    opacity: [0, 0.8, 0],
                   }}
                   transition={{
                     duration: 5,
                     repeat: Infinity,
                     ease: "easeInOut",
-                    delay: 2.5,
+                    delay: 3,
                   }}
                 />
               </div>
