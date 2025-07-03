@@ -14,7 +14,7 @@ import {
   ChevronRightIcon,
 } from '@heroicons/react/24/outline';
 
-type CurrentView = 'overview' | 'tenants' | 'plans' | 'payments' | 'domains' | 'codePromo' | 'globalUsers';
+type CurrentView = 'overview' | 'tenants' | 'plans' | 'payments' | 'domains' | 'codePromo' | 'globalUsers' | 'monitoring' | 'settings';
 
 interface SidebarProps {
   onNavigation: (view: CurrentView) => void;
@@ -45,8 +45,8 @@ const Sidebar = ({ onNavigation, onCollapseChange }: SidebarProps) => {
     },
     { name: 'Utilisateurs Globaux', icon: UserGroupIcon, onClick: () => onNavigation('globalUsers') },
     { name: 'Codes Promotionnels', icon: TicketIcon, onClick: () => onNavigation('codePromo') },
-    { name: 'Monitoring', icon: ChartBarIcon, onClick: () => console.log('Monitoring clicked') },
-    { name: 'Paramètres', icon: Cog6ToothIcon, onClick: () => console.log('Settings clicked') },
+    { name: 'Monitoring', icon: ChartBarIcon, onClick: () => onNavigation('monitoring') },
+    { name: 'Paramètres', icon: Cog6ToothIcon, onClick: () => onNavigation('settings') },
   ];
 
   const handleItemClick = (item: any) => {
