@@ -197,39 +197,82 @@ const CreateTenant = ({ onBack, onTenantCreated }: CreateTenantProps) => {
           </div>
         </div>
 
-        {/* Progress Steps */}
+        {/* Progress Steps avec animation fluide améliorée */}
         <div className="mb-8">
           <div className="flex items-center justify-between">
             {steps.map((step, index) => (
               <div key={step.id} className="flex items-center">
                 <motion.div
                   whileHover={{ scale: 1.1 }}
-                  className={`flex items-center justify-center w-12 h-12 rounded-full border-2 transition-all duration-300 ${
+                  className={`flex items-center justify-center w-16 h-16 rounded-full border-2 transition-all duration-500 ${
                     currentStep >= step.id
                       ? 'bg-gradient-to-r from-[#f57c00] to-[#ff9800] border-[#f57c00] text-white shadow-lg'
                       : 'bg-white border-gray-300 text-gray-400'
                   }`}
                 >
-                  <step.icon className="w-6 h-6" />
+                  <step.icon className="w-8 h-8" />
                 </motion.div>
                 {index < steps.length - 1 && (
-                  <div className={`w-16 h-1 mx-2 transition-all duration-300 ${
-                    currentStep > step.id ? 'bg-gradient-to-r from-[#f57c00] to-[#ff9800]' : 'bg-gray-300'
-                  }`} />
+                  <div className="relative w-24 h-2 mx-4">
+                    <div className="absolute inset-0 bg-gray-300 rounded-full" />
+                    <motion.div
+                      className="absolute inset-0 bg-gradient-to-r from-[#f57c00] to-[#ff9800] rounded-full"
+                      initial={{ width: 0 }}
+                      animate={{ 
+                        width: currentStep > step.id ? '100%' : '0%' 
+                      }}
+                      transition={{ 
+                        duration: 1.5, 
+                        ease: "easeInOut",
+                        delay: 0.4 
+                      }}
+                    />
+                    {/* Effet de brillance sur la barre */}
+                    <motion.div
+                      className="absolute inset-0 bg-gradient-to-r from-white/40 via-transparent to-white/40 rounded-full"
+                      initial={{ opacity: 0 }}
+                      animate={{ 
+                        opacity: currentStep > step.id ? 1 : 0 
+                      }}
+                      transition={{ 
+                        duration: 1, 
+                        delay: 0.6 
+                      }}
+                    />
+                    {/* Animation de progression fluide */}
+                    <motion.div
+                      className="absolute inset-0 bg-gradient-to-r from-transparent via-white/60 to-transparent rounded-full"
+                      initial={{ x: '-100%' }}
+                      animate={{ 
+                        x: currentStep > step.id ? '100%' : '-100%' 
+                      }}
+                      transition={{ 
+                        duration: 2, 
+                        repeat: currentStep > step.id ? Infinity : 0,
+                        ease: "easeInOut",
+                        delay: 0.8 
+                      }}
+                    />
+                  </div>
                 )}
               </div>
             ))}
           </div>
-          <div className="flex justify-between mt-4">
+          <div className="flex justify-between mt-8">
             {steps.map((step) => (
-              <span
+              <motion.span
                 key={step.id}
-                className={`text-sm font-medium transition-all duration-300 ${
+                className={`text-sm font-medium transition-all duration-500 ${
                   currentStep >= step.id ? 'text-[#f57c00]' : 'text-gray-400'
                 }`}
+                animate={{
+                  scale: currentStep === step.id ? 1.1 : 1,
+                  fontWeight: currentStep === step.id ? 'bold' : 'normal'
+                }}
+                transition={{ duration: 0.4 }}
               >
                 {step.title}
-              </span>
+              </motion.span>
             ))}
           </div>
         </div>
@@ -268,7 +311,7 @@ const CreateTenant = ({ onBack, onTenantCreated }: CreateTenantProps) => {
                       type="text"
                       value={formData.name}
                       onChange={(e) => handleInputChange('name', e.target.value)}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#f57c00]/50 focus:border-[#f57c00] transition-all duration-300 bg-white/80 backdrop-blur-sm"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#f57c00]/50 focus:border-[#f57c00] focus:text-[#f57c00] transition-all duration-300 bg-white/80 backdrop-blur-sm"
                       placeholder="Ex: Lycée Victor Hugo"
                     />
                   </motion.div>
@@ -282,7 +325,7 @@ const CreateTenant = ({ onBack, onTenantCreated }: CreateTenantProps) => {
                         type="text"
                         value={formData.code}
                         onChange={(e) => handleInputChange('code', e.target.value)}
-                        className="flex-1 px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#f57c00]/50 focus:border-[#f57c00] transition-all duration-300 bg-white/80 backdrop-blur-sm font-mono"
+                        className="flex-1 px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#f57c00]/50 focus:border-[#f57c00] focus:text-[#f57c00] transition-all duration-300 bg-white/80 backdrop-blur-sm font-mono"
                         placeholder="Code généré automatiquement"
                       />
                       <motion.button
@@ -303,7 +346,7 @@ const CreateTenant = ({ onBack, onTenantCreated }: CreateTenantProps) => {
                     <select
                       value={formData.type}
                       onChange={(e) => handleInputChange('type', e.target.value)}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#f57c00]/50 focus:border-[#f57c00] transition-all duration-300 bg-white/80 backdrop-blur-sm"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#f57c00]/50 focus:border-[#f57c00] focus:text-[#f57c00] transition-all duration-300 bg-[#2b4a6a]/5 backdrop-blur-sm"
                     >
                       <option value="">Sélectionner un type</option>
                       {establishmentTypes.map((type) => (
@@ -322,7 +365,7 @@ const CreateTenant = ({ onBack, onTenantCreated }: CreateTenantProps) => {
                       type="email"
                       value={formData.email}
                       onChange={(e) => handleInputChange('email', e.target.value)}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#f57c00]/50 focus:border-[#f57c00] transition-all duration-300 bg-white/80 backdrop-blur-sm"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#f57c00]/50 focus:border-[#f57c00] focus:text-[#f57c00] transition-all duration-300 bg-white/80 backdrop-blur-sm"
                       placeholder="admin@etablissement.edu"
                     />
                   </motion.div>
@@ -335,7 +378,7 @@ const CreateTenant = ({ onBack, onTenantCreated }: CreateTenantProps) => {
                       type="tel"
                       value={formData.phone}
                       onChange={(e) => handleInputChange('phone', e.target.value)}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#f57c00]/50 focus:border-[#f57c00] transition-all duration-300 bg-white/80 backdrop-blur-sm"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#f57c00]/50 focus:border-[#f57c00] focus:text-[#f57c00] transition-all duration-300 bg-white/80 backdrop-blur-sm"
                       placeholder="+33 1 42 XX XX XX"
                     />
                   </motion.div>
@@ -348,7 +391,7 @@ const CreateTenant = ({ onBack, onTenantCreated }: CreateTenantProps) => {
                       value={formData.address}
                       onChange={(e) => handleInputChange('address', e.target.value)}
                       rows={3}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#f57c00]/50 focus:border-[#f57c00] transition-all duration-300 bg-white/80 backdrop-blur-sm resize-none"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#f57c00]/50 focus:border-[#f57c00] focus:text-[#f57c00] transition-all duration-300 bg-white/80 backdrop-blur-sm resize-none"
                       placeholder="123 Rue de la République, 75001 Paris, France"
                     />
                   </motion.div>
@@ -635,14 +678,17 @@ const CreateTenant = ({ onBack, onTenantCreated }: CreateTenantProps) => {
             </motion.button>
 
             <motion.button
-              whileHover={{ scale: 1.05, backgroundColor: currentStep === 4 ? '#22c55e' : '#f57c00' }}
+              whileHover={{ 
+                scale: 1.05, 
+                boxShadow: currentStep === 4 ? "0px 8px 25px rgba(245, 158, 11, 0.4)" : "0px 8px 25px rgba(245, 124, 0, 0.4)"
+              }}
               whileTap={{ scale: 0.95 }}
               onClick={currentStep === 4 ? handleSubmit : handleNext}
               disabled={!isStepValid()}
               className={`px-8 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed ${
                 currentStep === 4
-                  ? 'bg-gradient-to-r from-green-500 to-emerald-600 text-white'
-                  : 'bg-gradient-to-r from-[#f57c00] to-[#ff9800] text-white'
+                  ? 'bg-gradient-to-r from-amber-500 to-orange-600 text-white hover:from-amber-600 hover:to-orange-700'
+                  : 'bg-gradient-to-r from-[#f57c00] to-[#ff9800] text-white hover:from-[#f57c00]/90 hover:to-[#ff9800]/90'
               }`}
             >
               {currentStep === 4 ? 'Créer le Tenant' : 'Suivant'}

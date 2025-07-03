@@ -141,20 +141,20 @@ const DashboardHeader = ({ isSidebarCollapsed = false }: DashboardHeaderProps) =
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => setNotificationOpen(!notificationOpen)}
-                className="relative p-2 text-gray-600 hover:text-orange-600 hover:bg-gray-100 rounded-full transition-all duration-200"
+                className="relative p-2 text-gray-600 hover:text-orange-600 rounded-full transition-all duration-200 bg-gradient-to-r from-orange-400/20 to-amber-500/20"
               >
                 <BellIcon className="h-6 w-6" />
                 <motion.span
                   initial={{ scale: 0 }}
                   animate={{ scale: 1 }}
-                  className="absolute -top-1 -right-1 bg-blue-500 text-white text-xs rounded-full h-4 w-4 flex items-center justify-center font-bold"
+                  className="absolute -top-1 -right-1 bg-gradient-to-r from-orange-400/90 to-amber-500/90 text-white text-xs rounded-full h-4 w-4 flex items-center justify-center font-bold"
                 >
                   3
                 </motion.span>
                 <motion.div
                   animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.5, 0.3] }}
                   transition={{ duration: 2, repeat: Infinity }}
-                  className="absolute inset-0 bg-blue-300 rounded-full opacity-20 blur-sm"
+                  className="absolute inset-0 bg-gradient-to-r from-orange-400 to-amber-500 rounded-full opacity-20 blur-sm"
                 />
               </motion.button>
               <AnimatePresence>
@@ -182,7 +182,7 @@ const DashboardHeader = ({ isSidebarCollapsed = false }: DashboardHeaderProps) =
                             <div className={`w-1.5 h-1.5 rounded-full mt-1.5 ${
                               notif.type === 'success' ? 'bg-green-500' :
                               notif.type === 'warning' ? 'bg-yellow-500' :
-                              'bg-blue-500'
+                              'bg-orange-400'
                             }`} />
                             <div>
                               <p className="text-sm text-gray-900 font-medium">{notif.title}</p>
@@ -206,7 +206,7 @@ const DashboardHeader = ({ isSidebarCollapsed = false }: DashboardHeaderProps) =
                 className="relative p-2 flex items-center space-x-1 hover:bg-gray-100 text-gray-600 hover:text-orange-600 rounded-full transition-all duration-200"
               >
                 <div className="relative">
-                  <UserCircleIcon className="h-6 w-6 text-orange-500 group-hover:text-orange-600 transition-all duration-200" />
+                  <UserCircleIcon className="h-6 w-6 text-orange-500 group-hover:text-orange600 transition-all duration-200" />
                   <motion.div
                     animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.5, 0.3] }}
                     transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}

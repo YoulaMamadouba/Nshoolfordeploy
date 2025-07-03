@@ -324,6 +324,14 @@ const ManageTenants = () => {
                 tenants={tenants}
                 onViewDetails={(tenant) => handleViewChange('details', tenant)}
                 onAddTenant={() => handleViewChange('create')}
+                onEditTenant={(id) => {
+                  // TODO: Implémenter l'édition
+                  console.log('Éditer tenant:', id);
+                }}
+                onDeleteTenant={(id) => {
+                  // TODO: Implémenter la suppression
+                  console.log('Supprimer tenant:', id);
+                }}
               />
             </motion.div>
           )}
@@ -370,12 +378,12 @@ const ManageTenants = () => {
             exit="exit"
             className="fixed top-20 right-6 z-50"
           >
-            <div className="bg-gradient-to-r from-green-500 to-emerald-600 text-white px-6 py-4 rounded-2xl shadow-2xl border border-green-400/30 backdrop-blur-sm">
+            <div className="bg-gradient-to-r from-orange-500/90 to-amber-600/90 text-white px-6 py-4 rounded-2xl shadow-2xl border border-orange-400/30 backdrop-blur-sm">
               <div className="flex items-center gap-3">
-                <CheckCircleIcon className="w-6 h-6 text-green-100" />
+                <CheckCircleIcon className="w-6 h-6 text-orange-100" />
                 <div>
                   <p className="font-semibold text-lg">{notificationMessage}</p>
-                  <p className="text-green-100 text-sm">Le tenant a été ajouté à votre liste</p>
+                  <p className="text-orange-100 text-sm">Le tenant a été ajouté à votre liste</p>
                 </div>
                 <button
                   onClick={() => setShowNotification(false)}

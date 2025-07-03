@@ -11,7 +11,10 @@ import {
   ArrowPathIcon,
   ArrowDownTrayIcon,
   ChevronUpIcon,
+  Squares2X2Icon,
+  TableCellsIcon,
 } from '@heroicons/react/24/outline';
+import TenantsCards from './TenantsCards';
 
 interface Tenant {
   id: number;
@@ -124,6 +127,7 @@ const TenantsList: React.FC<TenantsListProps> = ({ tenants, onViewDetails, onAdd
   const [currentPage, setCurrentPage] = useState(1);
   const [sortBy, setSortBy] = useState<string>('name');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
+  const [viewMode, setViewMode] = useState<'table' | 'cards'>('table');
 
   const handleFilterChange = (filterName: keyof typeof filters, value: string) => {
     setFilters((prev) => ({ ...prev, [filterName]: value }));
@@ -342,6 +346,20 @@ const TenantsList: React.FC<TenantsListProps> = ({ tenants, onViewDetails, onAdd
             variants={buttonVariants}
             whileHover="hover"
             whileTap="tap"
+            onClick={() => setViewMode(viewMode === 'table' ? 'cards' : 'table')}
+            className={`p-2 rounded-full border border-[#f57c00]/50 transition-all duration-300 ${
+              viewMode === 'cards' 
+                ? 'bg-[#f57c00] text-white' 
+                : 'bg-[#f57c00]/10 text-[#f57c00] hover:bg-[#f57c00] hover:text-white'
+            }`}
+            title={viewMode === 'table' ? 'Vue Cards' : 'Vue Tableau'}
+          >
+            {viewMode === 'table' ? <Squares2X2Icon className="h-5 w-5" /> : <TableCellsIcon className="h-5 w-5" />}
+          </motion.button>
+          <motion.button
+            variants={buttonVariants}
+            whileHover="hover"
+            whileTap="tap"
             onClick={onAddTenant}
             className="flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-[#f57c00] to-[#ff9800] text-white rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300"
             title="Ajouter un tenant"
@@ -352,170 +370,187 @@ const TenantsList: React.FC<TenantsListProps> = ({ tenants, onViewDetails, onAdd
         </div>
       </motion.div>
 
-      {/* Table */}
-      <div className="overflow-x-auto">
-        <table className="w-full text-sm">
-          <thead className="sticky top-0 bg-gradient-to-r from-white/90 to-gray-50/80 border-b border-[#f57c00]/30">
-            <tr className="text-left text-[#2b4a6a] font-bold">
-              <th className="py-3 px-4">
-                <button onClick={() => handleSort('name')} className="flex items-center gap-1 hover:text-[#f57c00] transition-colors">
-                  Tenant
-                  {sortBy === 'name' && (
-                    sortOrder === 'asc' ? <ChevronUpIcon className="w-4 h-4" /> : <ChevronDownIcon className="w-4 h-4" />
-                  )}
-                </button>
-              </th>
-              <th className="py-3 px-4">
-                <button onClick={() => handleSort('code')} className="flex items-center gap-1 hover:text-[#f57c00] transition-colors">
-                  Code
-                  {sortBy === 'code' && (
-                    sortOrder === 'asc' ? <ChevronUpIcon className="w-4 h-4" /> : <ChevronDownIcon className="w-4 h-4" />
-                  )}
-                </button>
-              </th>
-              <th className="py-3 px-4">
-                <button onClick={() => handleSort('domain')} className="flex items-center gap-1 hover:text-[#f57c00] transition-colors">
-                  Domaine
-                  {sortBy === 'domain' && (
-                    sortOrder === 'asc' ? <ChevronUpIcon className="w-4 h-4" /> : <ChevronDownIcon className="w-4 h-4" />
-                  )}
-                </button>
-              </th>
-              <th className="py-3 px-4">
-                <button onClick={() => handleSort('plan')} className="flex items-center gap-1 hover:text-[#f57c00] transition-colors">
-                  Plan
-                  {sortBy === 'plan' && (
-                    sortOrder === 'asc' ? <ChevronUpIcon className="w-4 h-4" /> : <ChevronDownIcon className="w-4 h-4" />
-                  )}
-                </button>
-              </th>
-              <th className="py-3 px-4">
-                <button onClick={() => handleSort('status')} className="flex items-center gap-1 hover:text-[#f57c00] transition-colors">
-                  Statut
-                  {sortBy === 'status' && (
-                    sortOrder === 'asc' ? <ChevronUpIcon className="w-4 h-4" /> : <ChevronDownIcon className="w-4 h-4" />
-                  )}
-                </button>
-              </th>
-              <th className="py-3 px-4">
-                <button onClick={() => handleSort('createdAt')} className="flex items-center gap-1 hover:text-[#f57c00] transition-colors">
-                  Date de création
-                  {sortBy === 'createdAt' && (
-                    sortOrder === 'asc' ? <ChevronUpIcon className="w-4 h-4" /> : <ChevronDownIcon className="w-4 h-4" />
-                  )}
-                </button>
-              </th>
-              <th className="py-3 px-4">
-                <button onClick={() => handleSort('users')} className="flex items-center gap-1 hover:text-[#f57c00] transition-colors">
-                  Utilisateurs
-                  {sortBy === 'users' && (
-                    sortOrder === 'asc' ? <ChevronUpIcon className="w-4 h-4" /> : <ChevronDownIcon className="w-4 h-4" />
-                  )}
-                </button>
-              </th>
-              <th className="py-3 px-4 text-right">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {paginatedTenants.length === 0 ? (
-              <tr>
-                <td colSpan={8} className="py-6 text-center text-gray-500 text-sm">
-                  Aucun tenant trouvé
-                </td>
+      {/* Content View */}
+      {viewMode === 'table' ? (
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm">
+            <thead className="sticky top-0 bg-gradient-to-r from-white/90 to-gray-50/80 border-b border-[#f57c00]/30">
+              <tr className="text-left text-[#2b4a6a] font-bold">
+                <th className="py-3 px-4">
+                  <button onClick={() => handleSort('name')} className="flex items-center gap-1 hover:text-[#f57c00] transition-colors">
+                    Tenant
+                    {sortBy === 'name' && (
+                      sortOrder === 'asc' ? <ChevronUpIcon className="w-4 h-4" /> : <ChevronDownIcon className="w-4 h-4" />
+                    )}
+                  </button>
+                </th>
+                <th className="py-3 px-4">
+                  <button onClick={() => handleSort('code')} className="flex items-center gap-1 hover:text-[#f57c00] transition-colors">
+                    Code
+                    {sortBy === 'code' && (
+                      sortOrder === 'asc' ? <ChevronUpIcon className="w-4 h-4" /> : <ChevronDownIcon className="w-4 h-4" />
+                    )}
+                  </button>
+                </th>
+                <th className="py-3 px-4">
+                  <button onClick={() => handleSort('domain')} className="flex items-center gap-1 hover:text-[#f57c00] transition-colors">
+                    Domaine
+                    {sortBy === 'domain' && (
+                      sortOrder === 'asc' ? <ChevronUpIcon className="w-4 h-4" /> : <ChevronDownIcon className="w-4 h-4" />
+                    )}
+                  </button>
+                </th>
+                <th className="py-3 px-4">
+                  <button onClick={() => handleSort('plan')} className="flex items-center gap-1 hover:text-[#f57c00] transition-colors">
+                    Plan
+                    {sortBy === 'plan' && (
+                      sortOrder === 'asc' ? <ChevronUpIcon className="w-4 h-4" /> : <ChevronDownIcon className="w-4 h-4" />
+                    )}
+                  </button>
+                </th>
+                <th className="py-3 px-4">
+                  <button onClick={() => handleSort('status')} className="flex items-center gap-1 hover:text-[#f57c00] transition-colors">
+                    Statut
+                    {sortBy === 'status' && (
+                      sortOrder === 'asc' ? <ChevronUpIcon className="w-4 h-4" /> : <ChevronDownIcon className="w-4 h-4" />
+                    )}
+                  </button>
+                </th>
+                <th className="py-3 px-4">
+                  <button onClick={() => handleSort('createdAt')} className="flex items-center gap-1 hover:text-[#f57c00] transition-colors">
+                    Date de création
+                    {sortBy === 'createdAt' && (
+                      sortOrder === 'asc' ? <ChevronUpIcon className="w-4 h-4" /> : <ChevronDownIcon className="w-4 h-4" />
+                    )}
+                  </button>
+                </th>
+                <th className="py-3 px-4">
+                  <button onClick={() => handleSort('users')} className="flex items-center gap-1 hover:text-[#f57c00] transition-colors">
+                    Utilisateurs
+                    {sortBy === 'users' && (
+                      sortOrder === 'asc' ? <ChevronUpIcon className="w-4 h-4" /> : <ChevronDownIcon className="w-4 h-4" />
+                    )}
+                  </button>
+                </th>
+                <th className="py-3 px-4 text-right">Actions</th>
               </tr>
-            ) : (
-              paginatedTenants.map((tenant, index) => (
-                <motion.tr
-                  key={`tenant-row-${tenant.id}`}
-                  className="border-b border-gray-100/50 hover:bg-gradient-to-r hover:from-white/30 hover:to-[#f57c00]/10 transition-all duration-300"
-                  initial="hidden"
-                  animate="visible"
-                  custom={index}
-                  variants={rowVariants}
-                >
-                  <td className="py-3 px-4">
-                    <div className="flex items-center gap-3">
-                      <motion.div
-                        className="w-10 h-10 bg-gradient-to-br from-[#f57c00] to-[#ff9800] rounded-lg flex items-center justify-center text-white font-bold text-sm overflow-hidden"
-                        whileHover={{ scale: 1.1 }}
-                        transition={{ duration: 0.2 }}
+            </thead>
+            <tbody>
+              {paginatedTenants.length === 0 ? (
+                <tr>
+                  <td colSpan={8} className="py-6 text-center text-gray-500 text-sm">
+                    Aucun tenant trouvé
+                  </td>
+                </tr>
+              ) : (
+                paginatedTenants.map((tenant, index) => (
+                  <motion.tr
+                    key={`tenant-row-${tenant.id}`}
+                    className="border-b border-gray-100/50 hover:bg-gradient-to-r hover:from-white/30 hover:to-[#f57c00]/10 transition-all duration-300"
+                    initial="hidden"
+                    animate="visible"
+                    custom={index}
+                    variants={rowVariants}
+                  >
+                    <td className="py-3 px-4">
+                      <div className="flex items-center gap-3">
+                        <motion.div
+                          className="w-10 h-10 bg-gradient-to-br from-[#f57c00] to-[#ff9800] rounded-lg flex items-center justify-center text-white font-bold text-sm overflow-hidden"
+                          whileHover={{ scale: 1.1 }}
+                          transition={{ duration: 0.2 }}
+                        >
+                          {tenant.logo ? (
+                            <img src={tenant.logo} alt={tenant.name} className="w-full h-full object-cover" />
+                          ) : (
+                            tenant.name.charAt(0)
+                          )}
+                        </motion.div>
+                        <p className="font-semibold text-gray-900">{tenant.name}</p>
+                      </div>
+                    </td>
+                    <td className="py-3 px-4">
+                      <span className="font-mono text-xs text-gray-600 bg-gray-100 px-2 py-1 rounded-md">{tenant.code}</span>
+                    </td>
+                    <td className="py-3 px-4 text-gray-700">{tenant.domain}</td>
+                    <td className="py-3 px-4">
+                      <motion.span
+                        variants={badgeVariants}
+                        whileHover="hover"
+                        className={`inline-block px-3 py-1 rounded-full text-sm font-medium ${getPlanColor(tenant.plan).bg} ${getPlanColor(tenant.plan).text}`}
                       >
-                        {tenant.logo ? (
-                          <img src={tenant.logo} alt={tenant.name} className="w-full h-full object-cover" />
-                        ) : (
-                          tenant.name.charAt(0)
-                        )}
-                      </motion.div>
-                      <p className="font-semibold text-gray-900">{tenant.name}</p>
-                    </div>
-                  </td>
-                  <td className="py-3 px-4">
-                    <span className="font-mono text-xs text-gray-600 bg-gray-100 px-2 py-1 rounded-md">{tenant.code}</span>
-                  </td>
-                  <td className="py-3 px-4 text-gray-700">{tenant.domain}</td>
-                  <td className="py-3 px-4">
-                    <motion.span
-                      variants={badgeVariants}
-                      whileHover="hover"
-                      className={`inline-block px-3 py-1 rounded-full text-sm font-medium ${getPlanColor(tenant.plan).bg} ${getPlanColor(tenant.plan).text}`}
-                    >
-                      {tenant.plan}
-                    </motion.span>
-                  </td>
-                  <td className="py-3 px-4">
-                    <motion.span
-                      variants={badgeVariants}
-                      whileHover="hover"
-                      className={`inline-block px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(tenant.status).bg} ${getStatusColor(tenant.status).text}`}
-                    >
-                      {tenant.status === 'active' ? 'Actif' : tenant.status === 'inactive' ? 'Inactif' : 'Suspendu'}
-                    </motion.span>
-                  </td>
-                  <td className="py-3 px-4 text-gray-600">{new Date(tenant.createdAt).toLocaleDateString('fr-FR')}</td>
-                  <td className="py-3 px-4">
-                    <motion.span
-                      variants={badgeVariants}
-                      whileHover="hover"
-                      className="text-gray-700 font-medium"
-                    >
-                      {tenant.users.toLocaleString()}
-                    </motion.span>
-                  </td>
-                  <td className="py-3 px-4 flex justify-end gap-2">
-                    <motion.button
-                      variants={iconVariants}
-                      whileHover="hover"
-                      onClick={() => onViewDetails(tenant)}
-                      className="text-[#2b4a6a] p-1 rounded-full hover:bg-[#2b4a6a]/10 transition-all duration-300"
-                      title="Voir détails"
-                    >
-                      <EyeIcon className="h-5 w-5" />
-                    </motion.button>
-                    <motion.button
-                      variants={iconVariants}
-                      whileHover="hover"
-                      onClick={() => onEditTenant(tenant.id)}
-                      className="text-[#f57c00] p-1 rounded-full hover:bg-[#f57c00]/10 transition-all duration-300"
-                      title="Modifier"
-                    >
-                      <PencilIcon className="h-5 w-5" />
-                    </motion.button>
-                    <motion.button
-                      variants={iconVariants}
-                      whileHover="hover"
-                      onClick={() => onDeleteTenant(tenant.id)}
-                      className="text-red-600 p-1 rounded-full hover:bg-red-600/10 transition-all duration-300"
-                      title="Supprimer"
-                    >
-                      <TrashIcon className="h-5 w-5" />
-                    </motion.button>
-                  </td>
-                </motion.tr>
-              ))
-            )}
-          </tbody>
-        </table>
-      </div>
+                        {tenant.plan}
+                      </motion.span>
+                    </td>
+                    <td className="py-3 px-4">
+                      <motion.span
+                        variants={badgeVariants}
+                        whileHover="hover"
+                        className={`inline-block px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(tenant.status).bg} ${getStatusColor(tenant.status).text}`}
+                      >
+                        {tenant.status === 'active' ? 'Actif' : tenant.status === 'inactive' ? 'Inactif' : 'Suspendu'}
+                      </motion.span>
+                    </td>
+                    <td className="py-3 px-4 text-gray-600">{new Date(tenant.createdAt).toLocaleDateString('fr-FR')}</td>
+                    <td className="py-3 px-4">
+                      <motion.span
+                        variants={badgeVariants}
+                        whileHover="hover"
+                        className="text-gray-700 font-medium"
+                      >
+                        {tenant.users.toLocaleString()}
+                      </motion.span>
+                    </td>
+                    <td className="py-3 px-4 flex justify-end gap-2">
+                      <motion.button
+                        variants={iconVariants}
+                        whileHover="hover"
+                        onClick={() => onViewDetails(tenant)}
+                        className="text-[#2b4a6a] p-1 rounded-full hover:bg-[#2b4a6a]/10 transition-all duration-300"
+                        title="Voir détails"
+                      >
+                        <EyeIcon className="h-5 w-5" />
+                      </motion.button>
+                      <motion.button
+                        variants={iconVariants}
+                        whileHover="hover"
+                        onClick={() => onEditTenant(tenant.id)}
+                        className="text-[#f57c00] p-1 rounded-full hover:bg-[#f57c00]/10 transition-all duration-300"
+                        title="Modifier"
+                      >
+                        <PencilIcon className="h-5 w-5" />
+                      </motion.button>
+                      <motion.button
+                        variants={iconVariants}
+                        whileHover="hover"
+                        onClick={() => onDeleteTenant(tenant.id)}
+                        className="text-red-600 p-1 rounded-full hover:bg-red-600/10 transition-all duration-300"
+                        title="Supprimer"
+                      >
+                        <TrashIcon className="h-5 w-5" />
+                      </motion.button>
+                    </td>
+                  </motion.tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
+      ) : (
+        <div>
+          {paginatedTenants.length === 0 ? (
+            <div className="py-12 text-center text-gray-500 text-sm">
+              Aucun tenant trouvé
+            </div>
+          ) : (
+            <TenantsCards
+              tenants={paginatedTenants}
+              onViewDetails={onViewDetails}
+              onEditTenant={onEditTenant}
+              onDeleteTenant={onDeleteTenant}
+            />
+          )}
+        </div>
+      )}
 
       {/* Pagination */}
       <motion.div

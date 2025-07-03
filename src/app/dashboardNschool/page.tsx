@@ -7,8 +7,10 @@ import ManageTenants from '@/components/dashboardNschool/ManageTenants';
 import PlansManagement from '@/components/dashboardNschool/Abonnements/PlansManagement';
 import PaymentsManagement from '@/components/dashboardNschool/Paiements/PaymentsManagement';
 import DomainManage from '@/components/dashboardNschool/DomainManage/DomainManage';
+import CodePromo from '@/components/dashboardNschool/CodePromo';
+import GlobalUsersPage from '@/components/dashboardNschool/GlobalUsers/GlobalUsersPage';
 
-type CurrentView = 'overview' | 'tenants' | 'plans' | 'payments' | 'domains';
+type CurrentView = 'overview' | 'tenants' | 'plans' | 'payments' | 'domains' | 'codePromo' | 'globalUsers';
 
 export default function DashboardPage() {
   const [currentView, setCurrentView] = useState<CurrentView>('overview');
@@ -44,6 +46,8 @@ export default function DashboardPage() {
               {currentView === 'plans' && <PlansManagement onBack={() => setCurrentView('overview')} />}
               {currentView === 'payments' && <PaymentsManagement onBack={() => setCurrentView('overview')} />}
               {currentView === 'domains' && <DomainManage />}
+              {currentView === 'codePromo' && <CodePromo />}
+              {currentView === 'globalUsers' && <GlobalUsersPage />}
             </div>
           </div>
         </main>

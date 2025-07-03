@@ -106,36 +106,66 @@ const TenantDetails = ({ tenant, onBack }: TenantDetailsProps) => {
       animate="visible"
       className="space-y-6"
     >
-      {/* Header */}
+      {/* Header avec fiche profil premium */}
       <motion.div
         variants={cardVariants}
-        className="bg-gradient-to-br from-white via-white to-gray-50/50 rounded-3xl p-6 shadow-xl border border-gray-200/50 backdrop-blur-sm"
+        className="bg-gradient-to-br from-white via-white to-gray-50/50 rounded-3xl p-8 shadow-xl border border-gray-200/50 backdrop-blur-sm overflow-hidden relative"
       >
-        <div className="flex items-center justify-between mb-6">
-          <div className="flex items-center gap-4">
-            <motion.button
-              whileHover={{ scale: 1.05, backgroundColor: '#f57c00' }}
-              whileTap={{ scale: 0.95 }}
-              onClick={onBack}
-              className="p-2 bg-gradient-to-r from-[#2b4a6a] to-[#3a5a7a] text-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300"
-            >
-              <ArrowLeftIcon className="w-5 h-5" />
-            </motion.button>
-            <div>
-              <h1 className="text-3xl font-bold text-[#2b4a6a] tracking-tight" style={{ textShadow: '0 2px 4px rgba(0,0,0,0.1)' }}>
-                {tenant.name}
-              </h1>
-              <p className="text-lg text-gray-600 font-medium">Détails du tenant</p>
+        {/* Effet de brillance en arrière-plan */}
+        <div className="absolute inset-0 bg-gradient-to-br from-amber-400/5 via-orange-500/3 to-transparent" />
+        
+        <div className="relative z-10">
+          <div className="flex items-start justify-between mb-8">
+            <div className="flex items-center gap-6">
+              <motion.button
+                whileHover={{ scale: 1.05, backgroundColor: '#f57c00' }}
+                whileTap={{ scale: 0.95 }}
+                onClick={onBack}
+                className="p-3 bg-gradient-to-r from-[#2b4a6a] to-[#3a5a7a] text-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300"
+              >
+                <ArrowLeftIcon className="w-5 h-5" />
+              </motion.button>
+              
+              <div className="flex items-center gap-6">
+                <motion.div
+                  className="w-20 h-20 bg-gradient-to-br from-[#f57c00] to-[#ff9800] rounded-2xl flex items-center justify-center text-white font-bold text-2xl overflow-hidden shadow-xl"
+                  whileHover={{ scale: 1.05, rotate: 5 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  {tenant.logo ? (
+                    <img src={tenant.logo} alt={tenant.name} className="w-full h-full object-cover" />
+                  ) : (
+                    tenant.name.charAt(0).toUpperCase()
+                  )}
+                </motion.div>
+                
+                <div>
+                  <h1 className="text-4xl font-bold text-[#2b4a6a] tracking-tight mb-2" style={{ textShadow: '0 2px 4px rgba(0,0,0,0.1)' }}>
+                    {tenant.name}
+                  </h1>
+                  <p className="text-xl text-gray-600 font-medium mb-3">Détails du tenant</p>
+                  
+                  {/* Tags miniatures */}
+                  <div className="flex items-center gap-3">
+                    <motion.span
+                      whileHover={{ scale: 1.05 }}
+                      className={`inline-flex items-center px-3 py-1.5 rounded-full text-sm font-semibold shadow-md ${getStatusColor(tenant.status)}`}
+                    >
+                      {tenant.status === 'active' ? 'Actif' : tenant.status === 'inactive' ? 'Inactif' : 'Suspendu'}
+                    </motion.span>
+                    <motion.span
+                      whileHover={{ scale: 1.05 }}
+                      className={`inline-flex items-center px-3 py-1.5 rounded-full text-sm font-semibold shadow-md ${getPlanColor(tenant.plan)}`}
+                    >
+                      {tenant.plan}
+                    </motion.span>
+                    <span className="inline-flex items-center px-3 py-1.5 rounded-full text-sm font-semibold bg-gray-100 text-gray-700 shadow-md">
+                      ID: {tenant.id}
+                    </span>
+                  </div>
+                </div>
+              </div>
             </div>
-          </div>
-          
-          <div className="flex items-center gap-3">
-            <span className={`inline-flex items-center px-4 py-2 rounded-full text-sm font-semibold shadow-lg ${getStatusColor(tenant.status)}`}>
-              {tenant.status === 'active' ? 'Actif' : tenant.status === 'inactive' ? 'Inactif' : 'Suspendu'}
-            </span>
-            <span className={`inline-flex items-center px-4 py-2 rounded-full text-sm font-semibold shadow-lg ${getPlanColor(tenant.plan)}`}>
-              {tenant.plan}
-            </span>
           </div>
         </div>
 
