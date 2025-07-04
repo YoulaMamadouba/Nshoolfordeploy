@@ -128,7 +128,7 @@ const PromoTableView: React.FC<PromoTableViewProps> = ({
                 custom={index}
                 variants={rowVariants}
               >
-                <td className="py-3 px-4">
+                <td className="py-3 px-4 align-middle">
                   <div className="flex items-center gap-3">
                     <motion.div
                       className="w-10 h-10 bg-gradient-to-br from-[#f57c00] to-[#ff9800] rounded-lg flex items-center justify-center text-white font-bold text-sm overflow-hidden"
@@ -143,10 +143,10 @@ const PromoTableView: React.FC<PromoTableViewProps> = ({
                     </div>
                   </div>
                 </td>
-                <td className="py-3 px-4">
+                <td className="py-3 px-4 align-middle">
                   <p className="text-gray-700 max-w-xs truncate">{promoCode.description}</p>
                 </td>
-                <td className="py-3 px-4">
+                <td className="py-3 px-4 align-middle">
                   <motion.span
                     variants={badgeVariants}
                     whileHover="hover"
@@ -156,18 +156,18 @@ const PromoTableView: React.FC<PromoTableViewProps> = ({
                     {promoCode.type === 'percentage' ? 'Pourcentage' : 'Montant fixe'}
                   </motion.span>
                 </td>
-                <td className="py-3 px-4">
+                <td className="py-3 px-4 align-middle">
                   <span className="font-semibold text-gray-900">
                     {promoCode.type === 'percentage' ? `${promoCode.value}%` : `${promoCode.value}€`}
                   </span>
                 </td>
-                <td className="py-3 px-4 text-gray-600">
+                <td className="py-3 px-4 align-middle text-gray-600">
                   {new Date(promoCode.startDate).toLocaleDateString('fr-FR')}
                 </td>
-                <td className="py-3 px-4 text-gray-600">
+                <td className="py-3 px-4 align-middle text-gray-600">
                   {new Date(promoCode.endDate).toLocaleDateString('fr-FR')}
                 </td>
-                <td className="py-3 px-4">
+                <td className="py-3 px-4 align-middle">
                   <div className="flex items-center gap-2">
                     <UsersIcon className="w-4 h-4 text-[#f57c00]" />
                     <span className="font-medium text-gray-700">
@@ -186,7 +186,7 @@ const PromoTableView: React.FC<PromoTableViewProps> = ({
                     </div>
                   )}
                 </td>
-                <td className="py-3 px-4">
+                <td className="py-3 px-4 align-middle">
                   <motion.span
                     variants={badgeVariants}
                     whileHover="hover"
@@ -198,7 +198,7 @@ const PromoTableView: React.FC<PromoTableViewProps> = ({
                     {promoCode.status === 'active' ? 'Actif' : promoCode.status === 'paused' ? 'En pause' : 'Expiré'}
                   </motion.span>
                 </td>
-                <td className="py-3 px-4 flex justify-end gap-2">
+                <td className="py-3 px-4 align-middle flex justify-end gap-2">
                   <motion.button
                     variants={iconVariants}
                     whileHover="hover"

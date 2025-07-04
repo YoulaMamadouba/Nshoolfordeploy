@@ -36,7 +36,7 @@ const SystemHealthSection: React.FC<SystemHealthSectionProps> = ({ isRefreshing 
       unit: '%',
       status: 'healthy',
       icon: CpuChipIcon,
-      color: 'from-green-500 to-emerald-600',
+      color: 'from-[#f57c00] to-[#ff9800]',
       description: 'Utilisation du processeur',
       trend: 'stable',
     },
@@ -46,7 +46,7 @@ const SystemHealthSection: React.FC<SystemHealthSectionProps> = ({ isRefreshing 
       unit: '%',
       status: 'warning',
       icon: ServerIcon,
-      color: 'from-yellow-500 to-orange-600',
+      color: 'from-[#f57c00] to-[#ff9800]',
       description: 'Utilisation de la mémoire',
       trend: 'up',
     },
@@ -56,7 +56,7 @@ const SystemHealthSection: React.FC<SystemHealthSectionProps> = ({ isRefreshing 
       unit: '%',
       status: 'healthy',
       icon: CircleStackIcon,
-      color: 'from-blue-500 to-indigo-600',
+      color: 'from-[#f57c00] to-[#ff9800]',
       description: 'Espace disque utilisé',
       trend: 'stable',
     },
@@ -66,7 +66,7 @@ const SystemHealthSection: React.FC<SystemHealthSectionProps> = ({ isRefreshing 
       unit: '%',
       status: 'critical',
       icon: CircleStackIcon,
-      color: 'from-red-500 to-pink-600',
+      color: 'from-[#f57c00] to-[#ff9800]',
       description: 'Connexions actives',
       trend: 'up',
     },
@@ -76,7 +76,7 @@ const SystemHealthSection: React.FC<SystemHealthSectionProps> = ({ isRefreshing 
       unit: 'ms',
       status: 'healthy',
       icon: GlobeAltIcon,
-      color: 'from-green-500 to-emerald-600',
+      color: 'from-[#f57c00] to-[#ff9800]',
       description: 'Latence moyenne',
       trend: 'down',
     },
@@ -86,7 +86,7 @@ const SystemHealthSection: React.FC<SystemHealthSectionProps> = ({ isRefreshing 
       unit: '%',
       status: 'healthy',
       icon: ExclamationTriangleIcon,
-      color: 'from-green-500 to-emerald-600',
+      color: 'from-[#f57c00] to-[#ff9800]',
       description: 'Erreurs 5xx',
       trend: 'stable',
     },
@@ -117,10 +117,10 @@ const SystemHealthSection: React.FC<SystemHealthSectionProps> = ({ isRefreshing 
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'healthy': return { bg: 'bg-green-100', text: 'text-green-800', icon: 'text-green-600' };
-      case 'warning': return { bg: 'bg-yellow-100', text: 'text-yellow-800', icon: 'text-yellow-600' };
-      case 'critical': return { bg: 'bg-red-100', text: 'text-red-800', icon: 'text-red-600' };
-      default: return { bg: 'bg-gray-100', text: 'text-gray-800', icon: 'text-gray-600' };
+      case 'healthy': return { bg: 'bg-[#f57c00]/10', text: 'text-[#2b4a6a]', icon: 'text-[#f57c00]' };
+      case 'warning': return { bg: 'bg-[#f57c00]/10', text: 'text-[#2b4a6a]', icon: 'text-[#f57c00]' };
+      case 'critical': return { bg: 'bg-[#f57c00]/10', text: 'text-[#2b4a6a]', icon: 'text-[#f57c00]' };
+      default: return { bg: 'bg-[#f57c00]/10', text: 'text-[#2b4a6a]', icon: 'text-[#f57c00]' };
     }
   };
 
@@ -135,10 +135,10 @@ const SystemHealthSection: React.FC<SystemHealthSectionProps> = ({ isRefreshing 
 
   const getTrendColor = (trend: string) => {
     switch (trend) {
-      case 'up': return 'text-red-500';
-      case 'down': return 'text-green-500';
-      case 'stable': return 'text-gray-500';
-      default: return 'text-gray-500';
+      case 'up': return 'text-[#2b4a6a]';
+      case 'down': return 'text-[#2b4a6a]';
+      case 'stable': return 'text-[#2b4a6a]';
+      default: return 'text-[#2b4a6a]';
     }
   };
 
@@ -172,7 +172,7 @@ const SystemHealthSection: React.FC<SystemHealthSectionProps> = ({ isRefreshing 
         className="bg-white rounded-3xl p-6 shadow-xl border border-gray-200/50 backdrop-blur-sm"
       >
         <div className="flex items-center gap-3 mb-4">
-          <div className="p-3 bg-gradient-to-r from-green-500 to-emerald-600 rounded-xl">
+          <div className="p-3 bg-gradient-to-r from-[#f57c00] to-[#ff9800] rounded-xl">
             <HeartIcon className="w-6 h-6 text-white" />
           </div>
           <div>
@@ -196,12 +196,8 @@ const SystemHealthSection: React.FC<SystemHealthSectionProps> = ({ isRefreshing 
               variants={cardVariants}
               initial="hidden"
               animate="visible"
-              whileHover="hover"
-              className="group relative bg-white rounded-2xl shadow-lg hover:shadow-2xl border border-gray-100 overflow-hidden transition-all duration-300"
+              className="group relative bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden transition-all duration-300"
             >
-              {/* Effet de brillance au hover */}
-              <div className="absolute inset-0 bg-gradient-to-br from-amber-400/10 via-orange-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
-              
               {/* Header */}
               <div className="relative p-6 pb-4">
                 <div className="flex items-start justify-between mb-4">
@@ -212,11 +208,9 @@ const SystemHealthSection: React.FC<SystemHealthSectionProps> = ({ isRefreshing 
                       transition={{ duration: 0.3 }}
                     >
                       <MetricIcon className="w-6 h-6" />
-                      {/* Effet de brillance sur l'icône */}
-                      <div className="absolute inset-0 bg-gradient-to-tr from-white/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                     </motion.div>
                     <div>
-                      <h3 className="font-bold text-gray-900 text-lg leading-tight mb-1">{metric.name}</h3>
+                      <h3 className="font-bold text-[#2b4a6a] text-lg leading-tight mb-1">{metric.name}</h3>
                       <p className="text-sm text-gray-500">{metric.description}</p>
                     </div>
                   </div>
@@ -277,9 +271,6 @@ const SystemHealthSection: React.FC<SystemHealthSectionProps> = ({ isRefreshing 
                   <span>100%</span>
                 </div>
               </div>
-
-              {/* Effet de bordure animée */}
-              <div className="absolute inset-0 rounded-2xl border-2 border-transparent bg-gradient-to-r from-[#f57c00]/20 via-[#ff9800]/20 to-[#f57c00]/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
             </motion.div>
           );
         })}
@@ -303,26 +294,26 @@ const SystemHealthSection: React.FC<SystemHealthSectionProps> = ({ isRefreshing 
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="text-center p-4 bg-green-50 rounded-2xl border border-green-200">
-            <div className="text-3xl font-bold text-green-600 mb-2">4</div>
-            <p className="text-green-800 font-semibold">Services sains</p>
+          <div className="text-center p-4 bg-[#f57c00]/10 rounded-2xl border border-[#f57c00]/20">
+            <div className="text-3xl font-bold text-[#f57c00] mb-2">4</div>
+            <p className="text-[#2b4a6a] font-semibold">Services sains</p>
           </div>
-          <div className="text-center p-4 bg-yellow-50 rounded-2xl border border-yellow-200">
-            <div className="text-3xl font-bold text-yellow-600 mb-2">1</div>
-            <p className="text-yellow-800 font-semibold">Attention</p>
+          <div className="text-center p-4 bg-[#f57c00]/10 rounded-2xl border border-[#f57c00]/20">
+            <div className="text-3xl font-bold text-[#f57c00] mb-2">1</div>
+            <p className="text-[#2b4a6a] font-semibold">Attention</p>
           </div>
-          <div className="text-center p-4 bg-red-50 rounded-2xl border border-red-200">
-            <div className="text-3xl font-bold text-red-600 mb-2">1</div>
-            <p className="text-red-800 font-semibold">Critique</p>
+          <div className="text-center p-4 bg-[#f57c00]/10 rounded-2xl border border-[#f57c00]/20">
+            <div className="text-3xl font-bold text-[#f57c00] mb-2">1</div>
+            <p className="text-[#2b4a6a] font-semibold">Critique</p>
           </div>
         </div>
 
-        <div className="mt-6 p-4 bg-blue-50 rounded-2xl border border-blue-200">
+        <div className="mt-6 p-4 bg-[#f57c00]/10 rounded-2xl border border-[#f57c00]/20">
           <div className="flex items-center gap-3">
-            <ClockIcon className="w-5 h-5 text-blue-600" />
+            <ClockIcon className="w-5 h-5 text-[#f57c00]" />
             <div>
-              <p className="text-blue-800 font-semibold">Dernière vérification</p>
-              <p className="text-blue-600 text-sm">
+              <p className="text-[#2b4a6a] font-semibold">Dernière vérification</p>
+              <p className="text-[#f57c00] text-sm">
                 {new Date().toLocaleString('fr-FR', {
                   day: '2-digit',
                   month: '2-digit',

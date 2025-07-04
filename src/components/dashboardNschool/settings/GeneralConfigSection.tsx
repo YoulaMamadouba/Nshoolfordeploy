@@ -48,11 +48,11 @@ export default function GeneralConfigSection() {
     >
       <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
         <div className="flex items-center gap-3 mb-6">
-          <div className="p-2 bg-blue-50 rounded-lg">
-            <GlobeAltIcon className="h-6 w-6 text-blue-600" />
+          <div className="p-2 bg-[#f57c00]/10 rounded-lg">
+            <GlobeAltIcon className="h-6 w-6 text-[#f57c00]" />
           </div>
           <div>
-            <h3 className="text-lg font-semibold text-gray-900">Configuration Générale</h3>
+            <h3 className="text-lg font-semibold text-[#2b4a6a]">Configuration Générale</h3>
             <p className="text-sm text-gray-500">Paramètres de base du système</p>
           </div>
         </div>
@@ -126,7 +126,7 @@ export default function GeneralConfigSection() {
                 onClick={() => setTheme('light')}
                 className={`flex-1 px-4 py-3 rounded-xl border transition-all duration-200 flex items-center justify-center gap-2 ${
                   theme === 'light'
-                    ? 'border-blue-500 bg-blue-50 text-blue-700'
+                    ? 'border-[#f57c00] bg-[#f57c00]/10 text-[#f57c00]'
                     : 'border-gray-200 bg-white text-gray-600 hover:border-gray-300'
                 }`}
               >
@@ -137,7 +137,7 @@ export default function GeneralConfigSection() {
                 onClick={() => setTheme('dark')}
                 className={`flex-1 px-4 py-3 rounded-xl border transition-all duration-200 flex items-center justify-center gap-2 ${
                   theme === 'dark'
-                    ? 'border-blue-500 bg-blue-50 text-blue-700'
+                    ? 'border-[#f57c00] bg-[#f57c00]/10 text-[#f57c00]'
                     : 'border-gray-200 bg-white text-gray-600 hover:border-gray-300'
                 }`}
               >
@@ -157,7 +157,7 @@ export default function GeneralConfigSection() {
             <motion.button
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
-              className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200 text-sm font-medium"
+              className="px-6 py-2 bg-[#f57c00] text-white rounded-lg hover:bg-[#e65100] transition-colors duration-200 text-sm font-medium"
             >
               Sauvegarder
             </motion.button>

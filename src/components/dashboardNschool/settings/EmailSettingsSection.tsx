@@ -47,11 +47,11 @@ export default function EmailSettingsSection() {
       {/* Configuration SMTP */}
       <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
         <div className="flex items-center gap-3 mb-6">
-          <div className="p-2 bg-green-50 rounded-lg">
-            <EnvelopeIcon className="h-6 w-6 text-green-600" />
+          <div className="p-2 bg-[#f57c00]/10 rounded-lg">
+            <EnvelopeIcon className="h-6 w-6 text-[#f57c00]" />
           </div>
           <div>
-            <h3 className="text-lg font-semibold text-gray-900">Configuration SMTP</h3>
+            <h3 className="text-lg font-semibold text-[#2b4a6a]">Configuration SMTP</h3>
             <p className="text-sm text-gray-500">Paramètres du serveur d'envoi d'emails</p>
           </div>
         </div>
@@ -63,7 +63,7 @@ export default function EmailSettingsSection() {
               type="text"
               value={smtpHost}
               onChange={(e) => setSmtpHost(e.target.value)}
-              className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all duration-200"
+              className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#f57c00] focus:border-transparent transition-all duration-200"
               placeholder="smtp.gmail.com"
             />
           </div>
@@ -74,7 +74,7 @@ export default function EmailSettingsSection() {
               type="text"
               value={smtpPort}
               onChange={(e) => setSmtpPort(e.target.value)}
-              className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all duration-200"
+              className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#f57c00] focus:border-transparent transition-all duration-200"
               placeholder="587"
             />
           </div>
@@ -85,7 +85,7 @@ export default function EmailSettingsSection() {
               type="email"
               value={smtpUser}
               onChange={(e) => setSmtpUser(e.target.value)}
-              className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all duration-200"
+              className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#f57c00] focus:border-transparent transition-all duration-200"
               placeholder="votre-email@gmail.com"
             />
           </div>
@@ -96,7 +96,7 @@ export default function EmailSettingsSection() {
               type="password"
               value={smtpPassword}
               onChange={(e) => setSmtpPassword(e.target.value)}
-              className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all duration-200"
+              className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#f57c00] focus:border-transparent transition-all duration-200"
               placeholder="••••••••"
             />
           </div>
@@ -107,7 +107,7 @@ export default function EmailSettingsSection() {
               type="email"
               value={fromEmail}
               onChange={(e) => setFromEmail(e.target.value)}
-              className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all duration-200"
+              className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#f57c00] focus:border-transparent transition-all duration-200"
               placeholder="noreply@nschool.com"
             />
           </div>
@@ -118,7 +118,7 @@ export default function EmailSettingsSection() {
               type="text"
               value={fromName}
               onChange={(e) => setFromName(e.target.value)}
-              className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all duration-200"
+              className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#f57c00] focus:border-transparent transition-all duration-200"
               placeholder="Nschool"
             />
           </div>
@@ -129,14 +129,14 @@ export default function EmailSettingsSection() {
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             onClick={testEmailConnection}
-            className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors duration-200 text-sm font-medium"
+            className="flex items-center gap-2 px-4 py-2 bg-[#f57c00] text-white rounded-lg hover:bg-[#e65100] transition-colors duration-200 text-sm font-medium"
           >
             <PaperAirplaneIcon className="h-4 w-4" />
             Tester la connexion
           </motion.button>
           
           <div className="flex items-center gap-2 text-sm text-gray-500">
-            <CheckCircleIcon className="h-4 w-4 text-green-500" />
+            <CheckCircleIcon className="h-4 w-4 text-[#f57c00]" />
             Connexion établie
           </div>
         </div>
@@ -145,11 +145,11 @@ export default function EmailSettingsSection() {
       {/* Notifications */}
       <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
         <div className="flex items-center gap-3 mb-6">
-          <div className="p-2 bg-purple-50 rounded-lg">
-            <BellIcon className="h-6 w-6 text-purple-600" />
+          <div className="p-2 bg-[#f57c00]/10 rounded-lg">
+            <BellIcon className="h-6 w-6 text-[#f57c00]" />
           </div>
           <div>
-            <h3 className="text-lg font-semibold text-gray-900">Notifications par Email</h3>
+            <h3 className="text-lg font-semibold text-[#2b4a6a]">Notifications par Email</h3>
             <p className="text-sm text-gray-500">Gérez les types de notifications envoyées</p>
           </div>
         </div>
@@ -158,9 +158,9 @@ export default function EmailSettingsSection() {
           {Object.entries(notifications).map(([key, value]) => (
             <div key={key} className="flex items-center justify-between p-4 border border-gray-100 rounded-xl hover:bg-gray-50 transition-colors duration-200">
               <div className="flex items-center gap-3">
-                <div className={`w-3 h-3 rounded-full ${value ? 'bg-green-500' : 'bg-gray-300'}`} />
+                <div className={`w-3 h-3 rounded-full ${value ? 'bg-[#f57c00]' : 'bg-gray-300'}`} />
                 <div>
-                  <h4 className="text-sm font-medium text-gray-900 capitalize">
+                  <h4 className="text-sm font-medium text-[#2b4a6a] capitalize">
                     {key === 'newUser' && 'Nouveaux utilisateurs'}
                     {key === 'paymentSuccess' && 'Paiements réussis'}
                     {key === 'paymentFailed' && 'Échecs de paiement'}
@@ -181,7 +181,7 @@ export default function EmailSettingsSection() {
               <button
                 onClick={() => handleNotificationChange(key)}
                 className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors duration-200 ${
-                  value ? 'bg-purple-600' : 'bg-gray-200'
+                  value ? 'bg-[#f57c00]' : 'bg-gray-200'
                 }`}
               >
                 <span

@@ -41,7 +41,7 @@ const ReportsAndExportSection: React.FC = () => {
       description: 'Analyse détaillée des revenus et abonnements',
       type: 'revenue',
       icon: CurrencyDollarIcon,
-      color: 'from-green-500 to-emerald-600',
+      color: 'from-[#f57c00] to-[#ff9800]',
       lastGenerated: '2024-01-15T10:30:00Z',
       status: 'ready',
       format: 'pdf',
@@ -52,7 +52,7 @@ const ReportsAndExportSection: React.FC = () => {
       description: 'Statistiques d\'utilisation par établissement',
       type: 'activity',
       icon: UsersIcon,
-      color: 'from-blue-500 to-indigo-600',
+      color: 'from-[#f57c00] to-[#ff9800]',
       lastGenerated: '2024-01-14T15:45:00Z',
       status: 'ready',
       format: 'excel',
@@ -63,7 +63,7 @@ const ReportsAndExportSection: React.FC = () => {
       description: 'Métriques de performance et temps de réponse',
       type: 'performance',
       icon: ChartBarIcon,
-      color: 'from-purple-500 to-pink-600',
+      color: 'from-[#f57c00] to-[#ff9800]',
       lastGenerated: '2024-01-15T08:20:00Z',
       status: 'generating',
       format: 'csv',
@@ -74,7 +74,7 @@ const ReportsAndExportSection: React.FC = () => {
       description: 'Rapport configurable selon vos besoins',
       type: 'custom',
       icon: CogIcon,
-      color: 'from-orange-500 to-red-600',
+      color: 'from-[#f57c00] to-[#ff9800]',
       lastGenerated: '2024-01-13T14:15:00Z',
       status: 'error',
       format: 'json',
@@ -113,10 +113,10 @@ const ReportsAndExportSection: React.FC = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'ready': return { bg: 'bg-green-100', text: 'text-green-800', icon: 'text-green-600' };
-      case 'generating': return { bg: 'bg-yellow-100', text: 'text-yellow-800', icon: 'text-yellow-600' };
-      case 'error': return { bg: 'bg-red-100', text: 'text-red-800', icon: 'text-red-600' };
-      default: return { bg: 'bg-gray-100', text: 'text-gray-800', icon: 'text-gray-600' };
+      case 'ready': return { bg: 'bg-[#f57c00]/10', text: 'text-[#2b4a6a]', icon: 'text-[#f57c00]' };
+      case 'generating': return { bg: 'bg-[#f57c00]/10', text: 'text-[#2b4a6a]', icon: 'text-[#f57c00]' };
+      case 'error': return { bg: 'bg-[#f57c00]/10', text: 'text-[#2b4a6a]', icon: 'text-[#f57c00]' };
+      default: return { bg: 'bg-[#f57c00]/10', text: 'text-[#2b4a6a]', icon: 'text-[#f57c00]' };
     }
   };
 
@@ -144,11 +144,6 @@ const ReportsAndExportSection: React.FC = () => {
         duration: 0.6,
       },
     }),
-    hover: {
-      y: -8,
-      scale: 1.02,
-      transition: { duration: 0.3, ease: 'easeOut' },
-    },
   };
 
   return (
@@ -185,8 +180,7 @@ const ReportsAndExportSection: React.FC = () => {
               variants={cardVariants}
               initial="hidden"
               animate="visible"
-              whileHover="hover"
-              className="group relative bg-white rounded-2xl shadow-lg hover:shadow-2xl border border-gray-100 overflow-hidden transition-all duration-300"
+              className="group relative bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden transition-all duration-300"
             >
               <div className="relative p-6">
                 <div className="flex items-start justify-between mb-4">
@@ -272,7 +266,7 @@ const ReportsAndExportSection: React.FC = () => {
         className="bg-white rounded-3xl p-6 shadow-xl border border-gray-200/50 backdrop-blur-sm"
       >
         <div className="flex items-center gap-3 mb-6">
-          <div className="p-3 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-xl">
+          <div className="p-3 bg-gradient-to-r from-[#f57c00] to-[#ff9800] rounded-xl">
             <ArrowDownTrayIcon className="w-6 h-6 text-white" />
           </div>
           <div>

@@ -6,6 +6,13 @@ import GlobalUsersListCards from './GlobalUsersListCards';
 import GlobalUsersListTable from './GlobalUsersListTable';
 import PermissionsMatrix from './PermissionsMatrix';
 import { mockUsers, GlobalUser } from './data';
+import {
+  ChartBarIcon,
+  Squares2X2Icon,
+  TableCellsIcon,
+  ShieldCheckIcon,
+  PlusIcon,
+} from '@heroicons/react/24/outline';
 
 type View = 'overview' | 'cards' | 'table' | 'permissions';
 
@@ -79,9 +86,9 @@ const GlobalUsersPage: React.FC = () => {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, delay: 0.1 }}
-        className="bg-gradient-to-br from-white via-white to-gray-50/50 rounded-3xl p-6 shadow-xl border border-gray-200/50 backdrop-blur-sm"
+        className="bg-gradient-to-br from-white via-white to-gray-50/50 rounded-3xl p-4 shadow-xl border border-gray-200/50 backdrop-blur-sm"
       >
-        <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center justify-between mb-3">
           <div>
             <h1 className="text-3xl font-bold text-[#2b4a6a] tracking-tight" style={{ textShadow: '0 2px 4px rgba(0,0,0,0.1)' }}>
               Utilisateurs Globaux
@@ -91,74 +98,67 @@ const GlobalUsersPage: React.FC = () => {
             </p>
           </div>
           
-          <div className="flex gap-3">
+          <div className="flex gap-2">
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => handleViewChange('overview')}
-              className={`px-4 py-2 rounded-xl font-semibold transition-all duration-300 ${
+              className={`p-3 rounded-xl font-semibold transition-all duration-300 ${
                 currentView === 'overview'
                   ? 'bg-[#f57c00] text-white shadow-lg'
                   : 'bg-[#f57c00]/10 text-[#f57c00] border border-[#f57c00]/20 hover:bg-[#f57c00]/15'
               }`}
+              title="Vue d'ensemble"
             >
-              Vue d'ensemble
+              <ChartBarIcon className="w-5 h-5" />
             </motion.button>
             
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => handleViewChange('cards')}
-              className={`px-4 py-2 rounded-xl font-semibold transition-all duration-300 ${
+              className={`p-3 rounded-xl font-semibold transition-all duration-300 ${
                 currentView === 'cards'
                   ? 'bg-[#f57c00] text-white shadow-lg'
                   : 'bg-[#f57c00]/10 text-[#f57c00] border border-[#f57c00]/20 hover:bg-[#f57c00]/15'
               }`}
+              title="Vue Cards"
             >
-              Vue Cards
+              <Squares2X2Icon className="w-5 h-5" />
             </motion.button>
             
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => handleViewChange('table')}
-              className={`px-4 py-2 rounded-xl font-semibold transition-all duration-300 ${
+              className={`p-3 rounded-xl font-semibold transition-all duration-300 ${
                 currentView === 'table'
                   ? 'bg-[#f57c00] text-white shadow-lg'
                   : 'bg-[#f57c00]/10 text-[#f57c00] border border-[#f57c00]/20 hover:bg-[#f57c00]/15'
               }`}
+              title="Vue Tableau"
             >
-              Vue Tableau
+              <TableCellsIcon className="w-5 h-5" />
             </motion.button>
             
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => handleViewChange('permissions')}
-              className={`px-4 py-2 rounded-xl font-semibold transition-all duration-300 ${
+              className={`p-3 rounded-xl font-semibold transition-all duration-300 ${
                 currentView === 'permissions'
                   ? 'bg-[#f57c00] text-white shadow-lg'
                   : 'bg-[#f57c00]/10 text-[#f57c00] border border-[#f57c00]/20 hover:bg-[#f57c00]/15'
               }`}
+              title="Permissions"
             >
-              Permissions
+              <ShieldCheckIcon className="w-5 h-5" />
             </motion.button>
           </div>
         </div>
 
         {/* Quick Actions */}
-        <div className="flex items-center justify-between">
-          <div className="flex gap-2">
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={handleAddUser}
-              className="px-4 py-2 bg-[#f57c00] text-white rounded-xl font-semibold shadow-lg hover:bg-[#e65100] transition-all duration-300"
-            >
-              Nouvel Utilisateur
-            </motion.button>
-          </div>
-          
+        <div className="flex items-center justify-end">
           <div className="text-sm text-gray-500">
             {users.length} utilisateurs au total
           </div>

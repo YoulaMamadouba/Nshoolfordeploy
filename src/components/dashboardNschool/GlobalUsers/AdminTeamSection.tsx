@@ -153,11 +153,25 @@ const AdminTeamSection: React.FC = () => {
               variants={cardVariants}
               initial="hidden"
               animate="visible"
-              whileHover="hover"
-              className="group relative bg-white rounded-2xl shadow-lg hover:shadow-2xl border border-gray-100 overflow-hidden transition-all duration-300"
+              className="relative bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden transition-all duration-300"
+              whileHover={{
+                scale: 1.02,
+                transition: { duration: 0.3, ease: "easeOut" }
+              }}
             >
-              {/* Effet de brillance au hover */}
-              <div className="absolute inset-0 bg-gradient-to-br from-amber-400/10 via-orange-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
+              {/* Animation de pulse subtile */}
+              <motion.div
+                className="absolute inset-0 bg-gradient-to-r from-[#f57c00]/5 to-transparent"
+                animate={{
+                  opacity: [0, 0.3, 0],
+                  scale: [1, 1.05, 1],
+                }}
+                transition={{
+                  duration: 3,
+                  repeat: Infinity,
+                  ease: "easeInOut"
+                }}
+              />
               
               {/* Header */}
               <div className="relative p-6 pb-4">
@@ -169,8 +183,6 @@ const AdminTeamSection: React.FC = () => {
                       transition={{ duration: 0.3 }}
                     >
                       <role.icon className="w-7 h-7" />
-                      {/* Effet de brillance sur l'avatar */}
-                      <div className="absolute inset-0 bg-gradient-to-tr from-white/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                     </motion.div>
                     <div>
                       <h3 className="font-bold text-gray-900 text-lg leading-tight mb-1">{role.title}</h3>

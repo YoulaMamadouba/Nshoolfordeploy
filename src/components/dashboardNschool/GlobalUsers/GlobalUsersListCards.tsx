@@ -314,11 +314,25 @@ const GlobalUsersListCards: React.FC<GlobalUsersListCardsProps> = ({
                     variants={cardVariants}
                     initial="hidden"
                     animate="visible"
-                    whileHover="hover"
-                    className="group relative bg-white rounded-2xl shadow-lg hover:shadow-2xl border border-gray-100 overflow-hidden transition-all duration-300 min-h-[320px]"
+                    className="relative bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden transition-all duration-300 min-h-[320px]"
+                    whileHover={{
+                      scale: 1.02,
+                      transition: { duration: 0.3, ease: "easeOut" }
+                    }}
                   >
-                    {/* Effet de brillance au hover */}
-                    <div className="absolute inset-0 bg-gradient-to-br from-amber-400/10 via-orange-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
+                    {/* Animation de pulse subtile */}
+                    <motion.div
+                      className="absolute inset-0 bg-gradient-to-r from-[#f57c00]/5 to-transparent"
+                      animate={{
+                        opacity: [0, 0.3, 0],
+                        scale: [1, 1.05, 1],
+                      }}
+                      transition={{
+                        duration: 3,
+                        repeat: Infinity,
+                        ease: "easeInOut"
+                      }}
+                    />
                     
                     {/* Header avec avatar et badges */}
                     <div className="relative p-6 pb-4">
@@ -334,8 +348,6 @@ const GlobalUsersListCards: React.FC<GlobalUsersListCardsProps> = ({
                             ) : (
                               <RoleIcon className="w-7 h-7" />
                             )}
-                            {/* Effet de brillance sur l'avatar */}
-                            <div className="absolute inset-0 bg-gradient-to-tr from-white/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                           </motion.div>
                           <div className="min-w-0 flex-1">
                             <h3 className="font-bold text-gray-900 text-lg leading-tight mb-1 truncate">{user.name}</h3>

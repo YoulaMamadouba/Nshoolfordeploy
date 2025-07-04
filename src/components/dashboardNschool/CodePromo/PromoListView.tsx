@@ -184,10 +184,10 @@ const PromoListView: React.FC<PromoListViewProps> = ({
               whileHover="hover"
               whileTap="tap"
               onClick={() => setShowStats(!showStats)}
-              className={`p-3 rounded-xl border transition-all duration-300 ${
+              className={`p-3 rounded-xl border-2 transition-all duration-300 ${
                 showStats 
-                  ? 'bg-[#f57c00] text-white border-[#f57c00]' 
-                  : 'bg-[#f57c00]/10 text-[#f57c00] border-[#f57c00]/50 hover:bg-[#f57c00] hover:text-white'
+                  ? 'bg-[#f57c00] text-white border-[#f57c00] shadow-lg ring-2 ring-[#f57c00]/20' 
+                  : 'bg-white text-[#f57c00] border-[#f57c00] hover:bg-[#f57c00] hover:text-white hover:shadow-lg'
               }`}
               title="Afficher les statistiques"
             >
@@ -288,7 +288,10 @@ const PromoListView: React.FC<PromoListViewProps> = ({
               }`}
               title={viewMode === 'table' ? 'Vue Cards' : 'Vue Tableau'}
             >
-              {viewMode === 'table' ? <Squares2X2Icon className="h-5 w-5" /> : <TableCellsIcon className="h-5 w-5" />}
+              {viewMode === 'table' ? 
+                <Squares2X2Icon className="h-5 w-5 text-white" /> : 
+                <TableCellsIcon className="h-5 w-5 text-white" />
+              }
             </motion.button>
             
             <motion.button

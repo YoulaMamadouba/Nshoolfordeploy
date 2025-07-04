@@ -12,6 +12,8 @@ import {
   CogIcon,
   ShieldCheckIcon,
   ExclamationTriangleIcon,
+  CheckCircleIcon,
+  ClockIcon,
 } from '@heroicons/react/24/outline';
 
 interface Tenant {
@@ -46,29 +48,18 @@ const TenantDetails = ({ tenant, onBack }: TenantDetailsProps) => {
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'active':
-        return 'bg-gradient-to-r from-green-500 to-emerald-600 text-white';
+        return 'bg-[#f57c00] text-white';
       case 'inactive':
-        return 'bg-gradient-to-r from-gray-500 to-gray-600 text-white';
+        return 'bg-[#2b4a6a] text-white';
       case 'suspended':
-        return 'bg-gradient-to-r from-red-500 to-pink-600 text-white';
+        return 'bg-red-500 text-white';
       default:
-        return 'bg-gradient-to-r from-gray-500 to-gray-600 text-white';
+        return 'bg-[#2b4a6a] text-white';
     }
   };
 
   const getPlanColor = (plan: string) => {
-    switch (plan) {
-      case 'Enterprise':
-        return 'bg-gradient-to-r from-purple-500 to-indigo-600 text-white';
-      case 'Premium':
-        return 'bg-gradient-to-r from-blue-500 to-cyan-600 text-white';
-      case 'Basic':
-        return 'bg-gradient-to-r from-orange-500 to-yellow-600 text-white';
-      case 'Starter':
-        return 'bg-gradient-to-r from-green-500 to-teal-600 text-white';
-      default:
-        return 'bg-gradient-to-r from-gray-500 to-gray-600 text-white';
-    }
+    return 'bg-[#f57c00] text-white';
   };
 
   const containerVariants = {
@@ -112,16 +103,16 @@ const TenantDetails = ({ tenant, onBack }: TenantDetailsProps) => {
         className="bg-gradient-to-br from-white via-white to-gray-50/50 rounded-3xl p-8 shadow-xl border border-gray-200/50 backdrop-blur-sm overflow-hidden relative"
       >
         {/* Effet de brillance en arrière-plan */}
-        <div className="absolute inset-0 bg-gradient-to-br from-amber-400/5 via-orange-500/3 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-br from-[#f57c00]/5 via-[#f57c00]/3 to-transparent" />
         
         <div className="relative z-10">
           <div className="flex items-start justify-between mb-8">
             <div className="flex items-center gap-6">
               <motion.button
-                whileHover={{ scale: 1.05, backgroundColor: '#f57c00' }}
+                whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={onBack}
-                className="p-3 bg-gradient-to-r from-[#2b4a6a] to-[#3a5a7a] text-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300"
+                className="p-3 bg-[#2b4a6a] text-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300"
               >
                 <ArrowLeftIcon className="w-5 h-5" />
               </motion.button>
@@ -159,7 +150,7 @@ const TenantDetails = ({ tenant, onBack }: TenantDetailsProps) => {
                     >
                       {tenant.plan}
                     </motion.span>
-                    <span className="inline-flex items-center px-3 py-1.5 rounded-full text-sm font-semibold bg-gray-100 text-gray-700 shadow-md">
+                    <span className="inline-flex items-center px-3 py-1.5 rounded-full text-sm font-semibold bg-[#2b4a6a]/10 text-[#2b4a6a] border border-[#2b4a6a]/20 shadow-md">
                       ID: {tenant.id}
                     </span>
                   </div>
@@ -173,60 +164,60 @@ const TenantDetails = ({ tenant, onBack }: TenantDetailsProps) => {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           <motion.div
             whileHover={{ scale: 1.02 }}
-            className="bg-gradient-to-br from-blue-50 to-blue-100/50 p-4 rounded-2xl border border-blue-200/50"
+            className="bg-[#f57c00]/10 p-4 rounded-2xl border border-[#f57c00]/20"
           >
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-blue-500 rounded-xl">
+              <div className="p-2 bg-[#f57c00] rounded-xl">
                 <UsersIcon className="w-5 h-5 text-white" />
               </div>
               <div>
-                <p className="text-sm text-blue-600 font-medium">Utilisateurs</p>
-                <p className="text-2xl font-bold text-blue-800">{tenant.users.toLocaleString()}</p>
+                <p className="text-sm text-[#f57c00] font-medium">Utilisateurs</p>
+                <p className="text-2xl font-bold text-[#2b4a6a]">{tenant.users.toLocaleString()}</p>
               </div>
             </div>
           </motion.div>
 
           <motion.div
             whileHover={{ scale: 1.02 }}
-            className="bg-gradient-to-br from-green-50 to-green-100/50 p-4 rounded-2xl border border-green-200/50"
+            className="bg-[#f57c00]/10 p-4 rounded-2xl border border-[#f57c00]/20"
           >
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-green-500 rounded-xl">
+              <div className="p-2 bg-[#f57c00] rounded-xl">
                 <GlobeAltIcon className="w-5 h-5 text-white" />
               </div>
               <div>
-                <p className="text-sm text-green-600 font-medium">Domaine</p>
-                <p className="text-lg font-semibold text-green-800 truncate">{tenant.domain}</p>
+                <p className="text-sm text-[#f57c00] font-medium">Domaine</p>
+                <p className="text-lg font-semibold text-[#2b4a6a] truncate">{tenant.domain}</p>
               </div>
             </div>
           </motion.div>
 
           <motion.div
             whileHover={{ scale: 1.02 }}
-            className="bg-gradient-to-br from-purple-50 to-purple-100/50 p-4 rounded-2xl border border-purple-200/50"
+            className="bg-[#f57c00]/10 p-4 rounded-2xl border border-[#f57c00]/20"
           >
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-purple-500 rounded-xl">
+              <div className="p-2 bg-[#f57c00] rounded-xl">
                 <CreditCardIcon className="w-5 h-5 text-white" />
               </div>
               <div>
-                <p className="text-sm text-purple-600 font-medium">Code</p>
-                <p className="text-lg font-semibold text-purple-800 font-mono">{tenant.code}</p>
+                <p className="text-sm text-[#f57c00] font-medium">Code</p>
+                <p className="text-lg font-semibold text-[#2b4a6a] font-mono">{tenant.code}</p>
               </div>
             </div>
           </motion.div>
 
           <motion.div
             whileHover={{ scale: 1.02 }}
-            className="bg-gradient-to-br from-orange-50 to-orange-100/50 p-4 rounded-2xl border border-orange-200/50"
+            className="bg-[#f57c00]/10 p-4 rounded-2xl border border-[#f57c00]/20"
           >
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-orange-500 rounded-xl">
+              <div className="p-2 bg-[#f57c00] rounded-xl">
                 <CalendarIcon className="w-5 h-5 text-white" />
               </div>
               <div>
-                <p className="text-sm text-orange-600 font-medium">Créé le</p>
-                <p className="text-lg font-semibold text-orange-800">
+                <p className="text-sm text-[#f57c00] font-medium">Créé le</p>
+                <p className="text-lg font-semibold text-[#2b4a6a]">
                   {new Date(tenant.createdAt).toLocaleDateString('fr-FR')}
                 </p>
               </div>
@@ -250,8 +241,8 @@ const TenantDetails = ({ tenant, onBack }: TenantDetailsProps) => {
                 onClick={() => setActiveTab(tab.id as TabType)}
                 className={`flex items-center gap-2 px-6 py-4 text-sm font-semibold transition-all duration-300 whitespace-nowrap ${
                   activeTab === tab.id
-                    ? 'text-[#f57c00] border-b-2 border-[#f57c00] bg-orange-50/50'
-                    : 'text-gray-600 hover:text-[#f57c00] hover:bg-orange-50/30'
+                    ? 'text-[#f57c00] border-b-2 border-[#f57c00] bg-[#f57c00]/5'
+                    : 'text-[#2b4a6a] hover:text-[#f57c00] hover:bg-[#f57c00]/5'
                 }`}
               >
                 <tab.icon className="w-5 h-5" />
@@ -276,28 +267,28 @@ const TenantDetails = ({ tenant, onBack }: TenantDetailsProps) => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <motion.div
                     whileHover={{ scale: 1.02 }}
-                    className="bg-gradient-to-br from-gray-50 to-white p-6 rounded-2xl border border-gray-200/50"
+                    className="bg-[#f57c00]/5 p-6 rounded-2xl border border-[#f57c00]/20"
                   >
                     <h3 className="text-lg font-semibold text-[#2b4a6a] mb-4 flex items-center gap-2">
                       <BuildingOffice2Icon className="w-5 h-5 text-[#f57c00]" />
                       Informations de base
                     </h3>
                     <div className="space-y-3">
-                      <div className="flex justify-between items-center py-2 border-b border-gray-100">
-                        <span className="text-gray-600 font-medium">Nom</span>
-                        <span className="text-gray-900 font-semibold">{tenant.name}</span>
+                      <div className="flex justify-between items-center py-2 border-b border-[#f57c00]/10">
+                        <span className="text-[#2b4a6a] font-medium">Nom</span>
+                        <span className="text-[#2b4a6a] font-semibold">{tenant.name}</span>
                       </div>
-                      <div className="flex justify-between items-center py-2 border-b border-gray-100">
-                        <span className="text-gray-600 font-medium">Code</span>
-                        <span className="text-gray-900 font-mono font-semibold">{tenant.code}</span>
+                      <div className="flex justify-between items-center py-2 border-b border-[#f57c00]/10">
+                        <span className="text-[#2b4a6a] font-medium">Code</span>
+                        <span className="text-[#2b4a6a] font-mono font-semibold">{tenant.code}</span>
                       </div>
-                      <div className="flex justify-between items-center py-2 border-b border-gray-100">
-                        <span className="text-gray-600 font-medium">Domaine</span>
-                        <span className="text-gray-900 font-semibold">{tenant.domain}</span>
+                      <div className="flex justify-between items-center py-2 border-b border-[#f57c00]/10">
+                        <span className="text-[#2b4a6a] font-medium">Domaine</span>
+                        <span className="text-[#2b4a6a] font-semibold">{tenant.domain}</span>
                       </div>
                       <div className="flex justify-between items-center py-2">
-                        <span className="text-gray-600 font-medium">Date de création</span>
-                        <span className="text-gray-900 font-semibold">
+                        <span className="text-[#2b4a6a] font-medium">Date de création</span>
+                        <span className="text-[#2b4a6a] font-semibold">
                           {new Date(tenant.createdAt).toLocaleDateString('fr-FR', {
                             year: 'numeric',
                             month: 'long',
@@ -310,32 +301,32 @@ const TenantDetails = ({ tenant, onBack }: TenantDetailsProps) => {
 
                   <motion.div
                     whileHover={{ scale: 1.02 }}
-                    className="bg-gradient-to-br from-gray-50 to-white p-6 rounded-2xl border border-gray-200/50"
+                    className="bg-[#f57c00]/5 p-6 rounded-2xl border border-[#f57c00]/20"
                   >
                     <h3 className="text-lg font-semibold text-[#2b4a6a] mb-4 flex items-center gap-2">
                       <ShieldCheckIcon className="w-5 h-5 text-[#f57c00]" />
                       Statut et sécurité
                     </h3>
                     <div className="space-y-3">
-                      <div className="flex justify-between items-center py-2 border-b border-gray-100">
-                        <span className="text-gray-600 font-medium">Statut</span>
+                      <div className="flex justify-between items-center py-2 border-b border-[#f57c00]/10">
+                        <span className="text-[#2b4a6a] font-medium">Statut</span>
                         <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold ${getStatusColor(tenant.status)}`}>
                           {tenant.status === 'active' ? 'Actif' : tenant.status === 'inactive' ? 'Inactif' : 'Suspendu'}
                         </span>
                       </div>
-                      <div className="flex justify-between items-center py-2 border-b border-gray-100">
-                        <span className="text-gray-600 font-medium">Plan</span>
+                      <div className="flex justify-between items-center py-2 border-b border-[#f57c00]/10">
+                        <span className="text-[#2b4a6a] font-medium">Plan</span>
                         <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold ${getPlanColor(tenant.plan)}`}>
                           {tenant.plan}
                         </span>
                       </div>
-                      <div className="flex justify-between items-center py-2 border-b border-gray-100">
-                        <span className="text-gray-600 font-medium">Utilisateurs actifs</span>
-                        <span className="text-gray-900 font-semibold">{tenant.users.toLocaleString()}</span>
+                      <div className="flex justify-between items-center py-2 border-b border-[#f57c00]/10">
+                        <span className="text-[#2b4a6a] font-medium">Utilisateurs actifs</span>
+                        <span className="text-[#2b4a6a] font-semibold">{tenant.users.toLocaleString()}</span>
                       </div>
                       <div className="flex justify-between items-center py-2">
-                        <span className="text-gray-600 font-medium">Dernière activité</span>
-                        <span className="text-gray-900 font-semibold">Il y a 2 heures</span>
+                        <span className="text-[#2b4a6a] font-medium">Dernière activité</span>
+                        <span className="text-[#2b4a6a] font-semibold">Il y a 2 heures</span>
                       </div>
                     </div>
                   </motion.div>
@@ -354,28 +345,28 @@ const TenantDetails = ({ tenant, onBack }: TenantDetailsProps) => {
               >
                 <motion.div
                   whileHover={{ scale: 1.02 }}
-                  className="bg-gradient-to-br from-blue-50 to-blue-100/30 p-6 rounded-2xl border border-blue-200/50"
+                  className="bg-[#f57c00]/5 p-6 rounded-2xl border border-[#f57c00]/20"
                 >
                   <h3 className="text-lg font-semibold text-[#2b4a6a] mb-4 flex items-center gap-2">
                     <CreditCardIcon className="w-5 h-5 text-[#f57c00]" />
                     Détails de l'abonnement
                   </h3>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div className="text-center p-4 bg-white rounded-xl border border-blue-200/50">
-                      <p className="text-sm text-blue-600 font-medium">Plan actuel</p>
-                      <p className="text-2xl font-bold text-blue-800">{tenant.plan}</p>
+                    <div className="text-center p-4 bg-white rounded-xl border border-[#f57c00]/20">
+                      <p className="text-sm text-[#f57c00] font-medium">Plan actuel</p>
+                      <p className="text-2xl font-bold text-[#2b4a6a]">{tenant.plan}</p>
                     </div>
-                    <div className="text-center p-4 bg-white rounded-xl border border-blue-200/50">
-                      <p className="text-sm text-blue-600 font-medium">Prix mensuel</p>
-                      <p className="text-2xl font-bold text-blue-800">
+                    <div className="text-center p-4 bg-white rounded-xl border border-[#f57c00]/20">
+                      <p className="text-sm text-[#f57c00] font-medium">Prix mensuel</p>
+                      <p className="text-2xl font-bold text-[#2b4a6a]">
                         {tenant.plan === 'Enterprise' ? '€299' : 
                          tenant.plan === 'Premium' ? '€99' : 
                          tenant.plan === 'Basic' ? '€49' : '€19'}
                       </p>
                     </div>
-                    <div className="text-center p-4 bg-white rounded-xl border border-blue-200/50">
-                      <p className="text-sm text-blue-600 font-medium">Prochain paiement</p>
-                      <p className="text-lg font-semibold text-blue-800">15 Juillet 2025</p>
+                    <div className="text-center p-4 bg-white rounded-xl border border-[#f57c00]/20">
+                      <p className="text-sm text-[#f57c00] font-medium">Prochain paiement</p>
+                      <p className="text-lg font-semibold text-[#2b4a6a]">15 Juillet 2025</p>
                     </div>
                   </div>
                 </motion.div>
@@ -393,28 +384,28 @@ const TenantDetails = ({ tenant, onBack }: TenantDetailsProps) => {
               >
                 <motion.div
                   whileHover={{ scale: 1.02 }}
-                  className="bg-gradient-to-br from-green-50 to-green-100/30 p-6 rounded-2xl border border-green-200/50"
+                  className="bg-[#f57c00]/5 p-6 rounded-2xl border border-[#f57c00]/20"
                 >
                   <h3 className="text-lg font-semibold text-[#2b4a6a] mb-4 flex items-center gap-2">
                     <ChartBarIcon className="w-5 h-5 text-[#f57c00]" />
                     Statistiques d'utilisation
                   </h3>
                   <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                    <div className="text-center p-4 bg-white rounded-xl border border-green-200/50">
-                      <p className="text-sm text-green-600 font-medium">Utilisateurs actifs</p>
-                      <p className="text-2xl font-bold text-green-800">{tenant.users}</p>
+                    <div className="text-center p-4 bg-white rounded-xl border border-[#f57c00]/20">
+                      <p className="text-sm text-[#f57c00] font-medium">Utilisateurs actifs</p>
+                      <p className="text-2xl font-bold text-[#2b4a6a]">{tenant.users}</p>
                     </div>
-                    <div className="text-center p-4 bg-white rounded-xl border border-green-200/50">
-                      <p className="text-sm text-green-600 font-medium">Sessions/jour</p>
-                      <p className="text-2xl font-bold text-green-800">1,247</p>
+                    <div className="text-center p-4 bg-white rounded-xl border border-[#f57c00]/20">
+                      <p className="text-sm text-[#f57c00] font-medium">Sessions/jour</p>
+                      <p className="text-2xl font-bold text-[#2b4a6a]">1,247</p>
                     </div>
-                    <div className="text-center p-4 bg-white rounded-xl border border-green-200/50">
-                      <p className="text-sm text-green-600 font-medium">Temps moyen</p>
-                      <p className="text-2xl font-bold text-green-800">45 min</p>
+                    <div className="text-center p-4 bg-white rounded-xl border border-[#f57c00]/20">
+                      <p className="text-sm text-[#f57c00] font-medium">Temps moyen</p>
+                      <p className="text-2xl font-bold text-[#2b4a6a]">45 min</p>
                     </div>
-                    <div className="text-center p-4 bg-white rounded-xl border border-green-200/50">
-                      <p className="text-sm text-green-600 font-medium">Taux d'engagement</p>
-                      <p className="text-2xl font-bold text-green-800">87%</p>
+                    <div className="text-center p-4 bg-white rounded-xl border border-[#f57c00]/20">
+                      <p className="text-sm text-[#f57c00] font-medium">Taux d'engagement</p>
+                      <p className="text-2xl font-bold text-[#2b4a6a]">87%</p>
                     </div>
                   </div>
                 </motion.div>
@@ -432,7 +423,7 @@ const TenantDetails = ({ tenant, onBack }: TenantDetailsProps) => {
               >
                 <motion.div
                   whileHover={{ scale: 1.02 }}
-                  className="bg-gradient-to-br from-purple-50 to-purple-100/30 p-6 rounded-2xl border border-purple-200/50"
+                  className="bg-[#f57c00]/5 p-6 rounded-2xl border border-[#f57c00]/20"
                 >
                   <h3 className="text-lg font-semibold text-[#2b4a6a] mb-4 flex items-center gap-2">
                     <CogIcon className="w-5 h-5 text-[#f57c00]" />
@@ -440,39 +431,45 @@ const TenantDetails = ({ tenant, onBack }: TenantDetailsProps) => {
                   </h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="space-y-3">
-                      <div className="flex justify-between items-center py-2 border-b border-gray-100">
-                        <span className="text-gray-600 font-medium">Version API</span>
-                        <span className="text-gray-900 font-semibold">v2.1.0</span>
+                      <div className="flex justify-between items-center py-2 border-b border-[#f57c00]/10">
+                        <span className="text-[#2b4a6a] font-medium">Version API</span>
+                        <span className="text-[#2b4a6a] font-semibold">v2.1.0</span>
                       </div>
-                      <div className="flex justify-between items-center py-2 border-b border-gray-100">
-                        <span className="text-gray-600 font-medium">Base de données</span>
-                        <span className="text-gray-900 font-semibold">PostgreSQL 14</span>
+                      <div className="flex justify-between items-center py-2 border-b border-[#f57c00]/10">
+                        <span className="text-[#2b4a6a] font-medium">Base de données</span>
+                        <span className="text-[#2b4a6a] font-semibold">PostgreSQL 14</span>
                       </div>
-                      <div className="flex justify-between items-center py-2 border-b border-gray-100">
-                        <span className="text-gray-600 font-medium">Serveur</span>
-                        <span className="text-gray-900 font-semibold">AWS EC2</span>
+                      <div className="flex justify-between items-center py-2 border-b border-[#f57c00]/10">
+                        <span className="text-[#2b4a6a] font-medium">Serveur</span>
+                        <span className="text-[#2b4a6a] font-semibold">AWS EC2</span>
                       </div>
                       <div className="flex justify-between items-center py-2">
-                        <span className="text-gray-600 font-medium">SSL</span>
-                        <span className="text-green-600 font-semibold">Actif</span>
+                        <span className="text-[#2b4a6a] font-medium">SSL</span>
+                        <span className="text-[#f57c00] font-semibold flex items-center gap-1">
+                          <CheckCircleIcon className="w-4 h-4" />
+                          Actif
+                        </span>
                       </div>
                     </div>
                     <div className="space-y-3">
-                      <div className="flex justify-between items-center py-2 border-b border-gray-100">
-                        <span className="text-gray-600 font-medium">Uptime</span>
-                        <span className="text-gray-900 font-semibold">99.9%</span>
+                      <div className="flex justify-between items-center py-2 border-b border-[#f57c00]/10">
+                        <span className="text-[#2b4a6a] font-medium">Uptime</span>
+                        <span className="text-[#2b4a6a] font-semibold">99.9%</span>
                       </div>
-                      <div className="flex justify-between items-center py-2 border-b border-gray-100">
-                        <span className="text-gray-600 font-medium">Latence</span>
-                        <span className="text-gray-900 font-semibold">45ms</span>
+                      <div className="flex justify-between items-center py-2 border-b border-[#f57c00]/10">
+                        <span className="text-[#2b4a6a] font-medium">Latence</span>
+                        <span className="text-[#2b4a6a] font-semibold">45ms</span>
                       </div>
-                      <div className="flex justify-between items-center py-2 border-b border-gray-100">
-                        <span className="text-gray-600 font-medium">Stockage</span>
-                        <span className="text-gray-900 font-semibold">2.5 GB / 10 GB</span>
+                      <div className="flex justify-between items-center py-2 border-b border-[#f57c00]/10">
+                        <span className="text-[#2b4a6a] font-medium">Stockage</span>
+                        <span className="text-[#2b4a6a] font-semibold">2.5 GB / 10 GB</span>
                       </div>
                       <div className="flex justify-between items-center py-2">
-                        <span className="text-gray-600 font-medium">Dernière sauvegarde</span>
-                        <span className="text-gray-900 font-semibold">Il y a 2h</span>
+                        <span className="text-[#2b4a6a] font-medium">Dernière sauvegarde</span>
+                        <span className="text-[#2b4a6a] font-semibold flex items-center gap-1">
+                          <ClockIcon className="w-4 h-4" />
+                          Il y a 2h
+                        </span>
                       </div>
                     </div>
                   </div>

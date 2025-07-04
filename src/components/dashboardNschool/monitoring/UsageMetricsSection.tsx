@@ -94,42 +94,42 @@ const UsageMetricsSection: React.FC<UsageMetricsSectionProps> = ({ isRefreshing 
       name: 'Gestion des élèves',
       usage: 95,
       icon: UsersIcon,
-      color: 'from-blue-500 to-indigo-600',
+      color: 'from-[#f57c00] to-[#ff9800]',
       description: 'Utilisation du module élèves',
     },
     {
       name: 'Système de notes',
       usage: 87,
       icon: ChartBarIcon,
-      color: 'from-green-500 to-emerald-600',
+      color: 'from-[#f57c00] to-[#ff9800]',
       description: 'Utilisation du module notes',
     },
     {
       name: 'Emplois du temps',
       usage: 72,
       icon: ClockIcon,
-      color: 'from-purple-500 to-pink-600',
+      color: 'from-[#f57c00] to-[#ff9800]',
       description: 'Utilisation du module planning',
     },
     {
       name: 'Communication',
       usage: 65,
       icon: ChatBubbleLeftRightIcon,
-      color: 'from-orange-500 to-red-600',
+      color: 'from-[#f57c00] to-[#ff9800]',
       description: 'Utilisation du module communication',
     },
     {
       name: 'Rapports',
       usage: 58,
       icon: DocumentChartBarIcon,
-      color: 'from-teal-500 to-cyan-600',
+      color: 'from-[#f57c00] to-[#ff9800]',
       description: 'Utilisation du module rapports',
     },
     {
       name: 'API',
       usage: 92,
       icon: CpuChipIcon,
-      color: 'from-gray-500 to-slate-600',
+      color: 'from-[#f57c00] to-[#ff9800]',
       description: 'Utilisation des API',
     },
   ]);
@@ -163,9 +163,9 @@ const UsageMetricsSection: React.FC<UsageMetricsSectionProps> = ({ isRefreshing 
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'active': return { bg: 'bg-green-100', text: 'text-green-800', border: 'border-green-200' };
+      case 'active': return { bg: 'bg-[#f57c00]/10', text: 'text-[#2b4a6a]', border: 'border-[#f57c00]/20' };
       case 'inactive': return { bg: 'bg-gray-100', text: 'text-gray-800', border: 'border-gray-200' };
-      case 'suspended': return { bg: 'bg-red-100', text: 'text-red-800', border: 'border-red-200' };
+      case 'suspended': return { bg: 'bg-[#f57c00]/10', text: 'text-[#2b4a6a]', border: 'border-[#f57c00]/20' };
       default: return { bg: 'bg-gray-100', text: 'text-gray-800', border: 'border-gray-200' };
     }
   };
@@ -183,11 +183,6 @@ const UsageMetricsSection: React.FC<UsageMetricsSectionProps> = ({ isRefreshing 
         duration: 0.6,
       },
     }),
-    hover: {
-      y: -8,
-      scale: 1.02,
-      transition: { duration: 0.3, ease: 'easeOut' },
-    },
   };
 
   return (
@@ -200,7 +195,7 @@ const UsageMetricsSection: React.FC<UsageMetricsSectionProps> = ({ isRefreshing 
         className="bg-white rounded-3xl p-6 shadow-xl border border-gray-200/50 backdrop-blur-sm"
       >
         <div className="flex items-center gap-3 mb-4">
-          <div className="p-3 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-xl">
+          <div className="p-3 bg-gradient-to-r from-[#f57c00] to-[#ff9800] rounded-xl">
             <ChartBarIcon className="w-6 h-6 text-white" />
           </div>
           <div>
@@ -238,12 +233,8 @@ const UsageMetricsSection: React.FC<UsageMetricsSectionProps> = ({ isRefreshing 
                 variants={cardVariants}
                 initial="hidden"
                 animate="visible"
-                whileHover="hover"
-                className="group relative bg-gradient-to-br from-white to-gray-50/50 rounded-2xl shadow-lg hover:shadow-2xl border border-gray-100 overflow-hidden transition-all duration-300"
+                className="group relative bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden transition-all duration-300"
               >
-                {/* Effet de brillance au hover */}
-                <div className="absolute inset-0 bg-gradient-to-br from-amber-400/10 via-orange-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
-                
                 <div className="relative p-6">
                   <div className="flex items-center gap-3 mb-4">
                     <motion.div
@@ -252,11 +243,9 @@ const UsageMetricsSection: React.FC<UsageMetricsSectionProps> = ({ isRefreshing 
                       transition={{ duration: 0.3 }}
                     >
                       <FeatureIcon className="w-6 h-6" />
-                      {/* Effet de brillance sur l'icône */}
-                      <div className="absolute inset-0 bg-gradient-to-tr from-white/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                     </motion.div>
                     <div>
-                      <h4 className="font-bold text-gray-900 text-lg leading-tight mb-1">{feature.name}</h4>
+                      <h4 className="font-bold text-[#2b4a6a] text-lg leading-tight mb-1">{feature.name}</h4>
                       <p className="text-sm text-gray-500">{feature.description}</p>
                     </div>
                   </div>
@@ -278,18 +267,12 @@ const UsageMetricsSection: React.FC<UsageMetricsSectionProps> = ({ isRefreshing 
 
                   <div className="flex items-center justify-between text-sm">
                     <span className="text-gray-500">Adoption</span>
-                    <span className={`font-semibold ${
-                      feature.usage >= 80 ? 'text-green-600' : 
-                      feature.usage >= 60 ? 'text-yellow-600' : 'text-red-600'
-                    }`}>
+                    <span className="font-semibold text-[#2b4a6a]">
                       {feature.usage >= 80 ? 'Excellente' : 
                        feature.usage >= 60 ? 'Bonne' : 'À améliorer'}
                     </span>
                   </div>
                 </div>
-
-                {/* Effet de bordure animée */}
-                <div className="absolute inset-0 rounded-2xl border-2 border-transparent bg-gradient-to-r from-[#f57c00]/20 via-[#ff9800]/20 to-[#f57c00]/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
               </motion.div>
             );
           })}
@@ -304,7 +287,7 @@ const UsageMetricsSection: React.FC<UsageMetricsSectionProps> = ({ isRefreshing 
         className="bg-white rounded-3xl p-6 shadow-xl border border-gray-200/50 backdrop-blur-sm"
       >
         <div className="flex items-center gap-3 mb-6">
-          <div className="p-3 bg-gradient-to-r from-green-500 to-emerald-600 rounded-xl">
+          <div className="p-3 bg-gradient-to-r from-[#f57c00] to-[#ff9800] rounded-xl">
             <UsersIcon className="w-6 h-6 text-white" />
           </div>
           <div>
@@ -324,12 +307,8 @@ const UsageMetricsSection: React.FC<UsageMetricsSectionProps> = ({ isRefreshing 
                 variants={cardVariants}
                 initial="hidden"
                 animate="visible"
-                whileHover="hover"
-                className="group relative bg-gradient-to-br from-white to-gray-50/50 rounded-2xl shadow-lg hover:shadow-2xl border border-gray-100 overflow-hidden transition-all duration-300 p-6"
+                className="group relative bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden transition-all duration-300 p-6"
               >
-                {/* Effet de brillance au hover */}
-                <div className="absolute inset-0 bg-gradient-to-br from-amber-400/10 via-orange-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
-                
                 <div className="relative">
                   <div className="flex items-center justify-between mb-4">
                     <div className="flex items-center gap-4">
@@ -344,11 +323,11 @@ const UsageMetricsSection: React.FC<UsageMetricsSectionProps> = ({ isRefreshing 
                           </span>
                           <div className="flex items-center gap-1 text-sm">
                             {tenant.growth > 0 ? (
-                              <ArrowTrendingUpIcon className="w-4 h-4 text-green-600" />
+                              <ArrowTrendingUpIcon className="w-4 h-4 text-[#2b4a6a]" />
                             ) : (
-                              <ArrowTrendingDownIcon className="w-4 h-4 text-red-600" />
+                              <ArrowTrendingDownIcon className="w-4 h-4 text-[#2b4a6a]" />
                             )}
-                            <span className={tenant.growth > 0 ? 'text-green-600' : 'text-red-600'}>
+                            <span className="text-[#2b4a6a]">
                               {Math.abs(tenant.growth)}%
                             </span>
                           </div>
@@ -363,28 +342,28 @@ const UsageMetricsSection: React.FC<UsageMetricsSectionProps> = ({ isRefreshing 
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <div className="text-center p-4 bg-blue-50 rounded-xl border border-blue-200">
+                    <div className="text-center p-4 bg-[#f57c00]/10 rounded-xl border border-[#f57c00]/20">
                       <div className="flex items-center justify-center gap-2 mb-2">
-                        <UsersIcon className="w-5 h-5 text-blue-600" />
-                        <span className="text-sm text-blue-600 font-semibold">Utilisateurs actifs</span>
+                        <UsersIcon className="w-5 h-5 text-[#f57c00]" />
+                        <span className="text-sm text-[#f57c00] font-semibold">Utilisateurs actifs</span>
                       </div>
-                      <div className="text-2xl font-bold text-blue-800">{tenant.activeUsers.toLocaleString()}</div>
+                      <div className="text-2xl font-bold text-[#2b4a6a]">{tenant.activeUsers.toLocaleString()}</div>
                     </div>
                     
-                    <div className="text-center p-4 bg-green-50 rounded-xl border border-green-200">
+                    <div className="text-center p-4 bg-[#f57c00]/10 rounded-xl border border-[#f57c00]/20">
                       <div className="flex items-center justify-center gap-2 mb-2">
-                        <CloudIcon className="w-5 h-5 text-green-600" />
-                        <span className="text-sm text-green-600 font-semibold">Stockage utilisé</span>
+                        <CloudIcon className="w-5 h-5 text-[#f57c00]" />
+                        <span className="text-sm text-[#f57c00] font-semibold">Stockage utilisé</span>
                       </div>
-                      <div className="text-2xl font-bold text-green-800">{tenant.storageUsed} GB</div>
+                      <div className="text-2xl font-bold text-[#2b4a6a]">{tenant.storageUsed} GB</div>
                     </div>
                     
-                    <div className="text-center p-4 bg-purple-50 rounded-xl border border-purple-200">
+                    <div className="text-center p-4 bg-[#f57c00]/10 rounded-xl border border-[#f57c00]/20">
                       <div className="flex items-center justify-center gap-2 mb-2">
-                        <CpuChipIcon className="w-5 h-5 text-purple-600" />
-                        <span className="text-sm text-purple-600 font-semibold">Appels API</span>
+                        <CpuChipIcon className="w-5 h-5 text-[#f57c00]" />
+                        <span className="text-sm text-[#f57c00] font-semibold">Appels API</span>
                       </div>
-                      <div className="text-2xl font-bold text-purple-800">{tenant.apiCalls.toLocaleString()}</div>
+                      <div className="text-2xl font-bold text-[#2b4a6a]">{tenant.apiCalls.toLocaleString()}</div>
                     </div>
                   </div>
 
@@ -399,9 +378,6 @@ const UsageMetricsSection: React.FC<UsageMetricsSectionProps> = ({ isRefreshing 
                     </div>
                   </div>
                 </div>
-
-                {/* Effet de bordure animée */}
-                <div className="absolute inset-0 rounded-2xl border-2 border-transparent bg-gradient-to-r from-[#f57c00]/20 via-[#ff9800]/20 to-[#f57c00]/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
               </motion.div>
             );
           })}
@@ -426,29 +402,29 @@ const UsageMetricsSection: React.FC<UsageMetricsSectionProps> = ({ isRefreshing 
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-          <div className="text-center p-4 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl border border-blue-200">
-            <div className="text-3xl font-bold text-blue-600 mb-2">
+          <div className="text-center p-4 bg-[#f57c00]/10 rounded-2xl border border-[#f57c00]/20">
+            <div className="text-3xl font-bold text-[#f57c00] mb-2">
               {tenantUsage.reduce((sum, tenant) => sum + tenant.activeUsers, 0).toLocaleString()}
             </div>
-            <p className="text-blue-800 font-semibold">Utilisateurs totaux</p>
+            <p className="text-[#2b4a6a] font-semibold">Utilisateurs totaux</p>
           </div>
-          <div className="text-center p-4 bg-gradient-to-br from-green-50 to-emerald-50 rounded-2xl border border-green-200">
-            <div className="text-3xl font-bold text-green-600 mb-2">
+          <div className="text-center p-4 bg-[#f57c00]/10 rounded-2xl border border-[#f57c00]/20">
+            <div className="text-3xl font-bold text-[#f57c00] mb-2">
               {tenantUsage.reduce((sum, tenant) => sum + tenant.storageUsed, 0).toFixed(1)} GB
             </div>
-            <p className="text-green-800 font-semibold">Stockage total</p>
+            <p className="text-[#2b4a6a] font-semibold">Stockage total</p>
           </div>
-          <div className="text-center p-4 bg-gradient-to-br from-purple-50 to-pink-50 rounded-2xl border border-purple-200">
-            <div className="text-3xl font-bold text-purple-600 mb-2">
+          <div className="text-center p-4 bg-[#f57c00]/10 rounded-2xl border border-[#f57c00]/20">
+            <div className="text-3xl font-bold text-[#f57c00] mb-2">
               {tenantUsage.reduce((sum, tenant) => sum + tenant.apiCalls, 0).toLocaleString()}
             </div>
-            <p className="text-purple-800 font-semibold">Appels API/jour</p>
+            <p className="text-[#2b4a6a] font-semibold">Appels API/jour</p>
           </div>
-          <div className="text-center p-4 bg-gradient-to-br from-orange-50 to-red-50 rounded-2xl border border-orange-200">
-            <div className="text-3xl font-bold text-orange-600 mb-2">
+          <div className="text-center p-4 bg-[#f57c00]/10 rounded-2xl border border-[#f57c00]/20">
+            <div className="text-3xl font-bold text-[#f57c00] mb-2">
               {tenantUsage.filter(tenant => tenant.status === 'active').length}
             </div>
-            <p className="text-orange-800 font-semibold">Tenants actifs</p>
+            <p className="text-[#2b4a6a] font-semibold">Tenants actifs</p>
           </div>
         </div>
       </motion.div>

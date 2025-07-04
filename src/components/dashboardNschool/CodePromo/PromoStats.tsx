@@ -223,7 +223,7 @@ const PromoStats: React.FC<PromoStatsProps> = ({ promoCodes }) => {
                     initial={{ width: 0 }}
                     animate={{ width: `${(uses / Math.max(...Object.values(planData))) * 100}%` }}
                     transition={{ duration: 1, delay: index * 0.1 }}
-                    className="h-full bg-gradient-to-r from-purple-500 to-pink-600 rounded-full"
+                    className="h-full bg-gradient-to-r from-[#f57c00] to-[#ff9800] rounded-full"
                   />
                 </div>
                 <span className="text-sm font-semibold text-gray-900 w-12 text-right">

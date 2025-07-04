@@ -51,11 +51,11 @@ export default function SecurityAndComplianceSection() {
       {/* Sécurité */}
       <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
         <div className="flex items-center gap-3 mb-6">
-          <div className="p-2 bg-red-50 rounded-lg">
-            <ShieldCheckIcon className="h-6 w-6 text-red-600" />
+          <div className="p-2 bg-[#f57c00]/10 rounded-lg">
+            <ShieldCheckIcon className="h-6 w-6 text-[#f57c00]" />
           </div>
           <div>
-            <h3 className="text-lg font-semibold text-gray-900">Sécurité</h3>
+            <h3 className="text-lg font-semibold text-[#2b4a6a]">Sécurité</h3>
             <p className="text-sm text-gray-500">Paramètres de sécurité avancés</p>
           </div>
         </div>
@@ -74,7 +74,7 @@ export default function SecurityAndComplianceSection() {
               <button
                 onClick={() => handleSecurityChange('twoFactorAuth', !securitySettings.twoFactorAuth)}
                 className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors duration-200 ${
-                  securitySettings.twoFactorAuth ? 'bg-red-600' : 'bg-gray-200'
+                  securitySettings.twoFactorAuth ? 'bg-[#f57c00]' : 'bg-gray-200'
                 }`}
               >
                 <span
@@ -139,7 +139,7 @@ export default function SecurityAndComplianceSection() {
               <select
                 value={securitySettings.sessionTimeout}
                 onChange={(e) => handleSecurityChange('sessionTimeout', parseInt(e.target.value))}
-                className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all duration-200"
+                className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#f57c00] focus:border-transparent transition-all duration-200"
               >
                 <option value={15}>15 minutes</option>
                 <option value={30}>30 minutes</option>
@@ -154,7 +154,7 @@ export default function SecurityAndComplianceSection() {
               <select
                 value={securitySettings.loginAttempts}
                 onChange={(e) => handleSecurityChange('loginAttempts', parseInt(e.target.value))}
-                className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all duration-200"
+                className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#f57c00] focus:border-transparent transition-all duration-200"
               >
                 <option value={3}>3 tentatives</option>
                 <option value={5}>5 tentatives</option>
@@ -166,14 +166,14 @@ export default function SecurityAndComplianceSection() {
               <div className="flex items-center gap-3">
                 <ShieldCheckIcon className="h-5 w-5 text-gray-400" />
                 <div>
-                  <h4 className="text-sm font-medium text-gray-900">Liste blanche IP</h4>
+                  <h4 className="text-sm font-medium text-[#2b4a6a]">Liste blanche IP</h4>
                   <p className="text-xs text-gray-500">Restreindre l'accès aux IP autorisées</p>
                 </div>
               </div>
               <button
                 onClick={() => handleSecurityChange('ipWhitelist', !securitySettings.ipWhitelist)}
                 className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors duration-200 ${
-                  securitySettings.ipWhitelist ? 'bg-red-600' : 'bg-gray-200'
+                  securitySettings.ipWhitelist ? 'bg-[#f57c00]' : 'bg-gray-200'
                 }`}
               >
                 <span
@@ -190,11 +190,11 @@ export default function SecurityAndComplianceSection() {
       {/* Conformité */}
       <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
         <div className="flex items-center gap-3 mb-6">
-          <div className="p-2 bg-indigo-50 rounded-lg">
-            <DocumentTextIcon className="h-6 w-6 text-indigo-600" />
+          <div className="p-2 bg-[#f57c00]/10 rounded-lg">
+            <DocumentTextIcon className="h-6 w-6 text-[#f57c00]" />
           </div>
           <div>
-            <h3 className="text-lg font-semibold text-gray-900">Conformité</h3>
+            <h3 className="text-lg font-semibold text-[#2b4a6a]">Conformité</h3>
             <p className="text-sm text-gray-500">Statut de conformité et réglementations</p>
           </div>
         </div>

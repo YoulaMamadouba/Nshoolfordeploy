@@ -26,7 +26,7 @@ const SettingsPage: React.FC = () => {
             key={tab.id}
             onClick={() => setCurrentView(tab.id as SettingsView)}
             className={`flex items-center gap-2 px-4 py-2 rounded-xl font-semibold transition-all duration-300
-              ${currentView === tab.id ? 'bg-[#f57c00] text-white shadow-lg' : 'bg-[#f57c00]/10 text-[#f57c00] border border-[#f57c00]/20 hover:bg-[#f57c00]/15'}`}>
+              ${currentView === tab.id ? 'bg-[#f57c00] text-white shadow-lg' : 'bg-white text-[#2b4a6a] border border-[#2b4a6a]/20 hover:bg-[#2b4a6a]/5'}`}>
             <tab.icon className="h-5 w-5" />
             {tab.label}
           </button>

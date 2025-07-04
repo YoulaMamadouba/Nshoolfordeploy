@@ -99,23 +99,23 @@ const MonitoringPage: React.FC = () => {
         </div>
 
         {/* Navigation Tabs */}
-        <div className="flex flex-wrap gap-3">
+        <div className="flex flex-wrap gap-2">
           {navigationItems.map((item) => (
             <motion.button
               key={item.id}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
               onClick={() => handleViewChange(item.id)}
-              className={`px-6 py-3 rounded-xl font-semibold transition-all duration-300 flex items-center gap-3 ${
+              className={`px-4 py-2 rounded-lg font-medium transition-all duration-300 flex items-center gap-2 ${
                 currentView === item.id
-                  ? 'bg-[#f57c00] text-white shadow-lg'
-                  : 'bg-[#f57c00]/10 text-[#f57c00] border border-[#f57c00]/20 hover:bg-[#f57c00]/15'
+                  ? 'bg-[#f57c00] text-white shadow-md'
+                  : 'bg-white text-[#2b4a6a] border border-[#2b4a6a]/20 hover:bg-[#2b4a6a]/5'
               }`}
             >
-              <item.icon className="h-5 w-5" />
+              <item.icon className="h-4 w-4" />
               <div className="text-left">
-                <div className="font-semibold">{item.name}</div>
-                <div className="text-xs opacity-80">{item.description}</div>
+                <div className="font-medium text-sm">{item.name}</div>
+                <div className="text-xs opacity-70">{item.description}</div>
               </div>
             </motion.button>
           ))}
@@ -174,11 +174,11 @@ const MonitoringPage: React.FC = () => {
             <div className="text-sm text-gray-600">Uptime</div>
           </div>
           <div>
-            <div className="text-2xl font-bold text-green-600">245ms</div>
+            <div className="text-2xl font-bold text-[#2b4a6a]">245ms</div>
             <div className="text-sm text-gray-600">Temps de réponse</div>
           </div>
           <div>
-            <div className="text-2xl font-bold text-blue-600">1.2M</div>
+            <div className="text-2xl font-bold text-[#2b4a6a]">1.2M</div>
             <div className="text-sm text-gray-600">Requêtes/jour</div>
           </div>
           <div>

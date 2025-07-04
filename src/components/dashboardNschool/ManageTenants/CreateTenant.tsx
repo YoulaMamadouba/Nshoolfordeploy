@@ -37,28 +37,21 @@ type Step = 1 | 2 | 3 | 4;
 const CreateTenant = ({ onBack, onTenantCreated }: CreateTenantProps) => {
   const [currentStep, setCurrentStep] = useState<Step>(1);
   const [formData, setFormData] = useState({
-    // Étape 1: Informations de base
     name: '',
     code: '',
     type: '',
     email: '',
     phone: '',
     address: '',
-    
-    // Étape 2: Configuration technique
     domain: '',
     secondaryDomains: '',
     language: 'fr',
     timezone: 'Europe/Paris',
     initialConfig: '',
-    
-    // Étape 3: Abonnement et paiement
     plan: 'Starter',
     trialPeriod: false,
     promoCode: '',
     paymentMethod: 'card',
-    
-    // Étape 4: Validation
     termsAccepted: false,
   });
 
@@ -176,9 +169,9 @@ const CreateTenant = ({ onBack, onTenantCreated }: CreateTenantProps) => {
       {/* Header */}
       <motion.div
         variants={cardVariants}
-        className="bg-gradient-to-br from-white via-white to-gray-50/50 rounded-3xl p-6 shadow-xl border border-gray-200/50 backdrop-blur-sm"
+        className="bg-gradient-to-br from-white via-white to-gray-50/50 rounded-3xl p-4 shadow-xl border border-gray-200/50 backdrop-blur-sm"
       >
-        <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-4">
             <motion.button
               whileHover={{ scale: 1.05, backgroundColor: '#f57c00' }}
@@ -189,87 +182,117 @@ const CreateTenant = ({ onBack, onTenantCreated }: CreateTenantProps) => {
               <ArrowLeftIcon className="w-5 h-5" />
             </motion.button>
             <div>
-              <h1 className="text-3xl font-bold text-[#2b4a6a] tracking-tight" style={{ textShadow: '0 2px 4px rgba(0,0,0,0.1)' }}>
+              <h1 className="text-2xl font-bold text-[#2b4a6a] tracking-tight" style={{ textShadow: '0 2px 4px rgba(0,0,0,0.1)' }}>
                 Création d'un Nouveau Tenant
               </h1>
-              <p className="text-lg text-gray-600 font-medium">Formulaire multi-étapes</p>
+              <p className="text-md text-gray-600 font-medium">Formulaire multi-étapes</p>
             </div>
           </div>
         </div>
 
-        {/* Progress Steps avec animation fluide améliorée */}
-        <div className="mb-8">
+        {/* Progress Steps - Animation ULTRA PREMIUM */}
+        <div className="mb-3">
           <div className="flex items-center justify-between">
             {steps.map((step, index) => (
               <div key={step.id} className="flex items-center">
                 <motion.div
-                  whileHover={{ scale: 1.1 }}
-                  className={`flex items-center justify-center w-16 h-16 rounded-full border-2 transition-all duration-500 ${
+                  whileHover={{ scale: 1.05, rotate: 5 }}
+                  animate={{
+                    scale: currentStep === step.id ? 1.1 : 1,
+                    rotate: currentStep === step.id ? [0, -5, 5, 0] : 0
+                  }}
+                  transition={{
+                    scale: { duration: 0.3 },
+                    rotate: { duration: 0.6, repeat: currentStep === step.id ? Infinity : 0 }
+                  }}
+                  className={`flex items-center justify-center w-10 h-10 rounded-full border-2 transition-all duration-500 ${
                     currentStep >= step.id
                       ? 'bg-gradient-to-r from-[#f57c00] to-[#ff9800] border-[#f57c00] text-white shadow-lg'
                       : 'bg-white border-gray-300 text-gray-400'
                   }`}
                 >
-                  <step.icon className="w-8 h-8" />
+                  <motion.div
+                    animate={{
+                      scale: currentStep >= step.id ? [1, 1.2, 1] : 1,
+                      rotate: currentStep >= step.id ? [0, 360] : 0
+                    }}
+                    transition={{
+                      scale: { duration: 0.5, delay: 0.2 },
+                      rotate: { duration: 0.8, delay: 0.3 }
+                    }}
+                  >
+                    <step.icon className="w-5 h-5" />
+                  </motion.div>
                 </motion.div>
                 {index < steps.length - 1 && (
-                  <div className="relative w-24 h-2 mx-4">
-                    <div className="absolute inset-0 bg-gray-300 rounded-full" />
+                  <div className="relative w-20 h-1.5 ml-3">
+                    {/* Barre de fond */}
+                    <div className="absolute inset-0 bg-gray-200 rounded-full" />
+                    
+                    {/* Barre de progression avec effet 3D - Remplissage depuis le début */}
                     <motion.div
-                      className="absolute inset-0 bg-gradient-to-r from-[#f57c00] to-[#ff9800] rounded-full"
+                      className="absolute left-0 top-0 bottom-0 bg-gradient-to-r from-[#f57c00] to-[#ff9800] rounded-full shadow-sm origin-left"
                       initial={{ width: 0 }}
                       animate={{ 
-                        width: currentStep > step.id ? '100%' : '0%' 
+                        width: currentStep > step.id ? '100%' : currentStep === step.id ? '40%' : 0
+                      }}
+                      transition={{ 
+                        duration: 0.8, 
+                        ease: "easeOut",
+                        type: "spring",
+                        stiffness: 100
+                      }}
+                    />
+                    
+                    {/* Effet de brillance ultra-smooth */}
+                    <motion.div
+                      className="absolute inset-0 bg-gradient-to-r from-transparent via-white/70 to-transparent rounded-full"
+                      initial={{ x: '-100%', opacity: 0 }}
+                      animate={{ 
+                        x: currentStep > step.id ? '100%' : '-100%',
+                        opacity: currentStep > step.id ? 1 : 0
                       }}
                       transition={{ 
                         duration: 1.5, 
-                        ease: "easeInOut",
-                        delay: 0.4 
-                      }}
-                    />
-                    {/* Effet de brillance sur la barre */}
-                    <motion.div
-                      className="absolute inset-0 bg-gradient-to-r from-white/40 via-transparent to-white/40 rounded-full"
-                      initial={{ opacity: 0 }}
-                      animate={{ 
-                        opacity: currentStep > step.id ? 1 : 0 
-                      }}
-                      transition={{ 
-                        duration: 1, 
-                        delay: 0.6 
-                      }}
-                    />
-                    {/* Animation de progression fluide */}
-                    <motion.div
-                      className="absolute inset-0 bg-gradient-to-r from-transparent via-white/60 to-transparent rounded-full"
-                      initial={{ x: '-100%' }}
-                      animate={{ 
-                        x: currentStep > step.id ? '100%' : '-100%' 
-                      }}
-                      transition={{ 
-                        duration: 2, 
                         repeat: currentStep > step.id ? Infinity : 0,
                         ease: "easeInOut",
-                        delay: 0.8 
+                        delay: 0.5
                       }}
+                    />
+                    
+                    {/* Particules flottantes */}
+                    <motion.div
+                      className="absolute inset-0"
+                      animate={{
+                        background: currentStep > step.id 
+                          ? "radial-gradient(circle at 50% 50%, rgba(255,255,255,0.3) 0%, transparent 50%)"
+                          : "none"
+                      }}
+                      transition={{ duration: 0.5 }}
                     />
                   </div>
                 )}
               </div>
             ))}
           </div>
-          <div className="flex justify-between mt-8">
+          
+          {/* Labels avec animation de type */}
+          <div className="flex justify-between mt-3">
             {steps.map((step) => (
               <motion.span
                 key={step.id}
-                className={`text-sm font-medium transition-all duration-500 ${
+                className={`text-xs font-medium transition-all duration-300 ${
                   currentStep >= step.id ? 'text-[#f57c00]' : 'text-gray-400'
                 }`}
                 animate={{
-                  scale: currentStep === step.id ? 1.1 : 1,
-                  fontWeight: currentStep === step.id ? 'bold' : 'normal'
+                  scale: currentStep === step.id ? 1.05 : 1,
+                  fontWeight: currentStep === step.id ? '700' : '500',
+                  y: currentStep === step.id ? [-2, 0, -2] : 0
                 }}
-                transition={{ duration: 0.4 }}
+                transition={{ 
+                  duration: 0.4,
+                  y: { duration: 1, repeat: currentStep === step.id ? Infinity : 0 }
+                }}
               >
                 {step.title}
               </motion.span>
@@ -608,33 +631,33 @@ const CreateTenant = ({ onBack, onTenantCreated }: CreateTenantProps) => {
                   <h3 className="text-lg font-semibold text-[#2b4a6a] mb-4">Résumé de toutes les informations</h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-3">
-                      <div className="flex justify-between items-center py-2 border-b border-gray-100">
+                      <div className="flex justify-between items-center py-2">
                         <span className="text-gray-600 font-medium">Nom</span>
                         <span className="text-gray-900 font-semibold">{formData.name}</span>
                       </div>
-                      <div className="flex justify-between items-center py-2 border-b border-gray-100">
+                      <div className="flex justify-between items-center py-2">
                         <span className="text-gray-600 font-medium">Code</span>
                         <span className="text-gray-900 font-mono font-semibold">{formData.code}</span>
                       </div>
-                      <div className="flex justify-between items-center py-2 border-b border-gray-100">
+                      <div className="flex justify-between items-center py-2">
                         <span className="text-gray-600 font-medium">Type</span>
                         <span className="text-gray-900 font-semibold">{establishmentTypes.find(t => t.value === formData.type)?.label}</span>
                       </div>
-                      <div className="flex justify-between items-center py-2 border-b border-gray-100">
+                      <div className="flex justify-between items-center py-2">
                         <span className="text-gray-600 font-medium">Email</span>
                         <span className="text-gray-900 font-semibold">{formData.email}</span>
                       </div>
                     </div>
                     <div className="space-y-3">
-                      <div className="flex justify-between items-center py-2 border-b border-gray-100">
+                      <div className="flex justify-between items-center py-2">
                         <span className="text-gray-600 font-medium">Domaine</span>
                         <span className="text-gray-900 font-semibold">{formData.domain}.nschool.fr</span>
                       </div>
-                      <div className="flex justify-between items-center py-2 border-b border-gray-100">
+                      <div className="flex justify-between items-center py-2">
                         <span className="text-gray-600 font-medium">Plan</span>
                         <span className="text-gray-900 font-semibold">{formData.plan}</span>
                       </div>
-                      <div className="flex justify-between items-center py-2 border-b border-gray-100">
+                      <div className="flex justify-between items-center py-2">
                         <span className="text-gray-600 font-medium">Période d'essai</span>
                         <span className="text-gray-900 font-semibold">{formData.trialPeriod ? 'Oui' : 'Non'}</span>
                       </div>
@@ -700,4 +723,4 @@ const CreateTenant = ({ onBack, onTenantCreated }: CreateTenantProps) => {
   );
 };
 
-export default CreateTenant; 
+export default CreateTenant;
