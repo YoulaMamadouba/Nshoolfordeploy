@@ -37,9 +37,11 @@ export default function DashboardPage() {
         <DashboardHeader isSidebarCollapsed={isSidebarCollapsed} />
 
         {/* Main Content */}
-        <main className={`flex-1 pt-8 bg-gray-50 overflow-hidden transition-all duration-300 ${
-          isSidebarCollapsed ? 'pl-16' : 'pl-64'
-        }`}>
+        <main
+          className={`flex-1 pt-8 bg-gray-50 overflow-hidden transition-all duration-300 ${
+            isSidebarCollapsed ? 'pl-16' : 'pl-64'
+          }`}
+        >
           <div className="h-full overflow-y-auto overflow-x-hidden">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2">
               {/* Content based on current view */}

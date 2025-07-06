@@ -6,9 +6,7 @@ import {
   ChevronDownIcon,
   MagnifyingGlassIcon,
   Cog6ToothIcon,
-  ArrowRightOnRectangleIcon,
-  SunIcon,
-  MoonIcon
+  ArrowRightOnRectangleIcon
 } from '@heroicons/react/24/outline';
 
 interface DashboardHeaderProps {
@@ -19,18 +17,12 @@ const DashboardHeader = ({ isSidebarCollapsed = false }: DashboardHeaderProps) =
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const [notificationOpen, setNotificationOpen] = useState(false);
   const [searchFocused, setSearchFocused] = useState(false);
-  const [isDarkMode, setIsDarkMode] = useState(false);
 
   const notifications = [
     { id: 1, title: "Nouveau tenant ajouté", time: "Il y a 5 min", type: "success" },
     { id: 2, title: "Rapport mensuel disponible", time: "Il y a 1h", type: "info" },
     { id: 3, title: "Maintenance prévue", time: "Il y a 2h", type: "warning" }
   ];
-
-  const toggleDarkMode = () => {
-    setIsDarkMode(!isDarkMode);
-    // Note: Actual dark mode implementation requires additional logic (e.g., toggling a class on the root element).
-  };
 
   return (
     <motion.header 
@@ -80,7 +72,7 @@ const DashboardHeader = ({ isSidebarCollapsed = false }: DashboardHeaderProps) =
                   placeholder="Rechercher..."
                   onFocus={() => setSearchFocused(true)}
                   onBlur={() => setSearchFocused(false)}
-                  className="w-full pl-9 pr-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:outline-none focus:bg-white transition-all duration-300"
+                  className="w-full pl-9 pr-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm text-black focus:outline-none focus:bg-white transition-all duration-300"
                 />
                 <motion.div
                   initial={{ scaleX: 0 }}
@@ -99,28 +91,6 @@ const DashboardHeader = ({ isSidebarCollapsed = false }: DashboardHeaderProps) =
             animate={{ x: 0, opacity: 1 }}
             transition={{ duration: 0.5, delay: 0.3 }}
           >
-            {/* Mode Toggle Button */}
-            <motion.button
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={toggleDarkMode}
-              className="relative p-2 hover:bg-gray-100 rounded-full transition-all duration-200"
-            >
-              <svg className="h-6 w-6" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <defs>
-                  <linearGradient id="splitColor" x1="0%" y1="0%" x2="100%" y2="0%">
-                    <stop offset="50%" stop-color="#FFFFFF" />
-                    <stop offset="50%" stop-color="#2B4A6A" />
-                  </linearGradient>
-                </defs>
-                {isDarkMode ? (
-                  <SunIcon className="h-6 w-6" style={{ fill: 'url(#splitColor)' }} />
-                ) : (
-                  <MoonIcon className="h-6 w-6" style={{ fill: 'url(#splitColor)' }} />
-                )}
-              </svg>
-            </motion.button>
-
             {/* Settings Button */}
             <motion.button
               whileHover={{ scale: 1.1, rotate: 15 }}
