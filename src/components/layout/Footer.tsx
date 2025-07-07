@@ -1,82 +1,69 @@
 'use client';
-import React from 'react';
+import React, { useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
-import { useRef } from 'react';
-import { Mail, Phone, Linkedin, Twitter, ArrowRight } from 'lucide-react';
+import { Mail, Phone, Linkedin, Twitter, ArrowRight, BookOpen } from 'lucide-react';
 import Link from 'next/link';
 
 export default function Footer() {
   const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, amount: 0.2, margin: '-100px' });
+  const isInView = useInView(ref, { once: false, amount: 0.3, margin: '-100px' });
 
-  // Animation pour le CTA avec pulse subtil
-  const ctaVariants = {
-    hidden: { opacity: 0, scale: 0.95 },
-    visible: {
+  // Animation pour les sections du footer
+  const sectionVariants = {
+    hidden: { opacity: 0, y: 50 },
+    visible: (i: number) => ({
       opacity: 1,
-      scale: 1,
-      transition: {
-        duration: 0.6,
-        delay: 0.8,
-        ease: 'easeOut'
-      },
-    },
-    pulse: {
-      scale: [1, 1.05, 1],
-      transition: {
-        duration: 2,
-        repeat: Infinity,
-        ease: 'easeInOut',
-      },
-    },
+      y: 0,
+      transition: { duration: 0.6, delay: i * 0.2, ease: 'easeOut' },
+    }),
   };
 
-  // Animation pour les particules décoratives (sans mouvement vertical)
-  const particleVariants = (index: number) => ({
+  // Animation pour les particules en forme de livre
+  const bookParticleVariants = (index: number) => ({
     animate: {
-      x: [0, Math.cos(index * 1.5) * 6, 0],
-      y: 0, // Position verticale fixe
-      opacity: [0.3, 0.8, 0.3],
-      scale: [0.8, 1.2, 0.8],
+      rotate: [0, 360],
+      scale: [1, 1.3, 1],
+      opacity: [0.5, 1, 0.5],
       transition: {
-        duration: 3 + index * 0.5,
+        duration: 4 + index * 0.5,
         repeat: Infinity,
-        delay: index * 0.3,
+        delay: index * 0.2,
         ease: 'easeInOut',
       },
     },
   });
 
-  // Animation pour l'effet glow subtil
-  const glowVariants = {
-    animate: {
-      textShadow: [
-        '0 0 10px rgba(245, 124, 0, 0.3)',
-        '0 0 20px rgba(245, 124, 0, 0.5)',
-        '0 0 10px rgba(245, 124, 0, 0.3)',
-      ],
-      transition: {
-        duration: 2.5,
-        repeat: Infinity,
-        ease: 'easeInOut',
-      },
+  // Animation pour le CTA avec pulse uniquement
+  const ctaVariants = {
+    hidden: { opacity: 0, scale: 0.9 },
+    visible: {
+      opacity: 1,
+      scale: 1,
+      transition: { duration: 0.8, ease: 'easeOut' },
+    },
+    pulse: {
+      scale: [1, 1.05, 1],
+      transition: { duration: 2, repeat: Infinity, ease: 'easeInOut' },
     },
   };
 
-  // Positions fixes pour les particules flottantes
-  const particlePositions = [
-    { top: '10%', left: '15%' },
-    { top: '20%', left: '25%' },
-    { top: '30%', left: '35%' },
-    { top: '40%', left: '45%' },
-    { top: '50%', left: '55%' },
-    { top: '60%', left: '65%' },
-    { top: '70%', left: '75%' },
-    { top: '80%', left: '85%' },
-    { top: '90%', left: '95%' },
-    { top: '15%', left: '20%' },
-    { top: '25%', left: '30%' },
-    { top: '35%', left: '40%' },
+  // Animation pour les liens en vague
+  const waveVariants = (index: number) => ({
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.5, delay: 0.3 + index * 0.1, ease: 'easeOut' },
+    },
+    hover: { y: -5, transition: { duration: 0.2 } },
+  });
+
+  // Positions des particules en forme de livre
+  const bookParticles = [
+    { top: '10%', left: '10%', size: 20 },
+    { top: '30%', left: '85%', size: 15 },
+    { top: '50%', left: '20%', size: 18 },
+    { top: '70%', left: '75%', size: 22 },
   ];
 
   return (
@@ -85,251 +72,188 @@ export default function Footer() {
       className="relative overflow-hidden bg-[#2b4a6a] py-20 mt-16"
       suppressHydrationWarning
     >
-      {/* Effet de fond avec gradient subtil */}
-      <div className="absolute inset-0 bg-gradient-to-t from-[#1e3448] via-[#2b4a6a] to-[#2b4a6a] opacity-50"></div>
+      {/* Fond dynamique avec gradient */}
+      <div className="absolute inset-0 bg-gradient-to-br from-[#1e3448] via-[#2b4a6a] to-[#f57c00]/20 opacity-70"></div>
 
-      {/* Particules décoratives flottantes */}
+      {/* Particules en forme de livre */}
       <div className="absolute inset-0 pointer-events-none">
-        {particlePositions.map((pos, i) => (
+        {bookParticles.map((pos, i) => (
           <motion.div
             key={i}
-            className="absolute h-1 w-1 rounded-full bg-gradient-to-r from-[#f57c00] to-amber-400 opacity-30"
+            className="absolute text-[#f57c00]"
             style={{
               top: pos.top,
               left: pos.left,
-              y: 0, // Position verticale fixe
-              willChange: 'opacity, transform',
+              width: pos.size,
+              height: pos.size,
+              transformOrigin: 'center',
             }}
-            variants={particleVariants(i)}
+            variants={bookParticleVariants(i)}
             animate="animate"
-          />
+          >
+            <BookOpen className="w-full h-full" />
+          </motion.div>
         ))}
       </div>
 
-      <div className="relative mx-auto max-w-7xl px-6 lg:px-12">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-          {/* Colonne 1 : Nom et description */}
+      <div className="relative max-w-7xl mx-auto px-6 lg:px-12">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-12 relative">
+          {/* Section 1 : Mission avec effet de particules */}
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={isInView ? { opacity: 1 } : {}}
-            transition={{ duration: 0.7, ease: 'easeOut' }}
-            style={{ willChange: 'opacity' }}
+            custom={0}
+            initial="hidden"
+            animate={isInView ? 'visible' : 'hidden'}
+            variants={sectionVariants}
+            className="relative"
           >
-            <div className="relative inline-block">
-              <motion.h3
-                className="text-2xl font-bold relative z-10"
-                variants={glowVariants}
-                animate={isInView ? 'animate' : {}}
-                style={{ willChange: 'text-shadow' }}
-              >
-                <span className="text-white">N</span>
-                <span className="text-white"> </span>
-                <span className="bg-gradient-to-r from-[#f57c00] to-amber-400 bg-clip-text text-transparent">School</span>
-              </motion.h3>
-
-              {/* Particules scintillantes autour du logo */}
-              {[0, 1, 2].map((i) => (
-                <motion.div
-                  key={i}
-                  className="absolute h-1 w-1 rounded-full bg-gradient-to-r from-[#f57c00] to-amber-400 z-0"
-                  style={{
-                    top: `${30 + i * 20}%`,
-                    left: `${80 + i * 10}%`,
-                    y: 0, // Position verticale fixe
-                    willChange: 'opacity, transform',
-                  }}
-                  variants={particleVariants(i)}
-                  animate={isInView ? 'animate' : {}}
-                />
-              ))}
-            </div>
-            <motion.p
-              className="mt-4 text-base text-white/80 leading-relaxed"
-              initial={{ opacity: 0 }}
-              animate={isInView ? { opacity: 1 } : {}}
-              transition={{ duration: 0.8, delay: 0.2 }}
-              style={{ willChange: 'opacity' }}
-            >
-              Révolutionner la gestion scolaire en Afrique avec des solutions adaptées et accessibles.
-            </motion.p>
+            <h3 className="text-4xl font-extrabold">
+              <span className="text-white">N</span>
+              <span className="bg-gradient-to-r from-[#f57c00] to-amber-400 bg-clip-text text-transparent">school</span>
+            </h3>
+            <p className="mt-4 text-base text-white/80 leading-relaxed">
+              Révolutionner l'éducation en Afrique avec des solutions numériques accessibles, conçues pour inspirer et équiper les écoles de demain.
+            </p>
+            <motion.div
+              className="absolute -top-4 -left-4 w-4 h-4 rounded-full bg-[#f57c00]"
+              animate={{ scale: [1, 1.5, 1], opacity: [0.5, 1, 0.5] }}
+              transition={{ duration: 2, repeat: Infinity }}
+            />
           </motion.div>
 
-          {/* Colonne 2 : Navigation */}
+          {/* Section 2 : Navigation en vague interactive */}
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={isInView ? { opacity: 1 } : {}}
-            transition={{ duration: 0.7, delay: 0.2, ease: 'easeOut' }}
-            style={{ willChange: 'opacity' }}
+            custom={1}
+            initial="hidden"
+            animate={isInView ? 'visible' : 'hidden'}
+            variants={sectionVariants}
+            className="flex flex-col items-center"
           >
-            <h4
-              className="text-xl font-bold bg-gradient-to-r from-[#f57c00] to-amber-400 bg-clip-text text-transparent"
-            >
-              Liens
-            </h4>
-            <ul className="mt-4 space-y-3">
-              {['Accueil', 'À propos', 'Équipe', 'Contact'].map((item, i) => (
-                <motion.li
+            <h3 className="text-2xl font-bold bg-gradient-to-r from-[#f57c00] to-amber-400 bg-clip-text text-transparent mb-4">
+              Explorer
+            </h3>
+            <div className="flex flex-wrap justify-center gap-4">
+              {['Accueil', 'À propos', 'Solutions', 'Contact'].map((item, i) => (
+                <motion.div
                   key={i}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={isInView ? { opacity: 1, x: 0 } : {}}
-                  transition={{ duration: 0.6, delay: 0.3 + i * 0.1 }}
-                  style={{ willChange: 'opacity, transform' }}
+                  variants={waveVariants(i)}
+                  initial="hidden"
+                  animate={isInView ? 'visible' : 'hidden'}
+                  whileHover="hover"
                 >
                   <Link
                     href={`/${item.toLowerCase().replace(' ', '-')}`}
-                    className="text-white hover:bg-gradient-to-r hover:from-[#f57c00] hover:to-amber-400 hover:bg-clip-text hover:text-transparent transition-all duration-300 group inline-block"
+                    className="px-4 py-2 rounded-full bg-[#f57c00]/20 hover:bg-amber-400/30 text-white text-sm font-semibold transition-colors"
                   >
-                    <motion.span
-                      whileHover={{ x: 5 }}
-                      transition={{ duration: 0.2 }}
-                      style={{ willChange: 'transform' }}
-                    >
-                      {item}
-                    </motion.span>
+                    {item}
                   </Link>
-                </motion.li>
+                </motion.div>
               ))}
-            </ul>
+            </div>
+            <motion.div
+              className="mt-4 w-24 h-1 bg-gradient-to-r from-[#f57c00] to-amber-400"
+              animate={{ scaleX: [1, 1.2, 1] }}
+              transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
+            />
           </motion.div>
 
-          {/* Colonne 3 : Contact */}
+          {/* Section 3 : Contact et réseaux sociaux */}
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={isInView ? { opacity: 1 } : {}}
-            transition={{ duration: 0.7, delay: 0.4, ease: 'easeOut' }}
-            style={{ willChange: 'opacity' }}
+            custom={2}
+            initial="hidden"
+            animate={isInView ? 'visible' : 'hidden'}
+            variants={sectionVariants}
           >
-            <h4
-              className="text-xl font-bold bg-gradient-to-r from-[#f57c00] to-amber-400 bg-clip-text text-transparent"
-            >
+            <h3 className="text-3xl font-extrabold bg-gradient-to-r from-[#f57c00] to-amber-400 bg-clip-text text-transparent">
               Contact
-            </h4>
-            <ul className="mt-4 space-y-3">
+            </h3>
+            <ul className="mt-4 space-y-4">
               <motion.li
-                className="flex items-center gap-3 group"
-                initial={{ opacity: 0, x: -20 }}
-                animate={isInView ? { opacity: 1, x: 0 } : {}}
-                transition={{ duration: 0.6, delay: 0.5 }}
-                style={{ willChange: 'opacity, transform' }}
+                className="flex items-center gap-3"
+                whileHover={{ x: 5 }}
+                transition={{ duration: 0.2 }}
               >
-                <Mail className="h-5 w-5 text-white group-hover:text-[#f57c00] transition-colors duration-300" />
+                <Mail className="h-5 w-5 text-[#f57c00]" />
                 <a
                   href="mailto:contact@nschool.education"
-                  className="text-white hover:bg-gradient-to-r hover:from-[#f57c00] hover:to-amber-400 hover:bg-clip-text hover:text-transparent transition-all duration-300"
+                  className="text-white hover:bg-gradient-to-r hover:from-[#f57c00] hover:to-amber-400 hover:bg-clip-text hover:text-transparent"
                 >
                   contact@nschool.education
                 </a>
               </motion.li>
               <motion.li
-                className="flex items-center gap-3 group"
-                initial={{ opacity: 0, x: -20 }}
-                animate={isInView ? { opacity: 1, x: 0 } : {}}
-                transition={{ duration: 0.6, delay: 0.6 }}
-                style={{ willChange: 'opacity, transform' }}
+                className="flex items-center gap-3"
+                whileHover={{ x: 5 }}
+                transition={{ duration: 0.2 }}
               >
-                <Phone className="h-5 w-5 text-white group-hover:text-[#f57c00] transition-colors duration-300" />
+                <Phone className="h-5 w-5 text-[#f57c00]" />
                 <a
                   href="tel:+2250712345678"
-                  className="text-white hover:bg-gradient-to-r hover:from-[#f57c00] hover:to-amber-400 hover:bg-clip-text hover:text-transparent transition-all duration-300"
+                  className="text-white hover:bg-gradient-to-r hover:from-[#f57c00] hover:to-amber-400 hover:bg-clip-text hover:text-transparent"
                 >
                   +225 07 12 34 56 78
                 </a>
               </motion.li>
-            </ul>
-          </motion.div>
-
-          {/* Colonne 4 : Réseaux sociaux et CTA */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={isInView ? { opacity: 1 } : {}}
-            transition={{ duration: 0.7, delay: 0.6, ease: 'easeOut' }}
-            style={{ willChange: 'opacity' }}
-          >
-            <h4
-              className="text-xl font-bold bg-gradient-to-r from-[#f57c00] to-amber-400 bg-clip-text text-transparent"
-            >
-              Suivez-nous
-            </h4>
-            <div className="mt-4 flex gap-4">
-              <motion.a
-                href="https://linkedin.com"
-                target="_blank"
-                className="text-white hover:text-[#f57c00] transition-colors duration-300 p-2 rounded-full hover:bg-white/10"
-                whileHover={{ scale: 1.1 }}
-                transition={{ duration: 0.2 }}
-                style={{ willChange: 'transform' }}
-              >
-                <Linkedin className="h-6 w-6" />
-              </motion.a>
-              <motion.a
-                href="https://twitter.com"
-                target="_blank"
-                className="text-white hover:text-[#f57c00] transition-colors duration-300 p-2 rounded-full hover:bg-white/10"
-                whileHover={{ scale: 1.1 }}
-                transition={{ duration: 0.2 }}
-                style={{ willChange: 'transform' }}
-              >
-                <Twitter className="h-6 w-6" />
-              </motion.a>
-            </div>
-
-            <motion.div
-              className="mt-6"
-              variants={ctaVariants}
-              initial="hidden"
-              animate={isInView ? ['visible', 'pulse'] : 'hidden'}
-              style={{ willChange: 'opacity, transform' }}
-            >
-              <Link
-                href="/contact"
-                className="inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-[#f57c00] to-amber-400 px-6 py-3 text-base font-semibold text-white shadow-lg transition-all duration-300"
-              >
-                <span>Contactez-nous</span>
-                <motion.div
-                  whileHover={{ x: 3 }}
+              <li className="flex gap-4">
+                <motion.a
+                  href="https://linkedin.com"
+                  target="_blank"
+                  className="p-2 rounded-full bg-[#f57c00]/20 hover:bg-amber-400/30"
+                  whileHover={{ scale: 1.2, rotate: 10 }}
                   transition={{ duration: 0.2 }}
-                  style={{ willChange: 'transform' }}
                 >
-                  <ArrowRight className="h-4 w-4" />
-                </motion.div>
-              </Link>
-            </motion.div>
+                  <Linkedin className="h-5 w-5 text-white" />
+                </motion.a>
+                <motion.a
+                  href="https://twitter.com"
+                  target="_blank"
+                  className="p-2 rounded-full bg-[#f57c00]/20 hover:bg-amber-400/30"
+                  whileHover={{ scale: 1.2, rotate: 10 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  <Twitter className="h-5 w-5 text-white" />
+                </motion.a>
+              </li>
+            </ul>
           </motion.div>
         </div>
 
-        {/* Copyright avec animation élégante */}
+        {/* CTA avec pulse uniquement */}
         <motion.div
+          className="mt-12 text-center"
+          variants={ctaVariants}
+          initial="hidden"
+          animate={isInView ? ['visible', 'pulse'] : 'hidden'}
+        >
+          <Link
+            href="/contact"
+            className="relative inline-flex items-center gap-2 px-8 py-4 rounded-full bg-gradient-to-r from-[#f57c00] to-amber-400 text-white font-semibold text-lg overflow-hidden"
+          >
+            <span className="relative z-10">Découvrez Nschool</span>
+            <ArrowRight className="relative z-10 h-5 w-5" />
+          </Link>
+        </motion.div>
+
+        {/* Copyright avec style spécifique */}
+        <motion.div
+          className="mt-12 text-center text-sm text-white/80"
           initial={{ opacity: 0 }}
           animate={isInView ? { opacity: 1 } : {}}
-          transition={{ duration: 0.8, delay: 1 }}
-          className="mt-12 border-t border-white/20 pt-8 text-center"
-          style={{ willChange: 'opacity' }}
+          transition={{ duration: 0.8, delay: 0.5 }}
         >
-          <div className="text-base text-white/80">
+          <div>
             © 2025{' '}
             <span className="relative inline-block">
-              <motion.span
-                className="font-semibold relative z-10"
-                variants={glowVariants}
-                animate={isInView ? 'animate' : {}}
-                style={{ willChange: 'text-shadow' }}
-              >
+              <span className="font-semibold">
                 <span className="text-white">N</span>
-                <span className="text-white"> </span>
-                <span className="bg-gradient-to-r from-[#f57c00] to-amber-400 bg-clip-text text-transparent">School</span>
-              </motion.span>
+                <span className="bg-gradient-to-r from-[#f57c00] to-amber-400 bg-clip-text text-transparent">school</span>
+              </span>
               {[0, 1].map((i) => (
                 <motion.div
                   key={i}
-                  className="absolute h-0.5 w-0.5 rounded-full bg-gradient-to-r from-[#f57c00] to-amber-400 z-0 opacity-60"
-                  style={{
-                    top: `${20 + i * 60}%`,
-                    left: `${85 + i * 10}%`,
-                    y: 0, // Position verticale fixe
-                    willChange: 'opacity, transform',
-                  }}
-                  variants={particleVariants(i)}
-                  animate={isInView ? 'animate' : {}}
+                  className="absolute h-1 w-1 rounded-full bg-[#f57c00]"
+                  style={{ top: `${20 + i * 60}%`, left: `${85 + i * 10}%` }}
+                  variants={bookParticleVariants(i)}
+                  animate="animate"
                 />
               ))}
             </span>
