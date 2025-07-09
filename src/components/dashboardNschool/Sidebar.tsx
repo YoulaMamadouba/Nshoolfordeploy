@@ -13,6 +13,7 @@ import {
   ChevronDownIcon,
   ChevronRightIcon,
 } from '@heroicons/react/24/outline';
+import { useTheme } from '@/contexts/ThemeContext';
 
 type CurrentView = 'overview' | 'tenants' | 'plans' | 'payments' | 'domains' | 'codePromo' | 'globalUsers' | 'monitoring' | 'settings';
 
@@ -24,6 +25,7 @@ interface SidebarProps {
 const Sidebar = ({ onNavigation, onCollapseChange }: SidebarProps) => {
   const [expandedSection, setExpandedSection] = useState<string | null>(null);
   const [isCollapsed, setIsCollapsed] = useState(false);
+  const { theme } = useTheme();
 
   // Notifier le parent du changement d'état
   React.useEffect(() => {
@@ -62,13 +64,19 @@ const Sidebar = ({ onNavigation, onCollapseChange }: SidebarProps) => {
       initial={{ y: 50, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.6, ease: 'easeOut' }}
-      className={`fixed left-0 top-0 bg-[#2b4a6a] text-white h-screen z-30 backdrop-blur-sm bg-opacity-90 shadow-[0_0_15px_rgba(245,124,0,0.2)] transition-all duration-300 ease-in-out ${
+      className={`fixed left-0 top-0 text-white h-screen z-30 backdrop-blur-sm transition-all duration-500 ease-in-out ${
         isCollapsed ? 'w-16' : 'w-64'
+      } ${
+        theme === 'dark'
+          ? 'bg-[#1a2332]/95 border-r border-[#f57c00]/30 shadow-[0_0_20px_rgba(245,124,0,0.3)]'
+          : 'bg-[#2b4a6a] border-r border-[#f57c00]/10 shadow-[0_0_15px_rgba(245,124,0,0.2)]'
       }`}
     >
       <div className="flex flex-col h-full">
         {/* Sidebar Header */}
-        <div className="p-4 flex items-center justify-center border-b border-[#f57c00]/20 relative">
+        <div className={`p-4 flex items-center justify-center border-b relative ${
+          theme === 'dark' ? 'border-[#f57c00]/40 bg-[#151f28]/50' : 'border-[#f57c00]/20'
+        }`}>
           <motion.div
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -91,7 +99,11 @@ const Sidebar = ({ onNavigation, onCollapseChange }: SidebarProps) => {
             whileHover={{ scale: 1.15, rotate: 90 }}
             whileTap={{ scale: 0.95 }}
             onClick={() => setIsCollapsed(!isCollapsed)}
-            className="absolute right-2 top-2 w-9 h-9 flex items-center justify-center rounded-full bg-gradient-to-br from-[#f57c00]/80 to-[#2b4a6a]/80 shadow-lg border-2 border-white/30 hover:shadow-2xl transition-all duration-300 group"
+            className={`absolute right-2 top-2 w-9 h-9 flex items-center justify-center rounded-full shadow-lg border-2 transition-all duration-300 group ${
+              theme === 'dark'
+                ? 'bg-gradient-to-br from-[#f57c00]/90 to-[#1a2332]/90 border-white/40 hover:shadow-2xl hover:shadow-orange-500/50'
+                : 'bg-gradient-to-br from-[#f57c00]/80 to-[#2b4a6a]/80 border-white/30 hover:shadow-2xl hover:shadow-orange-500/20'
+            }`}
             title={isCollapsed ? "Agrandir la sidebar" : "Réduire la sidebar"}
           >
             <span className="sr-only">Réduire la sidebar</span>
@@ -109,7 +121,9 @@ const Sidebar = ({ onNavigation, onCollapseChange }: SidebarProps) => {
         </div>
 
         {/* Navigation */}
-        <nav className="flex-1 p-4 space-y-2">
+        <nav className={`flex-1 p-4 space-y-2 ${
+          theme === 'dark' ? 'bg-[#151f28]/30' : ''
+        }`}>
           {navItems.map((item, index) => (
             <div key={item.name}>
               <motion.button
@@ -117,7 +131,11 @@ const Sidebar = ({ onNavigation, onCollapseChange }: SidebarProps) => {
                 initial={{ x: -20, opacity: 0 }}
                 animate={{ x: 0, opacity: 1 }}
                 transition={{ duration: 0.5, delay: index * 0.1, ease: 'easeOut' }}
-                className="relative flex items-center justify-between p-2.5 rounded-md text-white hover:bg-[#f57c00]/10 group transition-all duration-300 w-full text-left"
+                className={`relative flex items-center justify-between p-2.5 rounded-md text-white group transition-all duration-300 w-full text-left ${
+                  theme === 'dark' 
+                    ? 'hover:bg-[#f57c00]/20 hover:shadow-lg hover:shadow-orange-500/30 bg-[#1a2332]/50' 
+                    : 'hover:bg-[#f57c00]/10 hover:shadow-md'
+                }`}
                 title={isCollapsed ? item.name : undefined}
               >
                 <div className="flex items-center space-x-3">
@@ -125,15 +143,21 @@ const Sidebar = ({ onNavigation, onCollapseChange }: SidebarProps) => {
                     whileHover={{ scale: 1.1 }}
                     className="relative"
                   >
-                    <item.icon className="h-6 w-6 text-[#f57c00]" />
+                    <item.icon className={`h-6 w-6 ${
+                      theme === 'dark' ? 'text-orange-400' : 'text-[#f57c00]'
+                    }`} />
                     <motion.div
                       animate={{ opacity: [0.2, 0.3, 0.2] }}
                       transition={{ duration: 1.5, repeat: Infinity }}
-                      className="absolute inset-0 bg-[#f57c00]/20 rounded-full blur-sm"
+                      className={`absolute inset-0 rounded-full blur-sm ${
+                        theme === 'dark' ? 'bg-orange-400/30' : 'bg-[#f57c00]/20'
+                      }`}
                     />
                   </motion.div>
                   <motion.span 
-                    className="text-sm font-semibold text-white"
+                    className={`text-sm font-semibold ${
+                      theme === 'dark' ? 'text-white' : 'text-white'
+                    }`}
                     animate={{ opacity: isCollapsed ? 0 : 1, width: isCollapsed ? 0 : 'auto' }}
                     transition={{ duration: 0.3 }}
                   >
@@ -145,11 +169,15 @@ const Sidebar = ({ onNavigation, onCollapseChange }: SidebarProps) => {
                     animate={{ rotate: expandedSection === item.name ? 90 : 0 }}
                     transition={{ duration: 0.3 }}
                   >
-                    <ChevronRightIcon className="h-4 w-4 text-[#f57c00]" />
+                    <ChevronRightIcon className={`h-4 w-4 ${
+                      theme === 'dark' ? 'text-orange-400' : 'text-[#f57c00]'
+                    }`} />
                   </motion.div>
                 )}
                 <motion.div
-                  className="absolute bottom-0 left-0 right-0 h-0.5 bg-white opacity-0 group-hover:opacity-100"
+                  className={`absolute bottom-0 left-0 right-0 h-0.5 opacity-0 group-hover:opacity-100 ${
+                    theme === 'dark' ? 'bg-orange-400' : 'bg-white'
+                  }`}
                   initial={{ scaleX: 0 }}
                   animate={{ scaleX: 1 }}
                   transition={{ duration: 0.3, ease: 'easeInOut' }}
@@ -165,7 +193,9 @@ const Sidebar = ({ onNavigation, onCollapseChange }: SidebarProps) => {
                       animate={{ opacity: 1, height: 'auto' }}
                       exit={{ opacity: 0, height: 0 }}
                       transition={{ type: 'spring', stiffness: 100, damping: 15 }}
-                      className="ml-8 mt-2 space-y-1"
+                      className={`ml-8 mt-2 space-y-1 ${
+                        theme === 'dark' ? 'bg-[#151f28]/50' : ''
+                      }`}
                     >
                       {item.subItems?.map((subItem, subIndex) => (
                         <motion.button
@@ -174,12 +204,20 @@ const Sidebar = ({ onNavigation, onCollapseChange }: SidebarProps) => {
                           initial={{ opacity: 0, x: -10 }}
                           animate={{ opacity: 1, x: 0 }}
                           transition={{ delay: subIndex * 0.1 }}
-                          className="relative flex items-center space-x-3 p-2 rounded-md text-white/70 hover:text-white hover:bg-[#f57c00]/5 group transition-all duration-300 w-full text-left"
+                          className={`relative flex items-center space-x-3 p-2 rounded-md group transition-all duration-300 w-full text-left ${
+                            theme === 'dark' 
+                              ? 'text-white/80 hover:text-white hover:bg-[#f57c00]/15 hover:shadow-md hover:shadow-orange-500/20' 
+                              : 'text-white/70 hover:text-white hover:bg-[#f57c00]/5'
+                          }`}
                         >
-                          <div className="w-2 h-2 bg-[#f57c00] rounded-full" />
+                          <div className={`w-2 h-2 rounded-full ${
+                            theme === 'dark' ? 'bg-orange-400' : 'bg-[#f57c00]'
+                          }`} />
                           <span className="text-sm font-medium">{subItem.name}</span>
                           <motion.div
-                            className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#f57c00] opacity-0 group-hover:opacity-100"
+                            className={`absolute bottom-0 left-0 right-0 h-0.5 opacity-0 group-hover:opacity-100 ${
+                              theme === 'dark' ? 'bg-orange-400' : 'bg-[#f57c00]'
+                            }`}
                             initial={{ scaleX: 0 }}
                             animate={{ scaleX: 1 }}
                             transition={{ duration: 0.3, ease: 'easeInOut' }}
@@ -195,7 +233,9 @@ const Sidebar = ({ onNavigation, onCollapseChange }: SidebarProps) => {
         </nav>
 
         {/* Footer */}
-        <div className="p-4 border-t border-[#f57c00]/20">
+        <div className={`p-4 border-t ${
+          theme === 'dark' ? 'border-[#f57c00]/40 bg-[#151f28]/50' : 'border-[#f57c00]/20'
+        }`}>
           <motion.div
             className="flex items-center space-x-2"
             initial={{ opacity: 0, y: 10 }}
@@ -206,13 +246,19 @@ const Sidebar = ({ onNavigation, onCollapseChange }: SidebarProps) => {
               whileHover={{ scale: 1.1 }}
               className="relative"
             >
-              <div className="w-8 h-8 bg-[#f57c00]/30 rounded-md flex items-center justify-center">
-                <span className="text-[#f57c00] text-sm font-bold">A</span>
+              <div className={`w-8 h-8 rounded-md flex items-center justify-center ${
+                theme === 'dark' ? 'bg-orange-400/40' : 'bg-[#f57c00]/30'
+              }`}>
+                <span className={`text-sm font-bold ${
+                  theme === 'dark' ? 'text-orange-400' : 'text-[#f57c00]'
+                }`}>A</span>
               </div>
               <motion.div
                 animate={{ opacity: [0.3, 0.5, 0.3] }}
                 transition={{ duration: 2, repeat: Infinity }}
-                className="absolute inset-0 bg-[#f57c00]/20 rounded-md blur-sm"
+                className={`absolute inset-0 rounded-md blur-sm ${
+                  theme === 'dark' ? 'bg-orange-400/30' : 'bg-[#f57c00]/20'
+                }`}
               />
             </motion.div>
             <motion.div 
@@ -221,7 +267,9 @@ const Sidebar = ({ onNavigation, onCollapseChange }: SidebarProps) => {
               transition={{ duration: 0.3 }}
             >
               <p className="font-semibold text-white">Admin</p>
-              <p className="text-[#f57c00]/60">admin@nschool.com</p>
+              <p className={`${
+                theme === 'dark' ? 'text-orange-400/70' : 'text-[#f57c00]/60'
+              }`}>admin@nschool.com</p>
             </motion.div>
           </motion.div>
         </div>

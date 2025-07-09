@@ -11,12 +11,14 @@ import CodePromo from '@/components/dashboardNschool/CodePromo';
 import GlobalUsersPage from '@/components/dashboardNschool/GlobalUsers/GlobalUsersPage';
 import MonitoringPage from '@/components/dashboardNschool/monitoring/MonitoringPage';
 import SettingsPage from '@/components/dashboardNschool/settings/SettingsPage';
+import { ThemeProvider, useTheme } from '@/contexts/ThemeContext';
 
 type CurrentView = 'overview' | 'tenants' | 'plans' | 'payments' | 'domains' | 'codePromo' | 'globalUsers' | 'monitoring' | 'settings';
 
-export default function DashboardPage() {
+function DashboardContent() {
   const [currentView, setCurrentView] = useState<CurrentView>('overview');
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
+  const { theme } = useTheme();
 
   const handleNavigation = (view: CurrentView) => {
     setCurrentView(view);
@@ -27,7 +29,11 @@ export default function DashboardPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex overflow-hidden">
+    <div className={`min-h-screen flex overflow-hidden transition-all duration-500 ${
+      theme === 'dark' 
+        ? 'bg-[#151f28]' 
+        : 'bg-gray-50'
+    }`}>
       {/* Sidebar */}
       <Sidebar onNavigation={handleNavigation} onCollapseChange={handleSidebarCollapse} />
 
@@ -38,7 +44,7 @@ export default function DashboardPage() {
 
         {/* Main Content */}
         <main
-          className={`flex-1 pt-8 bg-gray-50 overflow-hidden transition-all duration-300 ${
+          className={`flex-1 pt-8 overflow-hidden transition-all duration-300 ${
             isSidebarCollapsed ? 'pl-16' : 'pl-64'
           }`}
         >
@@ -59,5 +65,13 @@ export default function DashboardPage() {
         </main>
       </div>
     </div>
+  );
+}
+
+export default function DashboardPage() {
+  return (
+    <ThemeProvider>
+      <DashboardContent />
+    </ThemeProvider>
   );
 }
