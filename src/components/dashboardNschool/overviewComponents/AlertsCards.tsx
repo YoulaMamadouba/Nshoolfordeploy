@@ -210,9 +210,9 @@ const AlertsCards: React.FC<AlertsCardsProps> = ({ alerts, actions }) => {
       ) : (
         <>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-            {paginatedAlerts.map((alert, index) => (
+            {paginatedAlerts.map((alertItem, index) => (
               <motion.div
-                key={`alert-card-${alert.id}`}
+                key={`alert-card-${alertItem.id}`}
                 variants={cardVariants}
                 initial="hidden"
                 animate="visible"
@@ -221,18 +221,18 @@ const AlertsCards: React.FC<AlertsCardsProps> = ({ alerts, actions }) => {
               >
                 <div className="relative z-10">
                   <div className="flex items-start justify-between mb-3">
-                    <span className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-semibold border ${getBadgeStyles(alert.type)}`}>
-                      {getAlertIcon(alert.type)}
-                      {alert.issue}
+                    <span className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-semibold border ${getBadgeStyles(alertItem.type)}`}>
+                      {getAlertIcon(alertItem.type)}
+                      {alertItem.issue}
                     </span>
                     <div className="w-2 h-2 bg-[#f57c00] rounded-full animate-pulse"></div>
                   </div>
                   
-                  <h3 className="font-semibold text-gray-800 text-sm mb-2">{alert.tenant}</h3>
+                  <h3 className="font-semibold text-gray-800 text-sm mb-2">{alertItem.tenant}</h3>
                   
                   <div className="flex items-center gap-1 text-xs text-[#2b4a6a]/60 mb-4">
                     <ClockIcon className="w-3 h-3" />
-                    <span>{alert.date}</span>
+                    <span>{alertItem.date}</span>
                   </div>
                   
                   <div className="flex items-center justify-between">
@@ -240,7 +240,7 @@ const AlertsCards: React.FC<AlertsCardsProps> = ({ alerts, actions }) => {
                       whileHover={{ scale: 1.05, backgroundColor: '#2b4a6a', color: 'white' }}
                       whileTap={{ scale: 0.95 }}
                       className="text-xs bg-[#2b4a6a]/15 text-[#2b4a6a] px-2 py-1 rounded-lg flex items-center gap-1 transition-all duration-200 font-medium hover:shadow-sm"
-                      onClick={() => alert(`Voir détails: ${alert.tenant} - ${alert.issue}`)}
+                      onClick={() => window.alert(`Voir détails: ${alertItem.tenant} - ${alertItem.issue}`)}
                     >
                       <EyeIcon className="w-3 h-3" />
                       <span>Voir</span>
@@ -250,7 +250,7 @@ const AlertsCards: React.FC<AlertsCardsProps> = ({ alerts, actions }) => {
                       whileHover={{ scale: 1.05, backgroundColor: '#f57c00', color: 'white' }}
                       whileTap={{ scale: 0.95 }}
                       className="text-xs bg-[#f57c00]/15 text-[#f57c00] px-2 py-1 rounded-lg flex items-center gap-1 transition-all duration-200 font-medium hover:shadow-sm"
-                      onClick={() => alert(`Résoudre: ${alert.tenant} - ${alert.issue}`)}
+                      onClick={() => window.alert(`Résoudre: ${alertItem.tenant} - ${alertItem.issue}`)}
                     >
                       <CheckCircleIcon className="w-3 h-3" />
                       <span>Résoudre</span>

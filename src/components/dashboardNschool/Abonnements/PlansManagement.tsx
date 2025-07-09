@@ -1,6 +1,6 @@
 'use client';
 import React, { useState } from 'react';
-import { motion, AnimatePresence, Variants } from 'framer-motion';
+import { motion, Variants } from 'framer-motion';
 import CountUp from 'react-countup';
 import {
   PlusIcon,
@@ -13,6 +13,7 @@ import {
 import PlanDistribution from './PlanDistribution';
 import PlanCard from './PlanCard';
 import CreatePlanModal from './CreatePlanModal';
+
 
 const cardVariants: Variants = {
   hidden: { opacity: 0, y: 30 },
@@ -55,6 +56,15 @@ const valueVariants: Variants = {
   },
 };
 
+interface Metric {
+  title: string;
+  value: number;
+  prefix?: string;
+  suffix?: string;
+  icon: React.ReactNode;
+  description: string;
+}
+
 interface SubscriptionMetricsProps {
   mrr: number;
   arr: number;
@@ -63,31 +73,31 @@ interface SubscriptionMetricsProps {
 }
 
 const SubscriptionMetrics = ({ mrr, arr, retentionRate, clv }: SubscriptionMetricsProps) => {
-  const metrics = [
+  const metrics: Metric[] = [
     {
       title: 'MRR',
-      value: mrr,
+      value: mrr || 0,
       prefix: '€',
       icon: <CurrencyDollarIcon />,
       description: 'Revenu mensuel récurrent',
     },
     {
       title: 'ARR',
-      value: arr,
+      value: arr || 0,
       prefix: '€',
       icon: <ChartBarIcon />,
       description: 'Revenu annuel récurrent',
     },
     {
       title: 'Taux de rétention',
-      value: retentionRate,
+      value: retentionRate || 0,
       suffix: '%',
       icon: <UsersIcon />,
       description: 'Taux de rétention des clients',
     },
     {
       title: 'CLV',
-      value: clv,
+      value: clv || 0,
       prefix: '€',
       icon: <StarIcon />,
       description: 'Valeur vie client',
@@ -96,7 +106,7 @@ const SubscriptionMetrics = ({ mrr, arr, retentionRate, clv }: SubscriptionMetri
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-      {metrics.map((metric, index) => (
+      {metrics.map((metric) => (
         <motion.div
           key={metric.title}
           variants={cardVariants}
@@ -131,7 +141,9 @@ const SubscriptionMetrics = ({ mrr, arr, retentionRate, clv }: SubscriptionMetri
               variants={iconVariants}
               className="w-10 h-10 text-orange-500 flex items-center justify-center rounded-full bg-gray-100"
             >
-              {React.cloneElement(metric.icon, { className: 'w-5 h-5' })}
+              {React.isValidElement(metric.icon) 
+                ? React.cloneElement(metric.icon as React.ReactElement<any>, { className: 'w-5 h-5' })
+                : metric.icon}
             </motion.div>
           </div>
         </motion.div>
@@ -153,6 +165,25 @@ interface Plan {
   tenantCount: number;
   revenue: number;
   isPopular?: boolean;
+}
+
+interface PlanDistributionData {
+  name: string;
+  tenants: number;
+  revenue: number;
+  percentage: number;
+  color: string;
+}
+
+interface PlanDistributionProps {
+  plans: PlanDistributionData[];
+  totalMRR: number;
+}
+
+interface CreatePlanModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onSave: (newPlan: Omit<Plan, 'id' | 'tenantCount' | 'revenue'>) => void;
 }
 
 interface PlansManagementProps {
@@ -231,19 +262,18 @@ const mockPlans: Plan[] = [
 const PlansManagement = ({ onBack }: PlansManagementProps) => {
   const [plans, setPlans] = useState<Plan[]>(mockPlans);
   const [showCreateModal, setShowCreateModal] = useState(false);
-  const [editingPlan, setEditingPlan] = useState<Plan | null>(null);
 
-  const totalMRR = plans.reduce((sum, plan) => sum + plan.revenue, 0);
+  const totalMRR = plans.reduce((sum, plan) => sum + (plan.revenue || 0), 0);
   const totalARR = totalMRR * 12;
-  const totalTenants = plans.reduce((sum, plan) => sum + plan.tenantCount, 0);
+  const totalTenants = plans.reduce((sum, plan) => sum + (plan.tenantCount || 0), 0);
   const retentionRate = 94.5;
   const clv = 1250;
 
-  const planDistributionData = plans.map(plan => ({
+  const planDistributionData: PlanDistributionData[] = plans.map(plan => ({
     name: plan.name,
-    tenants: plan.tenantCount,
-    revenue: plan.revenue,
-    percentage: Math.round((plan.tenantCount / totalTenants) * 100),
+    tenants: plan.tenantCount || 0,
+    revenue: plan.revenue || 0,
+    percentage: totalTenants ? Math.round((plan.tenantCount / totalTenants) * 100) : 0,
     color: plan.color === 'bg-gray-500' ? '#6b7280' :
            plan.color === 'bg-green-500' ? '#10b981' :
            plan.color === 'bg-blue-500' ? '#3b82f6' :
@@ -262,10 +292,6 @@ const PlansManagement = ({ onBack }: PlansManagementProps) => {
     setShowCreateModal(false);
   };
 
-  const handleEditPlan = (plan: Plan) => {
-    setEditingPlan(plan);
-  };
-
   const handleDeletePlan = (planId: string) => {
     setPlans(plans.filter(plan => plan.id !== planId));
   };
@@ -281,7 +307,6 @@ const PlansManagement = ({ onBack }: PlansManagementProps) => {
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2, type: 'spring', stiffness: 100, damping: 15 }}
-        whileHover={{}}
         className="mb-6 bg-transparent"
       >
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
@@ -332,7 +357,10 @@ const PlansManagement = ({ onBack }: PlansManagementProps) => {
             <PlanCard
               key={plan.id}
               plan={plan}
-              onEdit={handleEditPlan}
+              onEdit={(plan) => {
+                // Fonction d'édition à implémenter
+                console.log('Éditer le plan:', plan);
+              }}
               onDelete={handleDeletePlan}
             />
           ))}

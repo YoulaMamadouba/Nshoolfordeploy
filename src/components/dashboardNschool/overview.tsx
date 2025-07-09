@@ -4,7 +4,6 @@ import StatsCard from '@/components/dashboardNschool/overviewComponents/StatsCar
 import TenantsGrowthChart from '@/components/dashboardNschool/overviewComponents/TenantsGrowthChart';
 import SubscriptionDistributionChart from '@/components/dashboardNschool/overviewComponents/SubscriptionDistributionChart';
 import PlanRevenueChart from '@/components/dashboardNschool/overviewComponents/PlanRevenueChart';
-import AlertsCenter from '@/components/dashboardNschool/overviewComponents/AlertsCenter';
 import ActivityLog from '@/components/dashboardNschool/overviewComponents/ActivityLog';
 import AlertsCards from '@/components/dashboardNschool/overviewComponents/AlertsCards';
 import {
@@ -14,7 +13,27 @@ import {
   CreditCardIcon,
 } from '@heroicons/react/24/outline';
 
-type ActivityType = 'success' | 'info' | 'warning';
+interface Alert {
+  id: number;
+  tenant: string;
+  issue: string;
+  type: 'payment_failed' | 'subscription_expired' | 'technical_issue' | 'account_suspended' | 'update_required';
+  date: string;
+}
+
+interface Action {
+  id: number;
+  description: string;
+  type: 'promo_code' | 'support_request' | 'db_migration';
+}
+
+interface Activity {
+  id: number;
+  action: string;
+  user: string;
+  time: string;
+  type: 'inscription' | 'paiement' | 'ajout-tenant' | 'abonnement' | 'rapport' | 'ajout-etudiant';
+}
 
 const mockData = {
   metrics: {
@@ -54,27 +73,27 @@ const mockData = {
   },
   alertsCenter: {
     alerts: [
-      { id: 1, tenant: 'École A', issue: 'Paiement échoué', type: 'payment_failed', date: '28/06/2025 14:30' },
-      { id: 2, tenant: 'Université B', issue: 'Abonnement expiré', type: 'subscription_expired', date: '27/06/2025 09:15' },
-      { id: 3, tenant: 'Tenant C', issue: 'Problème technique', type: 'technical_issue', date: '26/06/2025 16:45' },
-      { id: 4, tenant: 'École D', issue: 'Compte suspendu', type: 'account_suspended', date: '25/06/2025 11:20' },
-      { id: 5, tenant: 'Université E', issue: 'Mise à jour requise', type: 'update_required', date: '24/06/2025 13:00' },
-      { id: 6, tenant: 'Tenant F', issue: 'Paiement échoué', type: 'payment_failed', date: '23/06/2025 08:10' },
-      { id: 7, tenant: 'École G', issue: 'Abonnement expiré', type: 'subscription_expired', date: '22/06/2025 17:30' },
+      { id: 1, tenant: 'École A', issue: 'Paiement échoué', type: 'payment_failed' as const, date: '28/06/2025 14:30' },
+      { id: 2, tenant: 'Université B', issue: 'Abonnement expiré', type: 'subscription_expired' as const, date: '27/06/2025 09:15' },
+      { id: 3, tenant: 'Tenant C', issue: 'Problème technique', type: 'technical_issue' as const, date: '26/06/2025 16:45' },
+      { id: 4, tenant: 'École D', issue: 'Compte suspendu', type: 'account_suspended' as const, date: '25/06/2025 11:20' },
+      { id: 5, tenant: 'Université E', issue: 'Mise à jour requise', type: 'update_required' as const, date: '24/06/2025 13:00' },
+      { id: 6, tenant: 'Tenant F', issue: 'Paiement échoué', type: 'payment_failed' as const, date: '23/06/2025 08:10' },
+      { id: 7, tenant: 'École G', issue: 'Abonnement expiré', type: 'subscription_expired' as const, date: '22/06/2025 17:30' },
     ],
     actions: [
-      { id: 1, description: 'Code promo expire dans 3 jours', type: 'promo_code' },
-      { id: 2, description: 'Demande de support prioritaire', type: 'support_request' },
-      { id: 3, description: 'Migration DB en attente', type: 'db_migration' },
-      { id: 4, description: 'Vérifier nouveau ticket de support', type: 'support_request' },
+      { id: 1, description: 'Code promo expire dans 3 jours', type: 'promo_code' as const },
+      { id: 2, description: 'Demande de support prioritaire', type: 'support_request' as const },
+      { id: 3, description: 'Migration DB en attente', type: 'db_migration' as const },
+      { id: 4, description: 'Vérifier nouveau ticket de support', type: 'support_request' as const },
     ],
   },
   activities: [
-    { id: 1, action: 'Nouveau étudiant inscrit', user: 'Jean Dupont', time: 'Il y a 10 min', type: 'inscription' },
-    { id: 2, action: 'Paiement reçu', user: 'Tenant A', time: 'Il y a 1h', type: 'paiement' },
-    { id: 3, action: 'Tenant ajouté', user: 'Admin', time: 'Il y a 2h', type: 'ajout-tenant' },
-    { id: 4, action: 'Abonnement renouvelé', user: 'Tenant B', time: 'Il y a 3h', type: 'abonnement' },
-    { id: 5, action: 'Rapport généré', user: 'Admin', time: 'Il y a 4h', type: 'rapport' },
+    { id: 1, action: 'Nouveau étudiant inscrit', user: 'Jean Dupont', time: 'Il y a 10 min', type: 'inscription' as const },
+    { id: 2, action: 'Paiement reçu', user: 'Tenant A', time: 'Il y a 1h', type: 'paiement' as const },
+    { id: 3, action: 'Tenant ajouté', user: 'Admin', time: 'Il y a 2h', type: 'ajout-tenant' as const },
+    { id: 4, action: 'Abonnement renouvelé', user: 'Tenant B', time: 'Il y a 3h', type: 'abonnement' as const },
+    { id: 5, action: 'Rapport généré', user: 'Admin', time: 'Il y a 4h', type: 'rapport' as const },
   ],
 };
 
@@ -176,11 +195,10 @@ const Overview = () => {
       {/* Alerts Cards (nouveau centre d'alertes) */}
       <div className="mb-8">
         <AlertsCards
-          alerts={data?.alertsCenter.alerts ?? []}
-          actions={data?.alertsCenter.actions ?? []}
+          alerts={data?.alertsCenter?.alerts ?? []}
+          actions={data?.alertsCenter?.actions ?? []}
         />
       </div>
-
       {/* Activity Log */}
       <div className="grid grid-cols-1 gap-4">
         <ActivityLog activities={data?.activities ?? []} />

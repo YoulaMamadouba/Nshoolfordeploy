@@ -67,7 +67,10 @@ const CreatePlanModal = ({ isOpen, onClose, onSave }: CreatePlanModalProps) => {
     { value: 'bg-red-500', label: 'Rouge', color: '#ef4444' },
   ];
 
-  const handleInputChange = (field: string, value: any) => {
+  type FormField = keyof typeof formData;
+  type FormValue = string | number | boolean;
+
+  const handleInputChange = (field: FormField, value: FormValue) => {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
 
@@ -132,7 +135,7 @@ const CreatePlanModal = ({ isOpen, onClose, onSave }: CreatePlanModalProps) => {
               <div className="flex items-center justify-between">
                 <div>
                   <h2 className="text-2xl font-bold">Créer un Nouveau Plan</h2>
-                  <p className="text-orange-100 mt-1">Configurez votre plan d'abonnement</p>
+                  <p className="text-orange-100 mt-1">Configurez votre plan d&apos;abonnement</p>
                 </div>
                 <motion.button
                   whileHover={{ scale: 1.1 }}
@@ -273,9 +276,9 @@ const CreatePlanModal = ({ isOpen, onClose, onSave }: CreatePlanModalProps) => {
                       
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center">
+                          <label className="block text-sm font-medium text-gray-700 mb-2 items-center">
                             <UsersIcon className="w-4 h-4 mr-2" />
-                            Nombre d'Utilisateurs
+                            Nombre d&apos;Utilisateurs
                           </label>
                           <input
                             type="number"
@@ -288,7 +291,7 @@ const CreatePlanModal = ({ isOpen, onClose, onSave }: CreatePlanModalProps) => {
                         </div>
                         
                         <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center">
+                          <label className="block text-sm font-medium text-gray-700 mb-2 items-center">
                             <CloudIcon className="w-4 h-4 mr-2" />
                             Stockage
                           </label>
@@ -303,7 +306,7 @@ const CreatePlanModal = ({ isOpen, onClose, onSave }: CreatePlanModalProps) => {
                       </div>
                       
                       <div className="mt-6">
-                        <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center">
+                        <label className="text-sm font-medium text-gray-700 mb-2 flex items-center">
                           <Cog6ToothIcon className="w-4 h-4 mr-2" />
                           Fonctionnalités Incluses
                         </label>

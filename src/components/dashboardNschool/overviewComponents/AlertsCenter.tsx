@@ -147,7 +147,7 @@ const AlertsCenter = ({ alerts, actions }: AlertsCenterProps) => {
                     <motion.button
                       whileHover={{ scale: 1.1, backgroundColor: '#2b4a6a', color: 'white' }}
                       className="text-sm bg-[#2b4a6a]/10 text-[#2b4a6a] px-2 py-1 rounded-md flex items-center space-x-1 transition-colors"
-                      onClick={() => alert(`Voir détails: ${alert.tenant} - ${alert.issue}`)}
+                      onClick={() => window.alert(`Voir détails: ${alert.tenant} - ${alert.issue}`)}
                     >
                       <EyeIcon className="w-4 h-4" />
                       <span>Voir</span>
@@ -155,7 +155,7 @@ const AlertsCenter = ({ alerts, actions }: AlertsCenterProps) => {
                     <motion.button
                       whileHover={{ scale: 1.1, backgroundColor: '#f57c00', color: 'white' }}
                       className="text-sm bg-[#f57c00]/10 text-[#f57c00] px-2 py-1 rounded-md flex items-center space-x-1 transition-colors"
-                      onClick={() => alert(`Résoudre: ${alert.tenant} - ${alert.issue}`)}
+                      onClick={() => window.alert(`Résoudre: ${alert.tenant} - ${alert.issue}`)}
                     >
                       <CheckCircleIcon className="w-4 h-4" />
                       <span>Résoudre</span>
@@ -163,7 +163,7 @@ const AlertsCenter = ({ alerts, actions }: AlertsCenterProps) => {
                     <motion.button
                       whileHover={{ scale: 1.1, backgroundColor: '#dc2626', color: 'white' }}
                       className="text-sm bg-red-600/10 text-red-600 px-2 py-1 rounded-md flex items-center space-x-1 transition-colors"
-                      onClick={() => alert(`Supprimer: ${alert.tenant} - ${alert.issue}`)}
+                      onClick={() => window.alert(`Supprimer: ${alert.tenant} - ${alert.issue}`)}
                     >
                       <TrashIcon className="w-4 h-4" />
                       <span>Supprimer</span>
@@ -199,7 +199,7 @@ const AlertsCenter = ({ alerts, actions }: AlertsCenterProps) => {
                     <motion.button
                       whileHover={{ scale: 1.1, backgroundColor: '#2b4a6a', color: 'white' }}
                       className="text-sm bg-[#2b4a6a]/10 text-[#2b4a6a] px-2 py-1 rounded-md flex items-center space-x-1 transition-colors"
-                      onClick={() => alert(`Voir détails: ${action.description}`)}
+                      onClick={() => window.alert(`Voir détails: ${action.description}`)}
                     >
                       <EyeIcon className="w-4 h-4" />
                       <span>Voir</span>
@@ -207,7 +207,7 @@ const AlertsCenter = ({ alerts, actions }: AlertsCenterProps) => {
                     <motion.button
                       whileHover={{ scale: 1.1, backgroundColor: '#f57c00', color: 'white' }}
                       className="text-sm bg-[#f57c00]/10 text-[#f57c00] px-2 py-1 rounded-md flex items-center space-x-1 transition-colors"
-                      onClick={() => alert(`Résoudre: ${action.description}`)}
+                      onClick={() => window.alert(`Résoudre: ${action.description}`)}
                     >
                       <CheckCircleIcon className="w-4 h-4" />
                       <span>Résoudre</span>
@@ -215,7 +215,7 @@ const AlertsCenter = ({ alerts, actions }: AlertsCenterProps) => {
                     <motion.button
                       whileHover={{ scale: 1.1, backgroundColor: '#dc2626', color: 'white' }}
                       className="text-sm bg-red-600/10 text-red-600 px-2 py-1 rounded-md flex items-center space-x-1 transition-colors"
-                      onClick={() => alert(`Supprimer: ${action.description}`)}
+                      onClick={() => window.alert(`Supprimer: ${action.description}`)}
                     >
                       <TrashIcon className="w-4 h-4" />
                       <span>Supprimer</span>

@@ -129,26 +129,12 @@ const PlanRevenueChart = ({ data }: PlanRevenueChartProps) => {
           font: {
             size: 11,
             family: 'Inter, sans-serif',
-            weight: '600',
           },
           color: '#2b4a6a',
           boxWidth: 16,
           padding: 12,
           usePointStyle: true,
           pointStyle: 'rect',
-          generateLabels: (chart) => {
-            const { data } = chart;
-            return data.datasets.map((dataset, i) => ({
-              text: dataset.label,
-              fillStyle: dataset.backgroundColor as string,
-              strokeStyle: dataset.borderColor as string,
-              lineWidth: 2,
-              pointStyle: 'rect',
-              fontColor: '#2b4a6a',
-              padding: 10,
-              boxWidth: 16,
-            }));
-          },
         },
       },
       title: {
@@ -157,14 +143,13 @@ const PlanRevenueChart = ({ data }: PlanRevenueChartProps) => {
         font: {
           size: 15,
           family: 'Inter, sans-serif',
-          weight: '700',
         },
         color: '#2b4a6a',
         padding: { bottom: 15, top: 10 },
       },
       tooltip: {
         backgroundColor: 'rgba(43, 74, 106, 0.95)',
-        titleFont: { size: 13, weight: 'bold' },
+        titleFont: { size: 13 },
         bodyFont: { size: 11 },
         padding: 12,
         cornerRadius: 10,
@@ -182,17 +167,15 @@ const PlanRevenueChart = ({ data }: PlanRevenueChartProps) => {
           display: true,
           text: 'Revenus ($)',
           color: '#2b4a6a',
-          font: { size: 12, weight: '600' },
+          font: { size: 12 },
           padding: { top: 8 },
         },
         grid: {
           color: 'rgba(229, 231, 235, 0.3)',
-          borderColor: 'rgba(43, 74, 106, 0.1)',
-          drawBorder: false,
         },
         stacked: true,
         ticks: {
-          font: { size: 11, weight: '500' },
+          font: { size: 11 },
           color: '#2b4a6a',
           padding: 6,
         },
@@ -202,7 +185,7 @@ const PlanRevenueChart = ({ data }: PlanRevenueChartProps) => {
           display: true,
           text: 'Mois',
           color: '#2b4a6a',
-          font: { size: 12, weight: '600' },
+          font: { size: 12 },
           padding: { bottom: 8 },
         },
         grid: {
@@ -210,7 +193,7 @@ const PlanRevenueChart = ({ data }: PlanRevenueChartProps) => {
         },
         stacked: true,
         ticks: {
-          font: { size: 11, weight: '500' },
+          font: { size: 11 },
           color: '#2b4a6a',
           padding: 6,
         },

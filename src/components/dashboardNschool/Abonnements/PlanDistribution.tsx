@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion, Variants } from 'framer-motion';
-import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from 'recharts';
+import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
 
 const cardVariants: Variants = {
   hidden: { opacity: 0, y: 30 },
@@ -56,7 +56,21 @@ const PlanDistribution = ({ plans, totalMRR }: PlanDistributionProps) => {
     color: plan.color,
   }));
 
-  const CustomTooltip = ({ active, payload }: any) => {
+  const CustomTooltip = ({
+    active,
+    payload,
+  }: {
+    active?: boolean;
+    payload?: Array<{
+      payload: {
+        name: string;
+        value: number;
+        revenue: number;
+        percentage: number;
+        color: string;
+      };
+    }>;
+  }) => {
     if (active && payload && payload.length) {
       const data = payload[0].payload;
       return (
@@ -70,7 +84,6 @@ const PlanDistribution = ({ plans, totalMRR }: PlanDistributionProps) => {
     }
     return null;
   };
-
   return (
     <motion.div
       variants={cardVariants}

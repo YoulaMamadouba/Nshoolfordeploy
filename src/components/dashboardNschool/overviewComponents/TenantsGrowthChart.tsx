@@ -62,9 +62,6 @@ const TenantsGrowthChart = ({ data }: TenantsGrowthChartProps) => {
     return gradient;
   };
 
-  const totalByMonth = data.months.map((_, i) => data.schools[i] + data.universities[i] + data.admins[i]);
-  const maxGrowthIndex = totalByMonth.indexOf(Math.max(...totalByMonth));
-
   const chartData: ChartData<'line'> = {
     labels: data.months,
     datasets: [
@@ -123,7 +120,6 @@ const TenantsGrowthChart = ({ data }: TenantsGrowthChartProps) => {
           font: {
             size: 12,
             family: 'Inter, sans-serif',
-            weight: 'bold',
           },
           color: '#2b4a6a',
           boxWidth: 20,
@@ -137,14 +133,13 @@ const TenantsGrowthChart = ({ data }: TenantsGrowthChartProps) => {
         font: {
           size: 16,
           family: 'Inter, sans-serif',
-          weight: 'bold',
         },
         color: '#2b4a6a',
         padding: { bottom: 20 },
       },
       tooltip: {
         backgroundColor: 'rgba(43, 74, 106, 0.95)',
-        titleFont: { size: 13, weight: 'bold' },
+        titleFont: { size: 13 },
         bodyFont: { size: 11 },
         padding: 12,
         cornerRadius: 10,
@@ -153,30 +148,6 @@ const TenantsGrowthChart = ({ data }: TenantsGrowthChartProps) => {
         displayColors: true,
         callbacks: {
           label: (context) => `${context.dataset.label}: ${context.raw} nouveaux tenants`,
-        },
-      },
-      annotation: {
-        annotations: {
-          peak: {
-            type: 'line',
-            xMin: maxGrowthIndex,
-            xMax: maxGrowthIndex,
-            yMin: 0,
-            yMax: totalByMonth[maxGrowthIndex],
-            borderColor: '#f57c00',
-            borderWidth: 2,
-            borderDash: [5, 5],
-            label: {
-              content: `Pic: ${totalByMonth[maxGrowthIndex]} tenants`,
-              display: true,
-              position: 'top',
-              backgroundColor: '#f57c00',
-              color: '#fff',
-              font: { size: 12, weight: 'bold' },
-              padding: 6,
-              borderRadius: 4,
-            },
-          },
         },
       },
     },

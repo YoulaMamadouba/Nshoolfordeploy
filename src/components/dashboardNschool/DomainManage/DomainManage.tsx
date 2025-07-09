@@ -22,6 +22,16 @@ const containerVariants: Variants = {
   },
 };
 
+interface Domain {
+  id: number;
+  name: string;
+  tenant: string;
+  type: string;
+  status: string;
+  ssl: string;
+  createdAt: string;
+}
+
 const mockDomainData = {
   stats: {
     totalDomains: 10,
@@ -38,6 +48,7 @@ const mockDomainData = {
       type: 'Principal',
       status: 'Actif',
       ssl: 'Valide',
+      createdAt: '2024-01-15T10:30:00Z',
     },
     {
       id: 2,
@@ -46,8 +57,9 @@ const mockDomainData = {
       type: 'Secondaire',
       status: 'Actif',
       ssl: 'Valide',
+      createdAt: '2024-01-10T14:20:00Z',
     },
-  ],
+  ] as Domain[],
 };
 
 const DomainManage = () => {

@@ -1,14 +1,9 @@
 import React, { useState } from 'react';
 import { motion, Variants } from 'framer-motion';
 import {
-  PencilIcon,
-  TrashIcon,
+  
   CheckIcon,
-  XMarkIcon,
   StarIcon,
-  UsersIcon,
-  CloudIcon,
-  Cog6ToothIcon,
 } from '@heroicons/react/24/outline';
 
 const cardVariants: Variants = {
@@ -52,9 +47,9 @@ interface PlanCardProps {
 }
 
 const PlanCard = ({ plan, onEdit, onDelete }: PlanCardProps) => {
-  const [isHovered, setIsHovered] = useState(false);
+  const [, setIsHovered] = useState(false);
 
-  const getPeriodText = (period: string) => {
+  const getPeriodText = (period: Plan['period']) => {
     switch (period) {
       case 'monthly': return '/mois';
       case 'quarterly': return '/trimestre';
@@ -79,6 +74,8 @@ const PlanCard = ({ plan, onEdit, onDelete }: PlanCardProps) => {
       variants={cardVariants}
       initial="hidden"
       animate="visible"
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
       className="relative bg-white rounded-2xl p-6 shadow-sm border border-gray-100/50 overflow-hidden group"
     >
       {/* Gradient Accent Border */}
@@ -132,7 +129,7 @@ const PlanCard = ({ plan, onEdit, onDelete }: PlanCardProps) => {
           <div className="bg-gray-50 p-3 rounded-lg">
             <div className="text-gray-500">Utilisateurs</div>
             <div className="font-semibold text-[#2b4a6a]">
-              {plan.users === -1 ? 'Illimité' : plan.users.toLocaleString()}
+              {plan.users === -1 ? 'Illimité' : plan.users.toLocaleString('fr-FR')}
             </div>
           </div>
           <div className="bg-gray-50 p-3 rounded-lg">
@@ -143,18 +140,24 @@ const PlanCard = ({ plan, onEdit, onDelete }: PlanCardProps) => {
 
         {/* Actions */}
         <div className="flex gap-2">
-          <button
+          <motion.button
+            variants={buttonVariants}
+            whileHover="hover"
+            whileTap="tap"
             onClick={() => onEdit(plan)}
             className="flex-1 bg-[#f57c00]/10 text-[#f57c00] py-2 px-4 rounded-lg hover:bg-[#f57c00]/20 transition-colors text-sm font-medium"
           >
             Modifier
-          </button>
-          <button
+          </motion.button>
+          <motion.button
+            variants={buttonVariants}
+            whileHover="hover"
+            whileTap="tap"
             onClick={() => onDelete(plan.id)}
             className="flex-1 bg-red-50 text-red-600 py-2 px-4 rounded-lg hover:bg-red-100 transition-colors text-sm font-medium"
           >
             Supprimer
-          </button>
+          </motion.button>
         </div>
 
         {/* Stats Footer */}
@@ -164,7 +167,7 @@ const PlanCard = ({ plan, onEdit, onDelete }: PlanCardProps) => {
             <p className="text-xs text-gray-500">Tenants</p>
           </div>
           <div className="text-center">
-            <p className="text-lg font-bold text-green-600">€{plan.revenue.toLocaleString('fr-FR')}</p>
+            <p className="text-lg font-bold text-green-600">€{(plan.revenue || 0).toLocaleString('fr-FR')}</p>
             <p className="text-xs text-gray-500">Revenus/mois</p>
           </div>
         </div>
@@ -178,4 +181,4 @@ const PlanCard = ({ plan, onEdit, onDelete }: PlanCardProps) => {
   );
 };
 
-export default PlanCard; 
+export default PlanCard;

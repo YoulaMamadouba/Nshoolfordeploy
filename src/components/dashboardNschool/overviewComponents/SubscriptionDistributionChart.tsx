@@ -93,31 +93,12 @@ const SubscriptionDistributionChart: React.FC<SubscriptionDistributionChartProps
           font: {
             size: 11,
             family: 'Inter, sans-serif',
-            weight: '600',
           },
           color: '#2b4a6a',
           boxWidth: 18,
           padding: 10,
           usePointStyle: true,
           pointStyle: 'rect',
-          generateLabels: (chart) => {
-            const data = chart.data;
-            if (data.labels && data.datasets.length) {
-              return data.labels.map((label, i) => {
-                const value = data.datasets[0].data[i] as number;
-                const percentage = ((value / total) * 100).toFixed(1);
-                return {
-                  text: `${label}: ${value} (${percentage}%)`,
-                  fillStyle: data.datasets[0].backgroundColor![i] as string,
-                  strokeStyle: '#fff',
-                  lineWidth: 2,
-                  pointStyle: 'rect',
-                  fontColor: '#2b4a6a',
-                };
-              });
-            }
-            return [];
-          },
         },
       },
       title: {
@@ -126,7 +107,6 @@ const SubscriptionDistributionChart: React.FC<SubscriptionDistributionChartProps
         font: {
           size: 14,
           family: 'Inter, sans-serif',
-          weight: '700',
         },
         color: '#2b4a6a',
         padding: { bottom: 12, top: 8 },
@@ -134,7 +114,7 @@ const SubscriptionDistributionChart: React.FC<SubscriptionDistributionChartProps
       tooltip: {
         enabled: true,
         backgroundColor: 'rgba(43, 74, 106, 0.95)',
-        titleFont: { size: 13, weight: 'bold' },
+        titleFont: { size: 13 },
         bodyFont: { size: 11 },
         padding: 12,
         cornerRadius: 8,
@@ -148,54 +128,6 @@ const SubscriptionDistributionChart: React.FC<SubscriptionDistributionChartProps
             return `${context.label}: ${value} (${percentage}%)`;
           },
         },
-        custom: (tooltipModel) => {
-          if (tooltipModel.opacity === 0) {
-            return;
-          }
-          
-          const position = tooltipModel.chart.canvas.getBoundingClientRect();
-          const ctx = tooltipModel.chart.ctx;
-          
-          // Style du tooltip personnalisé
-          ctx.save();
-          ctx.fillStyle = 'rgba(43, 74, 106, 0.95)';
-          ctx.strokeStyle = '#f57c00';
-          ctx.lineWidth = 2;
-          ctx.shadowColor = 'rgba(0, 0, 0, 0.3)';
-          ctx.shadowBlur = 10;
-          ctx.shadowOffsetX = 0;
-          ctx.shadowOffsetY = 4;
-          
-          // Rectangle arrondi pour le tooltip
-          const tooltipWidth = 120;
-          const tooltipHeight = 60;
-          const x = position.left + tooltipModel.caretX - tooltipWidth / 2;
-          const y = position.top + tooltipModel.caretY - tooltipHeight - 10;
-          
-          // Dessiner le rectangle avec coins arrondis
-          ctx.beginPath();
-          ctx.roundRect(x, y, tooltipWidth, tooltipHeight, 8);
-          ctx.fill();
-          ctx.stroke();
-          
-          // Texte du tooltip
-          ctx.fillStyle = '#ffffff';
-          ctx.font = 'bold 12px Inter, sans-serif';
-          ctx.textAlign = 'center';
-          
-          if (tooltipModel.body) {
-            const body = tooltipModel.body[0];
-            const lines = body.lines;
-            const label = lines[0];
-            const value = lines[1] || '';
-            
-            ctx.fillText(label, x + tooltipWidth / 2, y + 20);
-            ctx.font = '11px Inter, sans-serif';
-            ctx.fillText(value, x + tooltipWidth / 2, y + 40);
-          }
-          
-          ctx.restore();
-        }
       },
     },
 

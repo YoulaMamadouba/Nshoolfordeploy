@@ -182,9 +182,9 @@ const CodePromo = () => {
             transition={{ type: 'spring', stiffness: 100, damping: 15 }}
           >
             <PromoForm
-              promoCode={selectedPromoCode || undefined}
+              promoCode={selectedPromoCode as any}
               onBack={() => handleViewChange('list')}
-              onSave={handleSavePromo}
+              onSave={handleSavePromo as any}
               mode={currentView}
             />
           </motion.div>
