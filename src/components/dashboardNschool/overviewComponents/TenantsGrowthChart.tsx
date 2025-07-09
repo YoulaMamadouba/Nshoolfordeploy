@@ -13,6 +13,7 @@ import {
   ChartData,
   ChartOptions,
 } from 'chart.js';
+import { useTheme } from '@/contexts/ThemeContext';
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
@@ -42,23 +43,33 @@ const cardVariants: Variants = {
 };
 
 const TenantsGrowthChart = ({ data }: TenantsGrowthChartProps) => {
+  const { theme } = useTheme();
+
   if (!data.months.length || !data.schools.length || !data.universities.length || !data.admins.length) {
     return (
       <motion.div
         variants={cardVariants}
         initial="hidden"
         animate="visible"
-        className="relative bg-gradient-to-br from-white/95 to-gray-50/90 rounded-3xl p-8 shadow-xl border border-[#f57c00]/20 backdrop-blur-sm overflow-hidden w-full min-w-0"
+        className={`relative rounded-3xl p-8 shadow-xl border backdrop-blur-sm overflow-hidden w-full min-w-0 ${
+          theme === 'dark'
+            ? 'bg-gradient-to-br from-[#1e2a35] to-[#2a3744] border-[#f57c00]/20'
+            : 'bg-gradient-to-br from-white/95 to-gray-50/90 border-[#f57c00]/20'
+        }`}
       >
-        <p className="text-sm text-gray-500 text-center">Aucune donnée disponible pour le graphique</p>
+        <p className={`text-sm text-center ${
+          theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
+        }`}>
+          Aucune donnée disponible pour le graphique
+        </p>
       </motion.div>
     );
   }
 
   const createGradient = (ctx: CanvasRenderingContext2D) => {
     const gradient = ctx.createLinearGradient(0, 0, 0, 400);
-    gradient.addColorStop(0, '#f57c00');
-    gradient.addColorStop(1, '#2b4a6a');
+    gradient.addColorStop(0, theme === 'dark' ? '#f97316' : '#f57c00');
+    gradient.addColorStop(1, theme === 'dark' ? '#2b4a6a' : '#2b4a6a');
     return gradient;
   };
 
@@ -69,13 +80,13 @@ const TenantsGrowthChart = ({ data }: TenantsGrowthChartProps) => {
         label: 'Écoles',
         data: data.schools,
         borderColor: (context: any) => createGradient(context.chart.ctx),
-        backgroundColor: '#f57c00',
+        backgroundColor: theme === 'dark' ? '#f97316' : '#f57c00',
         fill: false,
         tension: 0.4,
         pointRadius: 5,
         pointHoverRadius: 8,
-        pointBackgroundColor: '#f57c00',
-        pointBorderColor: '#fff',
+        pointBackgroundColor: theme === 'dark' ? '#f97316' : '#f57c00',
+        pointBorderColor: theme === 'dark' ? '#1e2a35' : '#fff',
         pointBorderWidth: 2,
       },
       {
@@ -88,7 +99,7 @@ const TenantsGrowthChart = ({ data }: TenantsGrowthChartProps) => {
         pointRadius: 5,
         pointHoverRadius: 8,
         pointBackgroundColor: '#2b4a6a',
-        pointBorderColor: '#fff',
+        pointBorderColor: theme === 'dark' ? '#1e2a35' : '#fff',
         pointBorderWidth: 2,
       },
       {
@@ -101,7 +112,7 @@ const TenantsGrowthChart = ({ data }: TenantsGrowthChartProps) => {
         pointRadius: 5,
         pointHoverRadius: 8,
         pointBackgroundColor: '#6b7280',
-        pointBorderColor: '#fff',
+        pointBorderColor: theme === 'dark' ? '#1e2a35' : '#fff',
         pointBorderWidth: 2,
       },
     ],
@@ -121,7 +132,7 @@ const TenantsGrowthChart = ({ data }: TenantsGrowthChartProps) => {
             size: 12,
             family: 'Inter, sans-serif',
           },
-          color: '#2b4a6a',
+          color: theme === 'dark' ? '#f3f4f6' : '#2b4a6a',
           boxWidth: 20,
           padding: 15,
           usePointStyle: true,
@@ -134,16 +145,16 @@ const TenantsGrowthChart = ({ data }: TenantsGrowthChartProps) => {
           size: 16,
           family: 'Inter, sans-serif',
         },
-        color: '#2b4a6a',
+        color: theme === 'dark' ? '#f3f4f6' : '#2b4a6a',
         padding: { bottom: 20 },
       },
       tooltip: {
-        backgroundColor: 'rgba(43, 74, 106, 0.95)',
+        backgroundColor: theme === 'dark' ? 'rgba(30, 42, 53, 0.95)' : 'rgba(43, 74, 106, 0.95)',
         titleFont: { size: 13 },
         bodyFont: { size: 11 },
         padding: 12,
         cornerRadius: 10,
-        borderColor: '#f57c00',
+        borderColor: theme === 'dark' ? '#f97316' : '#f57c00',
         borderWidth: 2,
         displayColors: true,
         callbacks: {
@@ -156,23 +167,29 @@ const TenantsGrowthChart = ({ data }: TenantsGrowthChartProps) => {
         title: {
           display: true,
           text: 'Mois',
-          color: '#2b4a6a',
+          color: theme === 'dark' ? '#f3f4f6' : '#2b4a6a',
           font: { size: 12, weight: 'bold' },
         },
         grid: {
           display: false,
+        },
+        ticks: {
+          color: theme === 'dark' ? '#9ca3af' : '#6b7280',
         },
       },
       y: {
         title: {
           display: true,
           text: 'Nouveaux Tenants',
-          color: '#2b4a6a',
+          color: theme === 'dark' ? '#f3f4f6' : '#2b4a6a',
           font: { size: 12, weight: 'bold' },
         },
         beginAtZero: true,
         grid: {
-          color: '#e5e7eb',
+          color: theme === 'dark' ? '#374151' : '#e5e7eb',
+        },
+        ticks: {
+          color: theme === 'dark' ? '#9ca3af' : '#6b7280',
         },
       },
     },
@@ -183,7 +200,11 @@ const TenantsGrowthChart = ({ data }: TenantsGrowthChartProps) => {
       variants={cardVariants}
       initial="hidden"
       animate="visible"
-      className="relative bg-gradient-to-br from-white/95 to-gray-50/90 rounded-3xl p-8 shadow-xl border border-[#f57c00]/20 backdrop-blur-sm overflow-hidden w-full min-w-0"
+      className={`relative rounded-3xl p-8 shadow-xl border backdrop-blur-sm overflow-hidden w-full min-w-0 ${
+        theme === 'dark'
+          ? 'bg-gradient-to-br from-[#1e2a35] to-[#2a3744] border-[#f57c00]/20'
+          : 'bg-gradient-to-br from-white/95 to-gray-50/90 border-[#f57c00]/20'
+      }`}
     >
       <div className="w-full h-[500px]">
         <Line data={chartData} options={options} />

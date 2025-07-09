@@ -44,7 +44,7 @@ function DashboardContent() {
 
         {/* Main Content */}
         <main
-          className={`flex-1 pt-8 overflow-hidden transition-all duration-300 ${
+          className={`flex-1 pt-24 overflow-hidden transition-all duration-300 ${
             isSidebarCollapsed ? 'pl-16' : 'pl-64'
           }`}
         >

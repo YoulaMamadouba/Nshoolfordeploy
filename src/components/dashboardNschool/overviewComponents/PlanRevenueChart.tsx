@@ -12,6 +12,7 @@ import {
   ChartData,
   ChartOptions,
 } from 'chart.js';
+import { useTheme } from '@/contexts/ThemeContext';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
@@ -43,6 +44,8 @@ const cardVariants: Variants = {
 };
 
 const PlanRevenueChart = ({ data }: PlanRevenueChartProps) => {
+  const { theme } = useTheme();
+
   if (
     !data.months.length ||
     !data.free.length ||
@@ -56,9 +59,17 @@ const PlanRevenueChart = ({ data }: PlanRevenueChartProps) => {
         variants={cardVariants}
         initial="hidden"
         animate="visible"
-        className="relative bg-gradient-to-br from-white/90 to-gray-50/80 rounded-2xl p-3 shadow-sm border border-[#f57c00]/30 backdrop-blur-sm overflow-visible max-w-[650px] w-full min-w-0"
+        className={`relative rounded-2xl p-3 shadow-sm border backdrop-blur-sm overflow-visible max-w-[650px] w-full min-w-0 ${
+          theme === 'dark'
+            ? 'bg-gradient-to-br from-[#1e2a35] to-[#2a3744] border-[#f57c00]/30'
+            : 'bg-gradient-to-br from-white/90 to-gray-50/80 border-[#f57c00]/30'
+        }`}
       >
-        <p className="text-base text-gray-500 text-center">Aucune donnée disponible pour le graphique</p>
+        <p className={`text-base text-center ${
+          theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
+        }`}>
+          Aucune donnée disponible pour le graphique
+        </p>
       </motion.div>
     );
   }
@@ -130,7 +141,7 @@ const PlanRevenueChart = ({ data }: PlanRevenueChartProps) => {
             size: 11,
             family: 'Inter, sans-serif',
           },
-          color: '#2b4a6a',
+          color: theme === 'dark' ? '#f3f4f6' : '#2b4a6a',
           boxWidth: 16,
           padding: 12,
           usePointStyle: true,
@@ -144,16 +155,16 @@ const PlanRevenueChart = ({ data }: PlanRevenueChartProps) => {
           size: 15,
           family: 'Inter, sans-serif',
         },
-        color: '#2b4a6a',
+        color: theme === 'dark' ? '#f3f4f6' : '#2b4a6a',
         padding: { bottom: 15, top: 10 },
       },
       tooltip: {
-        backgroundColor: 'rgba(43, 74, 106, 0.95)',
+        backgroundColor: theme === 'dark' ? 'rgba(30, 42, 53, 0.95)' : 'rgba(43, 74, 106, 0.95)',
         titleFont: { size: 13 },
         bodyFont: { size: 11 },
         padding: 12,
         cornerRadius: 10,
-        borderColor: '#f57c00',
+        borderColor: theme === 'dark' ? '#f97316' : '#f57c00',
         borderWidth: 2,
         displayColors: true,
         callbacks: {
@@ -166,17 +177,17 @@ const PlanRevenueChart = ({ data }: PlanRevenueChartProps) => {
         title: {
           display: true,
           text: 'Revenus ($)',
-          color: '#2b4a6a',
+          color: theme === 'dark' ? '#f3f4f6' : '#2b4a6a',
           font: { size: 12 },
           padding: { top: 8 },
         },
         grid: {
-          color: 'rgba(229, 231, 235, 0.3)',
+          color: theme === 'dark' ? 'rgba(55, 65, 81, 0.3)' : 'rgba(229, 231, 235, 0.3)',
         },
         stacked: true,
         ticks: {
           font: { size: 11 },
-          color: '#2b4a6a',
+          color: theme === 'dark' ? '#9ca3af' : '#2b4a6a',
           padding: 6,
         },
       },
@@ -184,7 +195,7 @@ const PlanRevenueChart = ({ data }: PlanRevenueChartProps) => {
         title: {
           display: true,
           text: 'Mois',
-          color: '#2b4a6a',
+          color: theme === 'dark' ? '#f3f4f6' : '#2b4a6a',
           font: { size: 12 },
           padding: { bottom: 8 },
         },
@@ -194,7 +205,7 @@ const PlanRevenueChart = ({ data }: PlanRevenueChartProps) => {
         stacked: true,
         ticks: {
           font: { size: 11 },
-          color: '#2b4a6a',
+          color: theme === 'dark' ? '#9ca3af' : '#2b4a6a',
           padding: 6,
         },
       },
@@ -206,7 +217,11 @@ const PlanRevenueChart = ({ data }: PlanRevenueChartProps) => {
       variants={cardVariants}
       initial="hidden"
       animate="visible"
-      className="relative bg-gradient-to-br from-white/90 to-gray-50/80 rounded-2xl p-4 shadow-sm border border-[#f57c00]/30 backdrop-blur-sm overflow-visible w-full min-w-0"
+      className={`relative rounded-2xl p-4 shadow-sm border backdrop-blur-sm overflow-visible w-full min-w-0 ${
+        theme === 'dark'
+          ? 'bg-gradient-to-br from-[#1e2a35] to-[#2a3744] border-[#f57c00]/30'
+          : 'bg-gradient-to-br from-white/90 to-gray-50/80 border-[#f57c00]/30'
+      }`}
     >
       <div className="w-full h-[450px]">
         <Bar data={chartData} options={options} />

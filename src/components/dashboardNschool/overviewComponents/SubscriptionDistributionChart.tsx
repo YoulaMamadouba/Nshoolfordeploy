@@ -9,6 +9,7 @@ import {
   ChartData,
   ChartOptions,
 } from 'chart.js';
+import { useTheme } from '@/contexts/ThemeContext';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -39,6 +40,7 @@ const cardVariants: Variants = {
 };
 
 const SubscriptionDistributionChart: React.FC<SubscriptionDistributionChartProps> = ({ data }) => {
+  const { theme } = useTheme();
 
   const total = data.free + data.starter + data.basic + data.premium + data.enterprise;
 
@@ -48,9 +50,17 @@ const SubscriptionDistributionChart: React.FC<SubscriptionDistributionChartProps
         variants={cardVariants}
         initial="hidden"
         animate="visible"
-        className="relative bg-white/80 rounded-2xl p-4 shadow-sm border border-gray-100/50 backdrop-blur-sm overflow-hidden max-w-[318px] w-full min-w-0"
+        className={`relative rounded-2xl p-4 shadow-sm border backdrop-blur-sm overflow-hidden max-w-[318px] w-full min-w-0 ${
+          theme === 'dark'
+            ? 'bg-gradient-to-br from-[#1e2a35] to-[#2a3744] border-[#f57c00]/20'
+            : 'bg-white/80 border-gray-100/50'
+        }`}
       >
-        <p className="text-sm text-gray-500 text-center">Aucune donnée disponible pour le graphique</p>
+        <p className={`text-sm text-center ${
+          theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
+        }`}>
+          Aucune donnée disponible pour le graphique
+        </p>
       </motion.div>
     );
   }
@@ -94,7 +104,7 @@ const SubscriptionDistributionChart: React.FC<SubscriptionDistributionChartProps
             size: 11,
             family: 'Inter, sans-serif',
           },
-          color: '#2b4a6a',
+          color: theme === 'dark' ? '#f3f4f6' : '#2b4a6a',
           boxWidth: 18,
           padding: 10,
           usePointStyle: true,
@@ -108,17 +118,17 @@ const SubscriptionDistributionChart: React.FC<SubscriptionDistributionChartProps
           size: 14,
           family: 'Inter, sans-serif',
         },
-        color: '#2b4a6a',
+        color: theme === 'dark' ? '#f3f4f6' : '#2b4a6a',
         padding: { bottom: 12, top: 8 },
       },
       tooltip: {
         enabled: true,
-        backgroundColor: 'rgba(43, 74, 106, 0.95)',
+        backgroundColor: theme === 'dark' ? 'rgba(30, 42, 53, 0.95)' : 'rgba(43, 74, 106, 0.95)',
         titleFont: { size: 13 },
         bodyFont: { size: 11 },
         padding: 12,
         cornerRadius: 8,
-        borderColor: '#f57c00',
+        borderColor: theme === 'dark' ? '#f97316' : '#f57c00',
         borderWidth: 2,
         displayColors: true,
         callbacks: {
@@ -130,7 +140,6 @@ const SubscriptionDistributionChart: React.FC<SubscriptionDistributionChartProps
         },
       },
     },
-
   };
 
   return (
@@ -138,7 +147,11 @@ const SubscriptionDistributionChart: React.FC<SubscriptionDistributionChartProps
       variants={cardVariants}
       initial="hidden"
       animate="visible"
-      className="relative bg-white/80 rounded-2xl p-4 shadow-sm border border-gray-100/50 backdrop-blur-sm overflow-hidden w-full min-w-0"
+      className={`relative rounded-2xl p-4 shadow-sm border backdrop-blur-sm overflow-hidden w-full min-w-0 ${
+        theme === 'dark'
+          ? 'bg-gradient-to-br from-[#1e2a35] to-[#2a3744] border-[#f57c00]/20'
+          : 'bg-white/80 border-gray-100/50'
+      }`}
     >
       <div className="w-full h-[450px] relative">
         <Pie data={chartData} options={options} />

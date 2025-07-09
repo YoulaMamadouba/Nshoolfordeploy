@@ -1,13 +1,16 @@
 import React, { useState } from 'react';
-import { motion, Variants } from 'framer-motion';
-import {
-  ExclamationCircleIcon,
-  ExclamationTriangleIcon,
-  ClockIcon,
-  EyeIcon,
+import { motion, AnimatePresence } from 'framer-motion';
+import { 
+  ExclamationTriangleIcon, 
+  ClockIcon, 
   CheckCircleIcon,
-  TrashIcon,
+  XCircleIcon,
+  BellIcon,
+  CogIcon,
+  DocumentTextIcon,
+  ChatBubbleLeftRightIcon
 } from '@heroicons/react/24/outline';
+import { useTheme } from '@/contexts/ThemeContext';
 
 interface Alert {
   id: number;
@@ -28,206 +31,353 @@ interface AlertsCenterProps {
   actions: Action[];
 }
 
-const cardVariants: Variants = {
-  hidden: { opacity: 0, y: 30 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      type: 'spring',
-      stiffness: 150,
-      damping: 15,
-      duration: 0.5,
-    },
-  },
-};
-
-const itemVariants: Variants = {
-  hidden: { opacity: 0, x: -20 },
-  visible: {
-    opacity: 1,
-    x: 0,
-    transition: { duration: 0.3, ease: 'easeOut' },
-  },
-};
-
 const AlertsCenter = ({ alerts, actions }: AlertsCenterProps) => {
-  const [filter, setFilter] = useState<string>('all');
+  const [selectedAlert, setSelectedAlert] = useState<Alert | null>(null);
+  const [selectedAction, setSelectedAction] = useState<Action | null>(null);
+  const { theme } = useTheme();
 
-  const getBadgeStyles = (type: Alert['type']) => {
+  const getAlertIcon = (type: Alert['type']) => {
     switch (type) {
       case 'payment_failed':
-        return 'bg-red-100 text-red-800 border-red-300';
+        return <XCircleIcon className="w-5 h-5 text-red-500" />;
       case 'subscription_expired':
-        return 'bg-orange-100 text-orange-800 border-orange-300';
+        return <ClockIcon className="w-5 h-5 text-yellow-500" />;
       case 'technical_issue':
-        return 'bg-yellow-100 text-yellow-800 border-yellow-300';
+        return <CogIcon className="w-5 h-5 text-blue-500" />;
       case 'account_suspended':
-        return 'bg-purple-100 text-purple-800 border-purple-300';
+        return <ExclamationTriangleIcon className="w-5 h-5 text-orange-500" />;
       case 'update_required':
-        return 'bg-blue-100 text-blue-800 border-blue-300';
+        return <DocumentTextIcon className="w-5 h-5 text-purple-500" />;
       default:
-        return 'bg-gray-100 text-gray-800 border-gray-300';
+        return <BellIcon className="w-5 h-5 text-gray-500" />;
+    }
+  };
+
+  const getAlertColor = (type: Alert['type']) => {
+    switch (type) {
+      case 'payment_failed':
+        return theme === 'dark' ? 'bg-red-900/20 border-red-500/30' : 'bg-red-50 border-red-200';
+      case 'subscription_expired':
+        return theme === 'dark' ? 'bg-yellow-900/20 border-yellow-500/30' : 'bg-yellow-50 border-yellow-200';
+      case 'technical_issue':
+        return theme === 'dark' ? 'bg-blue-900/20 border-blue-500/30' : 'bg-blue-50 border-blue-200';
+      case 'account_suspended':
+        return theme === 'dark' ? 'bg-orange-900/20 border-orange-500/30' : 'bg-orange-50 border-orange-200';
+      case 'update_required':
+        return theme === 'dark' ? 'bg-purple-900/20 border-purple-500/30' : 'bg-purple-50 border-purple-200';
+      default:
+        return theme === 'dark' ? 'bg-gray-800/20 border-gray-500/30' : 'bg-gray-50 border-gray-200';
     }
   };
 
   const getActionIcon = (type: Action['type']) => {
     switch (type) {
       case 'promo_code':
-        return <ClockIcon className="w-5 h-5 text-[#f57c00]" />;
+        return <DocumentTextIcon className="w-5 h-5 text-green-500" />;
       case 'support_request':
-        return <ExclamationCircleIcon className="w-5 h-5 text-[#2b4a6a]" />;
+        return <ChatBubbleLeftRightIcon className="w-5 h-5 text-blue-500" />;
       case 'db_migration':
-        return <ExclamationTriangleIcon className="w-5 h-5 text-[#a855f7]" />;
+        return <CogIcon className="w-5 h-5 text-purple-500" />;
       default:
-        return null;
+        return <BellIcon className="w-5 h-5 text-gray-500" />;
     }
   };
 
-  const filteredAlerts = filter === 'all' ? alerts : alerts.filter((alert) => alert.type === filter);
+  const getActionColor = (type: Action['type']) => {
+    switch (type) {
+      case 'promo_code':
+        return theme === 'dark' ? 'bg-green-900/20 border-green-500/30' : 'bg-green-50 border-green-200';
+      case 'support_request':
+        return theme === 'dark' ? 'bg-blue-900/20 border-blue-500/30' : 'bg-blue-50 border-blue-200';
+      case 'db_migration':
+        return theme === 'dark' ? 'bg-purple-900/20 border-purple-500/30' : 'bg-purple-50 border-purple-200';
+      default:
+        return theme === 'dark' ? 'bg-gray-800/20 border-gray-500/30' : 'bg-gray-50 border-gray-200';
+    }
+  };
 
   return (
-    <motion.div
-      variants={cardVariants}
-      initial="hidden"
-      animate="visible"
-      className="relative bg-gradient-to-br from-white/90 to-gray-50/80 rounded-2xl p-4 shadow-sm border border-[#f57c00]/30 backdrop-blur-sm overflow-visible max-w-[450px] w-full min-w-0"
-    >
-      <h2 className="text-lg font-bold text-[#2b4a6a] text-center mb-4 tracking-tight" style={{ textShadow: '0 1px 2px rgba(0, 0, 0, 0.1)' }}>
-        Centre d'alertes
-      </h2>
-      <div className="relative mb-4">
-        <div className="absolute inset-0 h-px bg-gradient-to-r from-transparent via-[#f57c00]/50 to-transparent" />
-      </div>
-      <div className="mb-4 relative">
-        <select
-          value={filter}
-          onChange={(e) => setFilter(e.target.value)}
-          className="w-full text-sm text-[#2b4a6a] bg-gradient-to-r from-white/70 to-[#f57c00]/10 border border-[#f57c00]/50 rounded-lg p-2.5 pl-3 pr-8 focus:outline-none focus:ring-2 focus:ring-[#f57c00]/50 transition-all appearance-none cursor-pointer"
-        >
-          <option value="all">Tous</option>
-          <option value="payment_failed">Paiement échoué</option>
-          <option value="subscription_expired">Abonnement expiré</option>
-          <option value="technical_issue">Problème technique</option>
-          <option value="account_suspended">Compte suspendu</option>
-          <option value="update_required">Mise à jour requise</option>
-        </select>
-        <span className="absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none">
-          <svg className="w-4 h-4 text-[#f57c00]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
-          </svg>
-        </span>
-      </div>
-      <div className="w-full h-64 flex flex-col space-y-4 overflow-y-auto scrollbar-thin scrollbar-thumb-[#f57c00] scrollbar-track-gray-100 scrollbar-thumb-rounded-full">
-        {/* Tenants avec problèmes */}
+    <div className={`rounded-xl p-6 ${
+      theme === 'dark' 
+        ? 'bg-gradient-to-br from-[#1e2a35] to-[#2a3744] border border-[#f57c00]/20' 
+        : 'bg-white border border-gray-200'
+    } shadow-lg`}>
+      <motion.h2 
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className={`text-xl font-bold mb-6 ${
+          theme === 'dark' ? 'text-white' : 'text-gray-900'
+        }`}
+      >
+        Centre d&apos;Alertes
+      </motion.h2>
+      
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Alerts Section */}
         <div>
-          <h3 className="text-sm font-bold text-[#2b4a6a] mb-2">Tenants avec problèmes</h3>
-          {filteredAlerts.length === 0 ? (
-            <p className="text-sm text-gray-500">Aucun problème signalé</p>
-          ) : (
-            <ul className="space-y-3">
-              {filteredAlerts.map((alert) => (
-                <motion.li
-                  key={alert.id}
-                  variants={itemVariants}
-                  initial="hidden"
-                  animate="visible"
-                  className="grid grid-cols-[auto_1fr_auto] items-center gap-2 bg-white/30 p-2 rounded-lg border border-gray-100/50"
-                >
-                  <span
-                    className={`text-sm font-medium px-2 py-1 rounded-full border ${getBadgeStyles(alert.type)}`}
-                  >
-                    {alert.issue}
-                  </span>
-                  <div>
-                    <p className="text-sm text-gray-700 font-medium">{alert.tenant}</p>
-                    <p className="text-xs text-gray-500">{alert.date}</p>
+          <motion.h3 
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+            className={`text-lg font-semibold mb-4 ${
+              theme === 'dark' ? 'text-white' : 'text-gray-900'
+            }`}
+          >
+            Alertes ({alerts.length})
+          </motion.h3>
+          
+          <div className="space-y-3 max-h-64 overflow-y-auto">
+            {alerts.map((alert, index) => (
+              <motion.div
+                key={alert.id}
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.5, delay: 0.2 + index * 0.1 }}
+                whileHover={{ 
+                  scale: 1.02,
+                  boxShadow: theme === 'dark' 
+                    ? '0 8px 25px rgba(245, 124, 0, 0.15)' 
+                    : '0 8px 25px rgba(0, 0, 0, 0.1)'
+                }}
+                onClick={() => setSelectedAlert(alert)}
+                className={`cursor-pointer rounded-lg p-3 border transition-all duration-300 ${
+                  getAlertColor(alert.type)
+                } ${
+                  selectedAlert?.id === alert.id 
+                    ? (theme === 'dark' ? 'ring-2 ring-orange-400' : 'ring-2 ring-orange-500')
+                    : ''
+                }`}
+              >
+                <div className="flex items-start space-x-3">
+                  <div className="flex-shrink-0">
+                    {getAlertIcon(alert.type)}
                   </div>
-                  <div className="flex space-x-1">
-                    <motion.button
-                      whileHover={{ scale: 1.1, backgroundColor: '#2b4a6a', color: 'white' }}
-                      className="text-sm bg-[#2b4a6a]/10 text-[#2b4a6a] px-2 py-1 rounded-md flex items-center space-x-1 transition-colors"
-                      onClick={() => window.alert(`Voir détails: ${alert.tenant} - ${alert.issue}`)}
-                    >
-                      <EyeIcon className="w-4 h-4" />
-                      <span>Voir</span>
-                    </motion.button>
-                    <motion.button
-                      whileHover={{ scale: 1.1, backgroundColor: '#f57c00', color: 'white' }}
-                      className="text-sm bg-[#f57c00]/10 text-[#f57c00] px-2 py-1 rounded-md flex items-center space-x-1 transition-colors"
-                      onClick={() => window.alert(`Résoudre: ${alert.tenant} - ${alert.issue}`)}
-                    >
-                      <CheckCircleIcon className="w-4 h-4" />
-                      <span>Résoudre</span>
-                    </motion.button>
-                    <motion.button
-                      whileHover={{ scale: 1.1, backgroundColor: '#dc2626', color: 'white' }}
-                      className="text-sm bg-red-600/10 text-red-600 px-2 py-1 rounded-md flex items-center space-x-1 transition-colors"
-                      onClick={() => window.alert(`Supprimer: ${alert.tenant} - ${alert.issue}`)}
-                    >
-                      <TrashIcon className="w-4 h-4" />
-                      <span>Supprimer</span>
-                    </motion.button>
+                  <div className="flex-1 min-w-0">
+                    <p className={`text-sm font-medium ${
+                      theme === 'dark' ? 'text-white' : 'text-gray-900'
+                    }`}>
+                      {alert.tenant}
+                    </p>
+                    <p className={`text-xs mt-1 ${
+                      theme === 'dark' ? 'text-gray-300' : 'text-gray-600'
+                    }`}>
+                      {alert.issue}
+                    </p>
+                    <p className={`text-xs mt-2 ${
+                      theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
+                    }`}>
+                      {alert.date}
+                    </p>
                   </div>
-                </motion.li>
-              ))}
-            </ul>
-          )}
+                  <motion.div
+                    whileHover={{ scale: 1.1 }}
+                    className={`w-2 h-2 rounded-full ${
+                      alert.type === 'payment_failed' ? 'bg-red-500' :
+                      alert.type === 'subscription_expired' ? 'bg-yellow-500' :
+                      alert.type === 'technical_issue' ? 'bg-blue-500' :
+                      alert.type === 'account_suspended' ? 'bg-orange-500' :
+                      'bg-purple-500'
+                    }`}
+                  />
+                </div>
+              </motion.div>
+            ))}
+          </div>
         </div>
 
-        {/* Actions requises */}
+        {/* Actions Section */}
         <div>
-          <h3 className="text-sm font-bold text-[#2b4a6a] mb-2">Actions requises</h3>
-          {actions.length === 0 ? (
-            <p className="text-sm text-gray-500">Aucune action requise</p>
-          ) : (
-            <ul className="space-y-3">
-              {actions.map((action) => (
-                <motion.li
-                  key={action.id}
-                  variants={itemVariants}
-                  initial="hidden"
-                  animate="visible"
-                  className="grid grid-cols-[auto_1fr_auto] items-center gap-2 bg-white/30 p-2 rounded-lg border border-gray-100/50"
-                >
-                  <div className="flex items-center space-x-2">
+          <motion.h3 
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+            className={`text-lg font-semibold mb-4 ${
+              theme === 'dark' ? 'text-white' : 'text-gray-900'
+            }`}
+          >
+            Actions Requises ({actions.length})
+          </motion.h3>
+          
+          <div className="space-y-3 max-h-64 overflow-y-auto">
+            {actions.map((action, index) => (
+              <motion.div
+                key={action.id}
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.5, delay: 0.3 + index * 0.1 }}
+                whileHover={{ 
+                  scale: 1.02,
+                  boxShadow: theme === 'dark' 
+                    ? '0 8px 25px rgba(34, 197, 94, 0.15)' 
+                    : '0 8px 25px rgba(0, 0, 0, 0.1)'
+                }}
+                onClick={() => setSelectedAction(action)}
+                className={`cursor-pointer rounded-lg p-3 border transition-all duration-300 ${
+                  getActionColor(action.type)
+                } ${
+                  selectedAction?.id === action.id 
+                    ? (theme === 'dark' ? 'ring-2 ring-green-400' : 'ring-2 ring-green-500')
+                    : ''
+                }`}
+              >
+                <div className="flex items-start space-x-3">
+                  <div className="flex-shrink-0">
                     {getActionIcon(action.type)}
-                    <span className="text-sm text-gray-700">{action.description}</span>
                   </div>
-                  <div />
-                  <div className="flex space-x-1">
-                    <motion.button
-                      whileHover={{ scale: 1.1, backgroundColor: '#2b4a6a', color: 'white' }}
-                      className="text-sm bg-[#2b4a6a]/10 text-[#2b4a6a] px-2 py-1 rounded-md flex items-center space-x-1 transition-colors"
-                      onClick={() => window.alert(`Voir détails: ${action.description}`)}
-                    >
-                      <EyeIcon className="w-4 h-4" />
-                      <span>Voir</span>
-                    </motion.button>
-                    <motion.button
-                      whileHover={{ scale: 1.1, backgroundColor: '#f57c00', color: 'white' }}
-                      className="text-sm bg-[#f57c00]/10 text-[#f57c00] px-2 py-1 rounded-md flex items-center space-x-1 transition-colors"
-                      onClick={() => window.alert(`Résoudre: ${action.description}`)}
-                    >
-                      <CheckCircleIcon className="w-4 h-4" />
-                      <span>Résoudre</span>
-                    </motion.button>
-                    <motion.button
-                      whileHover={{ scale: 1.1, backgroundColor: '#dc2626', color: 'white' }}
-                      className="text-sm bg-red-600/10 text-red-600 px-2 py-1 rounded-md flex items-center space-x-1 transition-colors"
-                      onClick={() => window.alert(`Supprimer: ${action.description}`)}
-                    >
-                      <TrashIcon className="w-4 h-4" />
-                      <span>Supprimer</span>
-                    </motion.button>
+                  <div className="flex-1 min-w-0">
+                    <p className={`text-sm font-medium ${
+                      theme === 'dark' ? 'text-white' : 'text-gray-900'
+                    }`}>
+                      {action.description}
+                    </p>
+                    <p className={`text-xs mt-1 ${
+                      theme === 'dark' ? 'text-gray-300' : 'text-gray-600'
+                    }`}>
+                      Action requise
+                    </p>
                   </div>
-                </motion.li>
-              ))}
-            </ul>
-          )}
+                  <motion.div
+                    whileHover={{ scale: 1.1 }}
+                    className="w-2 h-2 rounded-full bg-green-500"
+                  />
+                </div>
+              </motion.div>
+            ))}
+          </div>
         </div>
       </div>
-    </motion.div>
+
+      {/* Selected Alert Modal */}
+      <AnimatePresence>
+        {selectedAlert && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
+            onClick={() => setSelectedAlert(null)}
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              onClick={(e) => e.stopPropagation()}
+              className={`rounded-xl p-6 max-w-md w-full mx-4 ${
+                theme === 'dark' 
+                  ? 'bg-[#1e2a35] border border-[#f57c00]/20' 
+                  : 'bg-white border border-gray-200'
+              }`}
+            >
+              <div className="flex items-center space-x-3 mb-4">
+                {getAlertIcon(selectedAlert.type)}
+                <div>
+                  <h3 className={`font-semibold ${
+                    theme === 'dark' ? 'text-white' : 'text-gray-900'
+                  }`}>
+                    {selectedAlert.tenant}
+                  </h3>
+                  <p className={`text-sm ${
+                    theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
+                  }`}>
+                    {selectedAlert.date}
+                  </p>
+                </div>
+              </div>
+              <p className={`mb-4 ${
+                theme === 'dark' ? 'text-gray-300' : 'text-gray-700'
+              }`}>
+                {selectedAlert.issue}
+              </p>
+              <div className="flex space-x-2">
+                <button className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                  theme === 'dark'
+                    ? 'bg-orange-500 text-white hover:bg-orange-600'
+                    : 'bg-orange-500 text-white hover:bg-orange-600'
+                }`}>
+                  Résoudre
+                </button>
+                <button 
+                  onClick={() => setSelectedAlert(null)}
+                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                    theme === 'dark'
+                      ? 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+                      : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                  }`}
+                >
+                  Fermer
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Selected Action Modal */}
+      <AnimatePresence>
+        {selectedAction && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
+            onClick={() => setSelectedAction(null)}
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              onClick={(e) => e.stopPropagation()}
+              className={`rounded-xl p-6 max-w-md w-full mx-4 ${
+                theme === 'dark' 
+                  ? 'bg-[#1e2a35] border border-[#f57c00]/20' 
+                  : 'bg-white border border-gray-200'
+              }`}
+            >
+              <div className="flex items-center space-x-3 mb-4">
+                {getActionIcon(selectedAction.type)}
+                <div>
+                  <h3 className={`font-semibold ${
+                    theme === 'dark' ? 'text-white' : 'text-gray-900'
+                  }`}>
+                    Action Requise
+                  </h3>
+                  <p className={`text-sm ${
+                    theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
+                  }`}>
+                    {selectedAction.type}
+                  </p>
+                </div>
+              </div>
+              <p className={`mb-4 ${
+                theme === 'dark' ? 'text-gray-300' : 'text-gray-700'
+              }`}>
+                {selectedAction.description}
+              </p>
+              <div className="flex space-x-2">
+                <button className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                  theme === 'dark'
+                    ? 'bg-green-500 text-white hover:bg-green-600'
+                    : 'bg-green-500 text-white hover:bg-green-600'
+                }`}>
+                  Traiter
+                </button>
+                <button 
+                  onClick={() => setSelectedAction(null)}
+                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                    theme === 'dark'
+                      ? 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+                      : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                  }`}
+                >
+                  Fermer
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
   );
 };
 

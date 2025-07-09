@@ -12,6 +12,7 @@ import {
   CurrencyDollarIcon,
   CreditCardIcon,
 } from '@heroicons/react/24/outline';
+import { useTheme } from '@/contexts/ThemeContext';
 
 interface Alert {
   id: number;
@@ -113,6 +114,7 @@ type OverviewData = typeof mockData;
 const Overview = () => {
   const [data, setData] = useState<OverviewData | null>(null);
   const [loading, setLoading] = useState(true);
+  const { theme } = useTheme();
 
   useEffect(() => {
     // Simulate API fetch
@@ -124,11 +126,17 @@ const Overview = () => {
 
   if (loading) {
     return (
-      <div className="p-6 text-gray-500 flex items-center justify-center h-full">
+      <div className={`p-6 flex items-center justify-center h-full ${
+        theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
+      }`}>
         <motion.div
           animate={{ rotate: 360 }}
           transition={{ duration: 1.5, repeat: Infinity, ease: 'linear' }}
-          className="w-8 h-8 border-4 border-[#f57c00] border-t-transparent rounded-full"
+          className={`w-8 h-8 border-4 rounded-full ${
+            theme === 'dark' 
+              ? 'border-orange-400 border-t-transparent' 
+              : 'border-[#f57c00] border-t-transparent'
+          }`}
         />
       </div>
     );
@@ -139,7 +147,11 @@ const Overview = () => {
       variants={containerVariants}
       initial="hidden"
       animate="visible"
-      className="pt-6 px-4 bg-gradient-to-b from-gray-50 to-gray-100 min-h-full"
+      className={`px-4 min-h-full transition-all duration-500 ${
+        theme === 'dark'
+          ? 'bg-[#151f28] text-white'
+          : 'bg-gradient-to-b from-gray-50 to-gray-100 text-gray-900'
+      }`}
     >
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">

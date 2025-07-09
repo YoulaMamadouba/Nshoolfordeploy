@@ -1,111 +1,131 @@
 import React from 'react';
-import { motion, Variants } from 'framer-motion';
-import { PlusIcon, DocumentTextIcon } from '@heroicons/react/24/outline';
-
-const buttonVariants: Variants = {
-  hidden: { rotate: -10, scale: 0.9, opacity: 0 },
-  visible: (i: number) => ({
-    rotate: 0,
-    scale: 1,
-    opacity: 1,
-    transition: {
-      type: 'spring',
-      stiffness: 150,
-      damping: 15,
-      delay: i * 0.1,
-    },
-  }),
-  hover: {
-    scale: 1.05,
-    boxShadow: '0 6px 20px rgba(43, 74, 106, 0.2)',
-    transition: { duration: 0.2 },
-  },
-  tap: { scale: 0.95 },
-};
-
-const iconVariants: Variants = {
-  hover: {
-    scale: 1.2,
-    rotate: [0, 10, -10, 0],
-    transition: { duration: 0.3, repeat: 1 },
-  },
-};
-
-const cardVariants: Variants = {
-  hidden: { scale: 0.8, opacity: 0, y: 50 },
-  visible: {
-    scale: 1,
-    opacity: 1,
-    y: 0,
-    transition: {
-      type: 'spring',
-      stiffness: 120,
-      damping: 15,
-    },
-  },
-};
+import { motion } from 'framer-motion';
+import { 
+  PlusIcon, 
+  Cog6ToothIcon, 
+  DocumentTextIcon, 
+  UserPlusIcon,
+  ChartBarIcon,
+  BellIcon
+} from '@heroicons/react/24/outline';
+import { useTheme } from '@/contexts/ThemeContext';
 
 const QuickActions = () => {
-  const buttons = [
+  const { theme } = useTheme();
+
+  const actions = [
     {
-      text: 'Ajouter Tenant',
-      icon: <PlusIcon className="h-4 w-4" />,
+      id: 1,
+      title: 'Ajouter Tenant',
+      description: 'Créer un nouveau tenant',
+      icon: <PlusIcon className="w-6 h-6" />,
+      color: theme === 'dark' ? 'from-orange-500 to-amber-500' : 'from-[#f57c00] to-amber-500',
+      bgColor: theme === 'dark' ? 'bg-orange-500/20' : 'bg-orange-50',
+      borderColor: theme === 'dark' ? 'border-orange-500/30' : 'border-orange-200',
     },
     {
-      text: 'Ajouter Étudiant',
-      icon: <PlusIcon className="h-4 w-4" />,
+      id: 2,
+      title: 'Gérer Paramètres',
+      description: 'Configurer le système',
+      icon: <Cog6ToothIcon className="w-6 h-6" />,
+      color: theme === 'dark' ? 'from-blue-500 to-cyan-500' : 'from-blue-500 to-cyan-500',
+      bgColor: theme === 'dark' ? 'bg-blue-500/20' : 'bg-blue-50',
+      borderColor: theme === 'dark' ? 'border-blue-500/30' : 'border-blue-200',
     },
     {
-      text: 'Générer Rapport',
-      icon: <DocumentTextIcon className="h-4 w-4" />,
+      id: 3,
+      title: 'Générer Rapport',
+      description: 'Créer un rapport',
+      icon: <DocumentTextIcon className="w-6 h-6" />,
+      color: theme === 'dark' ? 'from-green-500 to-emerald-500' : 'from-green-500 to-emerald-500',
+      bgColor: theme === 'dark' ? 'bg-green-500/20' : 'bg-green-50',
+      borderColor: theme === 'dark' ? 'border-green-500/30' : 'border-green-200',
+    },
+    {
+      id: 4,
+      title: 'Ajouter Utilisateur',
+      description: 'Inviter un utilisateur',
+      icon: <UserPlusIcon className="w-6 h-6" />,
+      color: theme === 'dark' ? 'from-purple-500 to-pink-500' : 'from-purple-500 to-pink-500',
+      bgColor: theme === 'dark' ? 'bg-purple-500/20' : 'bg-purple-50',
+      borderColor: theme === 'dark' ? 'border-purple-500/30' : 'border-purple-200',
+    },
+    {
+      id: 5,
+      title: 'Voir Statistiques',
+      description: 'Analyser les données',
+      icon: <ChartBarIcon className="w-6 h-6" />,
+      color: theme === 'dark' ? 'from-indigo-500 to-blue-500' : 'from-indigo-500 to-blue-500',
+      bgColor: theme === 'dark' ? 'bg-indigo-500/20' : 'bg-indigo-50',
+      borderColor: theme === 'dark' ? 'border-indigo-500/30' : 'border-indigo-200',
+    },
+    {
+      id: 6,
+      title: 'Notifications',
+      description: 'Gérer les alertes',
+      icon: <BellIcon className="w-6 h-6" />,
+      color: theme === 'dark' ? 'from-red-500 to-pink-500' : 'from-red-500 to-pink-500',
+      bgColor: theme === 'dark' ? 'bg-red-500/20' : 'bg-red-50',
+      borderColor: theme === 'dark' ? 'border-red-500/30' : 'border-red-200',
     },
   ];
 
   return (
-    <motion.div
-      variants={cardVariants}
-      initial="hidden"
-      animate="visible"
-      className="relative bg-white/90 backdrop-blur-sm border border-[#2b4a6a]/20 rounded-2xl p-4 shadow-lg max-h-80 overflow-hidden"
-    >
-      <motion.h3
-        initial={{ opacity: 0, y: 10 }}
+    <div className={`rounded-xl p-6 ${
+      theme === 'dark' 
+        ? 'bg-gradient-to-br from-[#1e2a35] to-[#2a3744] border border-[#f57c00]/20' 
+        : 'bg-white border border-gray-200'
+    } shadow-lg`}>
+      <motion.h2 
+        initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ type: 'spring', stiffness: 100, damping: 10 }}
-        className="text-2xl font-semibold text-gray-900 text-center mb-4 drop-shadow-md"
+        transition={{ duration: 0.5 }}
+        className={`text-xl font-bold mb-6 ${
+          theme === 'dark' ? 'text-white' : 'text-gray-900'
+        }`}
       >
         Actions Rapides
-      </motion.h3>
-      <div className="space-y-2">
-        {buttons.map((btn, i) => (
+      </motion.h2>
+      
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+        {actions.map((action, index) => (
           <motion.button
-            key={btn.text}
-            custom={i}
-            variants={buttonVariants}
-            initial="hidden"
-            animate="visible"
-            whileHover="hover"
-            whileTap="tap"
-            className="relative w-full flex items-center justify-center space-x-2 p-3 bg-white/30 backdrop-blur-sm text-white rounded-lg overflow-hidden border border-[#2b4a6a]"
-            style={{ backgroundColor: 'rgba(43, 74, 106, 0.8)' }}
+            key={action.id}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: index * 0.1 }}
+            whileHover={{ 
+              scale: 1.05,
+              boxShadow: theme === 'dark' 
+                ? '0 10px 30px rgba(245, 124, 0, 0.2)' 
+                : '0 10px 30px rgba(0, 0, 0, 0.1)'
+            }}
+            whileTap={{ scale: 0.95 }}
+            className={`p-4 rounded-xl border transition-all duration-300 ${
+              action.bgColor
+            } ${action.borderColor} hover:border-opacity-50`}
           >
-            {/* Wavy Ripple Effect */}
-            <motion.div
-              className="absolute inset-0 bg-gradient-to-r from-[#2b4a6a]/30 to-[#2b4a6a]/10"
-              initial={{ scale: 0, opacity: 0, translateX: '-50%' }}
-              whileHover={{
-                scale: [0, 1.5, 1],
-                opacity: [0, 0.5, 0],
-                translateX: ['-50%', '50%', '50%'],
-              }}
-              transition={{ duration: 0.6, times: [0, 0.5, 1] }}
-            />
-            <motion.div variants={iconVariants}>{btn.icon}</motion.div>
-            <span className="relative z-10 text-sm font-medium">{btn.text}</span>
+            <div className="flex flex-col items-center text-center space-y-3">
+              <div className={`p-3 rounded-full bg-gradient-to-r ${action.color} text-white`}>
+                {action.icon}
+              </div>
+              <div>
+                <h3 className={`font-semibold text-sm ${
+                  theme === 'dark' ? 'text-white' : 'text-gray-900'
+                }`}>
+                  {action.title}
+                </h3>
+                <p className={`text-xs mt-1 ${
+                  theme === 'dark' ? 'text-gray-300' : 'text-gray-600'
+                }`}>
+                  {action.description}
+                </p>
+              </div>
+            </div>
           </motion.button>
         ))}
       </div>
-    </motion.div>
+    </div>
   );
 };
 
