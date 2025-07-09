@@ -14,7 +14,6 @@ import PlanDistribution from './PlanDistribution';
 import PlanCard from './PlanCard';
 import CreatePlanModal from './CreatePlanModal';
 
-
 const cardVariants: Variants = {
   hidden: { opacity: 0, y: 30 },
   visible: {
@@ -26,6 +25,11 @@ const cardVariants: Variants = {
       damping: 15,
       duration: 0.5,
     },
+  },
+  hover: {
+    scale: 1.03,
+    boxShadow: '0 10px 30px rgba(0, 0, 0, 0.1)',
+    transition: { duration: 0.3, ease: 'easeOut' },
   },
 };
 
@@ -39,6 +43,16 @@ const iconVariants: Variants = {
       stiffness: 200,
       damping: 10,
       delay: 0.2,
+    },
+  },
+  hover: {
+    scale: [1, 1.15, 1],
+    rotate: [0, 5, -5, 0],
+    transition: {
+      duration: 0.8,
+      repeat: Infinity,
+      repeatType: 'loop',
+      ease: 'easeInOut',
     },
   },
 };
@@ -78,28 +92,28 @@ const SubscriptionMetrics = ({ mrr, arr, retentionRate, clv }: SubscriptionMetri
       title: 'MRR',
       value: mrr || 0,
       prefix: '€',
-      icon: <CurrencyDollarIcon />,
+      icon: <CurrencyDollarIcon className="w-6 h-6" />,
       description: 'Revenu mensuel récurrent',
     },
     {
       title: 'ARR',
       value: arr || 0,
       prefix: '€',
-      icon: <ChartBarIcon />,
+      icon: <ChartBarIcon className="w-6 h-6" />,
       description: 'Revenu annuel récurrent',
     },
     {
       title: 'Taux de rétention',
       value: retentionRate || 0,
       suffix: '%',
-      icon: <UsersIcon />,
+      icon: <UsersIcon className="w-6 h-6" />,
       description: 'Taux de rétention des clients',
     },
     {
       title: 'CLV',
       value: clv || 0,
       prefix: '€',
-      icon: <StarIcon />,
+      icon: <StarIcon className="w-6 h-6" />,
       description: 'Valeur vie client',
     },
   ];
@@ -112,8 +126,13 @@ const SubscriptionMetrics = ({ mrr, arr, retentionRate, clv }: SubscriptionMetri
           variants={cardVariants}
           initial="hidden"
           animate="visible"
-          className="relative bg-white/90 backdrop-blur-sm rounded-2xl p-4 shadow-sm border border-gray-100/50 overflow-hidden"
+          whileHover="hover"
+          className="relative bg-white rounded-2xl p-4 shadow-sm border border-gray-100/50 overflow-hidden"
         >
+          {/* Gradient Accent Border */}
+          <div className="absolute inset-0 border-2 border-transparent bg-gradient-to-r from-[#f57c00]/0 via-[#f57c00]/20 to-[#f57c00]/0 rounded-2xl pointer-events-none" />
+
+          {/* Content */}
           <div className="flex items-start justify-between">
             <div>
               <p className="text-xs font-bold text-gray-500 uppercase tracking-wide">{metric.title}</p>
@@ -139,13 +158,20 @@ const SubscriptionMetrics = ({ mrr, arr, retentionRate, clv }: SubscriptionMetri
             </div>
             <motion.div
               variants={iconVariants}
-              className="w-10 h-10 text-orange-500 flex items-center justify-center rounded-full bg-gray-100"
+              className="w-10 h-10 text-[#2b4a6a] flex items-center justify-center rounded-full bg-[#f57c00]/10"
             >
-              {React.isValidElement(metric.icon) 
+              {React.isValidElement(metric.icon)
                 ? React.cloneElement(metric.icon as React.ReactElement<any>, { className: 'w-5 h-5' })
                 : metric.icon}
             </motion.div>
           </div>
+
+          {/* Hover Glow Effect */}
+          <motion.div
+            className="absolute inset-0 bg-[#f57c00]/5 opacity-0 rounded-2xl"
+            whileHover={{ opacity: 1 }}
+            transition={{ duration: 0.3 }}
+          />
         </motion.div>
       ))}
     </div>
@@ -173,17 +199,6 @@ interface PlanDistributionData {
   revenue: number;
   percentage: number;
   color: string;
-}
-
-interface PlanDistributionProps {
-  plans: PlanDistributionData[];
-  totalMRR: number;
-}
-
-interface CreatePlanModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  onSave: (newPlan: Omit<Plan, 'id' | 'tenantCount' | 'revenue'>) => void;
 }
 
 interface PlansManagementProps {
@@ -319,10 +334,10 @@ const PlansManagement = ({ onBack }: PlansManagementProps) => {
             </button>
             <div>
               <h1 className="text-3xl font-bold text-[#2b4a6a] tracking-tight" style={{ textShadow: '0 2px 4px rgba(0,0,0,0.1)' }}>
-                Gestion des Plans d'Abonnement
+                Gestion des Plans d&apos;Abonnement
               </h1>
               <p className="text-lg text-gray-600 mt-1 font-medium">
-                Gérez vos plans d'abonnement et métriques
+                Gérez vos plans d&apos;abonnement et métriques
               </p>
             </div>
           </div>
@@ -358,7 +373,6 @@ const PlansManagement = ({ onBack }: PlansManagementProps) => {
               key={plan.id}
               plan={plan}
               onEdit={(plan) => {
-                // Fonction d'édition à implémenter
                 console.log('Éditer le plan:', plan);
               }}
               onDelete={handleDeletePlan}
