@@ -11,6 +11,7 @@ import {
   MagnifyingGlassIcon,
   ChevronDownIcon,
 } from '@heroicons/react/24/outline';
+import { useTheme } from '@/contexts/ThemeContext';
 
 interface Payment {
   id: string;
@@ -112,6 +113,7 @@ const filterOptions = {
 };
 
 const PaymentTable: React.FC<PaymentTableProps> = ({ payments, onViewDetails, onRetryPayment, onRefundPayment }) => {
+  const { theme } = useTheme();
   const [searchTerm, setSearchTerm] = useState('');
   const [filters, setFilters] = useState({
     status: 'all',
@@ -158,12 +160,22 @@ const PaymentTable: React.FC<PaymentTableProps> = ({ payments, onViewDetails, on
   };
 
   const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'success': return { bg: 'bg-green-100 bg-opacity-80', text: 'text-green-800' };
-      case 'failed': return { bg: 'bg-red-100 bg-opacity-80', text: 'text-red-800' };
-      case 'pending': return { bg: 'bg-yellow-100 bg-opacity-80', text: 'text-yellow-800' };
-      case 'refunded': return { bg: 'bg-gray-100 bg-opacity-80', text: 'text-gray-800' };
-      default: return { bg: 'bg-gray-100 bg-opacity-80', text: 'text-gray-800' };
+    if (theme === 'dark') {
+      switch (status) {
+        case 'success': return { bg: 'bg-green-900/30', text: 'text-green-300' };
+        case 'failed': return { bg: 'bg-red-900/30', text: 'text-red-300' };
+        case 'pending': return { bg: 'bg-yellow-900/30', text: 'text-yellow-300' };
+        case 'refunded': return { bg: 'bg-gray-700/30', text: 'text-gray-300' };
+        default: return { bg: 'bg-gray-700/30', text: 'text-gray-300' };
+      }
+    } else {
+      switch (status) {
+        case 'success': return { bg: 'bg-green-100 bg-opacity-80', text: 'text-green-800' };
+        case 'failed': return { bg: 'bg-red-100 bg-opacity-80', text: 'text-red-800' };
+        case 'pending': return { bg: 'bg-yellow-100 bg-opacity-80', text: 'text-yellow-800' };
+        case 'refunded': return { bg: 'bg-gray-100 bg-opacity-80', text: 'text-gray-800' };
+        default: return { bg: 'bg-gray-100 bg-opacity-80', text: 'text-gray-800' };
+      }
     }
   };
 
@@ -204,14 +216,20 @@ const PaymentTable: React.FC<PaymentTableProps> = ({ payments, onViewDetails, on
       variants={cardVariants}
       initial="hidden"
       animate="visible"
-      className="relative bg-gradient-to-br from-white/90 to-gray-50/80 rounded-2xl p-4 shadow-sm border border-[#f57c00]/30 backdrop-blur-sm overflow-visible"
+      className={`relative rounded-2xl p-4 shadow-sm border backdrop-blur-sm overflow-visible ${
+        theme === 'dark'
+          ? 'bg-gradient-to-br from-gray-800/90 to-gray-900/80 border-[#f57c00]/30'
+          : 'bg-gradient-to-br from-white/90 to-gray-50/80 border-[#f57c00]/30'
+      }`}
     >
       <motion.h3
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ type: 'spring', stiffness: 150, damping: 12 }}
-        className="text-lg font-bold text-[#2b4a6a] text-center mb-4 tracking-tight"
-        style={{ textShadow: '0 1px 2px rgba(0, 0, 0, 0.1)' }}
+        className={`text-lg font-bold text-center mb-4 tracking-tight ${
+          theme === 'dark' ? 'text-white' : 'text-[#2b4a6a]'
+        }`}
+        style={{ textShadow: theme === 'dark' ? '0 1px 2px rgba(0, 0, 0, 0.3)' : '0 1px 2px rgba(0, 0, 0, 0.1)' }}
       >
         Transactions Récentes
       </motion.h3>
@@ -227,19 +245,29 @@ const PaymentTable: React.FC<PaymentTableProps> = ({ payments, onViewDetails, on
         className="flex flex-col sm:flex-row gap-4 mb-6 items-center"
       >
         <div className="relative flex-1">
-          <MagnifyingGlassIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+          <MagnifyingGlassIcon className={`absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 ${
+            theme === 'dark' ? 'text-gray-400' : 'text-gray-400'
+          }`} />
           <input
             type="text"
             placeholder="Rechercher par tenant ou ID..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-10 pr-4 py-2.5 text-sm bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#f57c00]/50 focus:border-[#f57c00] transition-all duration-300"
+            className={`w-full pl-10 pr-4 py-2.5 text-sm rounded-lg focus:outline-none focus:ring-2 focus:ring-[#f57c00]/50 focus:border-[#f57c00] transition-all duration-300 ${
+              theme === 'dark'
+                ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400'
+                : 'bg-gray-50 border-gray-200'
+            }`}
           />
         </div>
         {(['status', 'date', 'paymentMethod'] as const).map((filterName) => (
           <div className="relative" key={filterName}>
             <motion.button
-              className="w-full text-sm text-[#2b4a6a] bg-gradient-to-r from-white/70 to-[#f57c00]/10 border border-[#f57c00]/50 rounded-lg p-2.5 pl-3 pr-8 focus:outline-none focus:ring-2 focus:ring-[#f57c00]/50 transition-all appearance-none cursor-pointer flex justify-between items-center"
+              className={`w-full text-sm rounded-lg p-2.5 pl-3 pr-8 focus:outline-none focus:ring-2 focus:ring-[#f57c00]/50 transition-all appearance-none cursor-pointer flex justify-between items-center ${
+                theme === 'dark'
+                  ? 'text-gray-200 bg-gradient-to-r from-gray-700/70 to-[#f57c00]/10 border border-[#f57c00]/50'
+                  : 'text-[#2b4a6a] bg-gradient-to-r from-white/70 to-[#f57c00]/10 border border-[#f57c00]/50'
+              }`}
               onClick={() => setIsDropdownOpen((prev) => ({ ...prev, [filterName]: !prev[filterName] }))}
             >
               <span>{filterOptions[filterName].find((opt) => opt.value === filters[filterName])?.label}</span>
@@ -255,7 +283,11 @@ const PaymentTable: React.FC<PaymentTableProps> = ({ payments, onViewDetails, on
                 variants={dropdownVariants}
                 initial="hidden"
                 animate="visible"
-                className="absolute top-full left-0 w-full mt-2 bg-gradient-to-br from-white to-[#f5f7fa] border border-[#f57c00]/30 rounded-xl shadow-lg z-50 overflow-hidden"
+                className={`absolute top-full left-0 w-full mt-2 border border-[#f57c00]/30 rounded-xl shadow-lg z-50 overflow-hidden ${
+                  theme === 'dark'
+                    ? 'bg-gradient-to-br from-gray-800 to-gray-900'
+                    : 'bg-gradient-to-br from-white to-[#f5f7fa]'
+                }`}
               >
                 {filterOptions[filterName].map((option, index) => (
                   <motion.div
@@ -264,9 +296,13 @@ const PaymentTable: React.FC<PaymentTableProps> = ({ payments, onViewDetails, on
                     custom={index}
                     initial="hidden"
                     animate="visible"
-                    className={`px-4 py-2.5 text-sm text-[#2b4a6a] hover:bg-[#f57c00]/10 cursor-pointer transition-all duration-300 font-medium ${
-                      filters[filterName] === option.value ? 'bg-[#f57c00]/20 text-[#f57c00]' : ''
-                    } border-b border-[#f57c00]/10 last:border-b-0 flex items-center gap-2`}
+                    className={`px-4 py-2.5 text-sm cursor-pointer transition-all duration-300 font-medium border-b border-[#f57c00]/10 last:border-b-0 flex items-center gap-2 ${
+                      filters[filterName] === option.value 
+                        ? 'bg-[#f57c00]/20 text-[#f57c00]' 
+                        : theme === 'dark'
+                          ? 'text-gray-200 hover:bg-[#f57c00]/10'
+                          : 'text-[#2b4a6a] hover:bg-[#f57c00]/10'
+                    }`}
                     onClick={() => handleFilterChange(filterName, option.value)}
                   >
                     <span className="w-2 h-2 rounded-full bg-[#f57c00]/50" />
@@ -304,8 +340,14 @@ const PaymentTable: React.FC<PaymentTableProps> = ({ payments, onViewDetails, on
       {/* Table */}
       <div className="overflow-x-auto">
         <table className="w-full text-sm">
-          <thead className="sticky top-0 bg-gradient-to-r from-white/90 to-gray-50/80 border-b border-[#f57c00]/30">
-            <tr className="text-left text-[#2b4a6a] font-bold">
+          <thead className={`sticky top-0 border-b border-[#f57c00]/30 ${
+            theme === 'dark'
+              ? 'bg-gradient-to-r from-gray-800/90 to-gray-900/80'
+              : 'bg-gradient-to-r from-white/90 to-gray-50/80'
+          }`}>
+            <tr className={`text-left font-bold ${
+              theme === 'dark' ? 'text-white' : 'text-[#2b4a6a]'
+            }`}>
               <th className="py-3 px-4">Date</th>
               <th className="py-3 px-4">Tenant</th>
               <th className="py-3 px-4">Montant</th>
@@ -318,7 +360,9 @@ const PaymentTable: React.FC<PaymentTableProps> = ({ payments, onViewDetails, on
           <tbody>
             {paginatedPayments.length === 0 ? (
               <tr>
-                <td colSpan={7} className="py-6 text-center text-gray-500 text-sm">
+                <td colSpan={7} className={`py-6 text-center text-sm ${
+                  theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
+                }`}>
                   Aucune transaction trouvée
                 </td>
               </tr>
@@ -326,18 +370,30 @@ const PaymentTable: React.FC<PaymentTableProps> = ({ payments, onViewDetails, on
               paginatedPayments.map((payment, index) => (
                 <motion.tr
                   key={`payment-row-${payment.id}`}
-                  className="border-b border-gray-100/50 hover:bg-gradient-to-r hover:from-white/30amps://x.com/ to-[#f57c00]/10 transition-all duration-300"
+                  className={`border-b transition-all duration-300 ${
+                    theme === 'dark'
+                      ? 'border-gray-700/50 hover:bg-gradient-to-r hover:from-gray-700/30 hover:to-[#f57c00]/10'
+                      : 'border-gray-100/50 hover:bg-gradient-to-r hover:from-white/30 hover:to-[#f57c00]/10'
+                  }`}
                   initial="hidden"
                   animate="visible"
                   custom={index}
                   variants={rowVariants}
                 >
-                  <td className="py-3 px-4 text-gray-700">{new Date(payment.date).toLocaleDateString('fr-FR')}</td>
-                  <td className="py-3 px-4 text-gray-700 font-medium">{payment.tenant}</td>
-                  <td className="py-3 px-4 text-gray-700 font-semibold">
+                  <td className={`py-3 px-4 ${
+                    theme === 'dark' ? 'text-gray-300' : 'text-gray-700'
+                  }`}>{new Date(payment.date).toLocaleDateString('fr-FR')}</td>
+                  <td className={`py-3 px-4 font-medium ${
+                    theme === 'dark' ? 'text-gray-300' : 'text-gray-700'
+                  }`}>{payment.tenant}</td>
+                  <td className={`py-3 px-4 font-semibold ${
+                    theme === 'dark' ? 'text-gray-300' : 'text-gray-700'
+                  }`}>
                     €{payment.amount.toLocaleString('fr-FR')}
                   </td>
-                  <td className="py-3 px-4 text-gray-600">{payment.paymentMethod}</td>
+                  <td className={`py-3 px-4 ${
+                    theme === 'dark' ? 'text-gray-400' : 'text-gray-600'
+                  }`}>{payment.paymentMethod}</td>
                   <td className="py-3 px-4">
                     <motion.span
                       variants={badgeVariants}
@@ -350,13 +406,19 @@ const PaymentTable: React.FC<PaymentTableProps> = ({ payments, onViewDetails, on
                       {payment.status === 'refunded' && 'Remboursé'}
                     </motion.span>
                   </td>
-                  <td className="py-3 px-4 text-gray-600 font-mono text-xs">{payment.transactionId}</td>
+                  <td className={`py-3 px-4 font-mono text-xs ${
+                    theme === 'dark' ? 'text-gray-400' : 'text-gray-600'
+                  }`}>{payment.transactionId}</td>
                   <td className="py-3 px-4 flex justify-end gap-2">
                     <motion.button
                       variants={iconVariants}
                       whileHover="hover"
                       onClick={() => onViewDetails(payment)}
-                      className="text-[#2b4a6a] p-1 rounded-full hover:bg-[#2b4a6a]/10 transition-all duration-300"
+                      className={`p-1 rounded-full transition-all duration-300 ${
+                        theme === 'dark'
+                          ? 'text-gray-300 hover:bg-[#2b4a6a]/10'
+                          : 'text-[#2b4a6a] hover:bg-[#2b4a6a]/10'
+                      }`}
                       title="Voir détails"
                     >
                       <EyeIcon className="h-5 w-5" />

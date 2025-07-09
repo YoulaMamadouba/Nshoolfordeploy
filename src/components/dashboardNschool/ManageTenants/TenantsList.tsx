@@ -15,6 +15,7 @@ import {
   TableCellsIcon,
 } from '@heroicons/react/24/outline';
 import TenantsCards from './TenantsCards';
+import { useTheme } from '@/contexts/ThemeContext';
 
 interface Tenant {
   id: number;
@@ -117,6 +118,7 @@ const filterOptions = {
 };
 
 const TenantsList: React.FC<TenantsListProps> = ({ tenants, onViewDetails, onAddTenant, onEditTenant, onDeleteTenant }) => {
+  const { theme } = useTheme();
   const [searchTerm, setSearchTerm] = useState('');
   const [filters, setFilters] = useState({
     status: 'all',
@@ -225,21 +227,40 @@ const TenantsList: React.FC<TenantsListProps> = ({ tenants, onViewDetails, onAdd
   );
 
   const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'active': return { bg: 'bg-green-100 bg-opacity-80', text: 'text-green-800' };
-      case 'inactive': return { bg: 'bg-gray-100 bg-opacity-80', text: 'text-gray-800' };
-      case 'suspended': return { bg: 'bg-red-100 bg-opacity-80', text: 'text-red-800' };
-      default: return { bg: 'bg-gray-100 bg-opacity-80', text: 'text-gray-800' };
+    if (theme === 'dark') {
+      switch (status) {
+        case 'active': return { bg: 'bg-green-100/20 bg-opacity-80', text: 'text-green-300' };
+        case 'inactive': return { bg: 'bg-gray-100/20 bg-opacity-80', text: 'text-gray-300' };
+        case 'suspended': return { bg: 'bg-red-100/20 bg-opacity-80', text: 'text-red-300' };
+        default: return { bg: 'bg-gray-100/20 bg-opacity-80', text: 'text-gray-300' };
+      }
+    } else {
+      switch (status) {
+        case 'active': return { bg: 'bg-green-100 bg-opacity-80', text: 'text-green-800' };
+        case 'inactive': return { bg: 'bg-gray-100 bg-opacity-80', text: 'text-gray-800' };
+        case 'suspended': return { bg: 'bg-red-100 bg-opacity-80', text: 'text-red-800' };
+        default: return { bg: 'bg-gray-100 bg-opacity-80', text: 'text-gray-800' };
+      }
     }
   };
 
   const getPlanColor = (plan: string) => {
-    switch (plan) {
-      case 'Enterprise': return { bg: 'bg-purple-100 bg-opacity-80', text: 'text-purple-800' };
-      case 'Premium': return { bg: 'bg-blue-100 bg-opacity-80', text: 'text-blue-800' };
-      case 'Basic': return { bg: 'bg-orange-100 bg-opacity-80', text: 'text-orange-800' };
-      case 'Starter': return { bg: 'bg-green-100 bg-opacity-80', text: 'text-green-800' };
-      default: return { bg: 'bg-gray-100 bg-opacity-80', text: 'text-gray-800' };
+    if (theme === 'dark') {
+      switch (plan) {
+        case 'Enterprise': return { bg: 'bg-purple-100/20 bg-opacity-80', text: 'text-purple-300' };
+        case 'Premium': return { bg: 'bg-blue-100/20 bg-opacity-80', text: 'text-blue-300' };
+        case 'Basic': return { bg: 'bg-orange-100/20 bg-opacity-80', text: 'text-orange-300' };
+        case 'Starter': return { bg: 'bg-green-100/20 bg-opacity-80', text: 'text-green-300' };
+        default: return { bg: 'bg-gray-100/20 bg-opacity-80', text: 'text-gray-300' };
+      }
+    } else {
+      switch (plan) {
+        case 'Enterprise': return { bg: 'bg-purple-100 bg-opacity-80', text: 'text-purple-800' };
+        case 'Premium': return { bg: 'bg-blue-100 bg-opacity-80', text: 'text-blue-800' };
+        case 'Basic': return { bg: 'bg-orange-100 bg-opacity-80', text: 'text-orange-800' };
+        case 'Starter': return { bg: 'bg-green-100 bg-opacity-80', text: 'text-green-800' };
+        default: return { bg: 'bg-gray-100 bg-opacity-80', text: 'text-gray-800' };
+      }
     }
   };
 
@@ -248,14 +269,24 @@ const TenantsList: React.FC<TenantsListProps> = ({ tenants, onViewDetails, onAdd
       variants={cardVariants}
       initial="hidden"
       animate="visible"
-      className="relative bg-gradient-to-br from-white/90 to-gray-50/80 rounded-2xl p-4 shadow-sm border border-[#f57c00]/30 backdrop-blur-sm overflow-visible"
+      className={`relative rounded-2xl p-4 shadow-sm border backdrop-blur-sm overflow-visible transition-all duration-500 ${
+        theme === 'dark' 
+          ? 'bg-gradient-to-br from-[#1a2634]/90 to-[#151f28]/80 border-[#f57c00]/30 shadow-xl' 
+          : 'bg-gradient-to-br from-white/90 to-gray-50/80 border-[#f57c00]/30'
+      }`}
     >
       <motion.h3
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ type: 'spring', stiffness: 150, damping: 12 }}
-        className="text-lg font-bold text-[#2b4a6a] text-center mb-4 tracking-tight"
-        style={{ textShadow: '0 1px 2px rgba(0, 0, 0, 0.1)' }}
+        className={`text-lg font-bold text-center mb-4 tracking-tight transition-all duration-300 ${
+          theme === 'dark' ? 'text-gray-100' : 'text-[#2b4a6a]'
+        }`}
+        style={{ 
+          textShadow: theme === 'dark' 
+            ? '0 1px 2px rgba(0, 0, 0, 0.3)' 
+            : '0 1px 2px rgba(0, 0, 0, 0.1)' 
+        }}
       >
         Liste des Tenants
       </motion.h3>
@@ -271,19 +302,29 @@ const TenantsList: React.FC<TenantsListProps> = ({ tenants, onViewDetails, onAdd
         className="flex flex-col sm:flex-row gap-4 mb-6 items-center"
       >
         <div className="relative flex-1">
-          <MagnifyingGlassIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+          <MagnifyingGlassIcon className={`absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 transition-all duration-300 ${
+            theme === 'dark' ? 'text-gray-400' : 'text-gray-400'
+          }`} />
           <input
             type="text"
             placeholder="Rechercher par nom, code ou domaine..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-10 pr-4 py-2.5 text-sm bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#f57c00]/50 focus:border-[#f57c00] transition-all duration-300"
+            className={`w-full pl-10 pr-4 py-2.5 text-sm rounded-lg focus:outline-none focus:ring-2 focus:ring-[#f57c00]/50 focus:border-[#f57c00] transition-all duration-300 ${
+              theme === 'dark' 
+                ? 'bg-[#1a2634]/80 border border-[#2b4a6a]/50 text-gray-100 placeholder-gray-400' 
+                : 'bg-gray-50 border border-gray-200'
+            }`}
           />
         </div>
         {(['status', 'plan', 'date'] as const).map((filterName) => (
           <div className="relative" key={filterName}>
             <motion.button
-              className="w-full text-sm text-[#2b4a6a] bg-gradient-to-r from-white/70 to-[#f57c00]/10 border border-[#f57c00]/50 rounded-lg p-2.5 pl-3 pr-8 focus:outline-none focus:ring-2 focus:ring-[#f57c00]/50 transition-all appearance-none cursor-pointer flex justify-between items-center"
+              className={`w-full text-sm rounded-lg p-2.5 pl-3 pr-8 focus:outline-none focus:ring-2 focus:ring-[#f57c00]/50 transition-all appearance-none cursor-pointer flex justify-between items-center ${
+                theme === 'dark' 
+                  ? 'bg-[#1a2634]/80 border border-[#2b4a6a]/50 text-gray-100' 
+                  : 'bg-gradient-to-r from-white/70 to-[#f57c00]/10 border border-[#f57c00]/50 text-[#2b4a6a]'
+              }`}
               onClick={() => setIsDropdownOpen((prev) => ({ ...prev, [filterName]: !prev[filterName] }))}
             >
               <span>{filterOptions[filterName].find((opt) => opt.value === filters[filterName])?.label}</span>
@@ -299,7 +340,11 @@ const TenantsList: React.FC<TenantsListProps> = ({ tenants, onViewDetails, onAdd
                 variants={dropdownVariants}
                 initial="hidden"
                 animate="visible"
-                className="absolute top-full left-0 w-full mt-2 bg-gradient-to-br from-white to-[#f5f7fa] border border-[#f57c00]/30 rounded-xl shadow-lg z-50 overflow-hidden"
+                className={`absolute top-full left-0 w-full mt-2 border rounded-xl shadow-lg z-50 overflow-hidden transition-all duration-300 ${
+                  theme === 'dark' 
+                    ? 'bg-gradient-to-br from-[#1a2634] to-[#151f28] border-[#2b4a6a]/50' 
+                    : 'bg-gradient-to-br from-white to-[#f5f7fa] border-[#f57c00]/30'
+                }`}
               >
                 {filterOptions[filterName].map((option, index) => (
                   <motion.div
@@ -308,12 +353,20 @@ const TenantsList: React.FC<TenantsListProps> = ({ tenants, onViewDetails, onAdd
                     custom={index}
                     initial="hidden"
                     animate="visible"
-                    className={`px-4 py-2.5 text-sm text-[#2b4a6a] hover:bg-[#f57c00]/10 cursor-pointer transition-all duration-300 font-medium ${
-                      filters[filterName] === option.value ? 'bg-[#f57c00]/20 text-[#f57c00]' : ''
-                    } border-b border-[#f57c00]/10 last:border-b-0 flex items-center gap-2`}
+                    className={`px-4 py-2.5 text-sm cursor-pointer transition-all duration-300 font-medium border-b last:border-b-0 flex items-center gap-2 ${
+                      filters[filterName] === option.value 
+                        ? theme === 'dark' 
+                          ? 'bg-[#f57c00]/30 text-[#f57c00] border-[#f57c00]/20' 
+                          : 'bg-[#f57c00]/20 text-[#f57c00] border-[#f57c00]/10'
+                        : theme === 'dark' 
+                          ? 'text-gray-300 hover:bg-[#2b4a6a]/30 border-[#2b4a6a]/20' 
+                          : 'text-[#2b4a6a] hover:bg-[#f57c00]/10 border-[#f57c00]/10'
+                    }`}
                     onClick={() => handleFilterChange(filterName, option.value)}
                   >
-                    <span className="w-2 h-2 rounded-full bg-[#f57c00]/50" />
+                    <span className={`w-2 h-2 rounded-full ${
+                      theme === 'dark' ? 'bg-[#f57c00]/60' : 'bg-[#f57c00]/50'
+                    }`} />
                     {option.label}
                   </motion.div>
                 ))}
@@ -327,7 +380,11 @@ const TenantsList: React.FC<TenantsListProps> = ({ tenants, onViewDetails, onAdd
             whileHover="hover"
             whileTap="tap"
             onClick={handleResetFilters}
-            className="p-2 bg-[#f57c00]/10 text-[#f57c00] rounded-full border border-[#f57c00]/50 hover:bg-[#f57c00] hover:text-white transition-all duration-300"
+            className={`p-2 rounded-full border transition-all duration-300 ${
+              theme === 'dark' 
+                ? 'bg-[#f57c00]/20 text-[#f57c00] border-[#f57c00]/50 hover:bg-[#f57c00] hover:text-white' 
+                : 'bg-[#f57c00]/10 text-[#f57c00] border-[#f57c00]/50 hover:bg-[#f57c00] hover:text-white'
+            }`}
             title="Réinitialiser les filtres"
           >
             <ArrowPathIcon className="h-5 w-5" />
@@ -337,7 +394,11 @@ const TenantsList: React.FC<TenantsListProps> = ({ tenants, onViewDetails, onAdd
             whileHover="hover"
             whileTap="tap"
             onClick={handleDownloadCSV}
-            className="p-2 bg-[#f57c00]/10 text-[#f57c00] rounded-full border border-[#f57c00]/50 hover:bg-[#f57c00] hover:text-white transition-all duration-300"
+            className={`p-2 rounded-full border transition-all duration-300 ${
+              theme === 'dark' 
+                ? 'bg-[#f57c00]/20 text-[#f57c00] border-[#f57c00]/50 hover:bg-[#f57c00] hover:text-white' 
+                : 'bg-[#f57c00]/10 text-[#f57c00] border-[#f57c00]/50 hover:bg-[#f57c00] hover:text-white'
+            }`}
             title="Télécharger la liste (CSV)"
           >
             <ArrowDownTrayIcon className="h-5 w-5" />
@@ -347,10 +408,12 @@ const TenantsList: React.FC<TenantsListProps> = ({ tenants, onViewDetails, onAdd
             whileHover="hover"
             whileTap="tap"
             onClick={() => setViewMode(viewMode === 'table' ? 'cards' : 'table')}
-            className={`p-2 rounded-full border border-[#f57c00]/50 transition-all duration-300 ${
+            className={`p-2 rounded-full border transition-all duration-300 ${
               viewMode === 'cards' 
-                ? 'bg-[#f57c00] text-white' 
-                : 'bg-[#f57c00]/10 text-[#f57c00] hover:bg-[#f57c00] hover:text-white'
+                ? 'bg-[#f57c00] text-white border-[#f57c00]' 
+                : theme === 'dark' 
+                  ? 'bg-[#f57c00]/20 text-[#f57c00] border-[#f57c00]/50 hover:bg-[#f57c00] hover:text-white' 
+                  : 'bg-[#f57c00]/10 text-[#f57c00] border-[#f57c00]/50 hover:bg-[#f57c00] hover:text-white'
             }`}
             title={viewMode === 'table' ? 'Vue Cards' : 'Vue Tableau'}
           >
@@ -374,8 +437,14 @@ const TenantsList: React.FC<TenantsListProps> = ({ tenants, onViewDetails, onAdd
       {viewMode === 'table' ? (
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
-            <thead className="sticky top-0 bg-gradient-to-r from-white/90 to-gray-50/80 border-b border-[#f57c00]/30">
-              <tr className="text-left text-[#2b4a6a] font-bold">
+            <thead className={`sticky top-0 border-b transition-all duration-300 ${
+              theme === 'dark' 
+                ? 'bg-gradient-to-r from-[#1a2634]/90 to-[#151f28]/80 border-[#f57c00]/30' 
+                : 'bg-gradient-to-r from-white/90 to-gray-50/80 border-[#f57c00]/30'
+            }`}>
+              <tr className={`text-left font-bold transition-all duration-300 ${
+                theme === 'dark' ? 'text-gray-100' : 'text-[#2b4a6a]'
+              }`}>
                 <th className="py-3 px-4">
                   <button onClick={() => handleSort('name')} className="flex items-center gap-1 hover:text-[#f57c00] transition-colors">
                     Tenant
@@ -438,7 +507,9 @@ const TenantsList: React.FC<TenantsListProps> = ({ tenants, onViewDetails, onAdd
             <tbody>
               {paginatedTenants.length === 0 ? (
                 <tr>
-                  <td colSpan={8} className="py-6 text-center text-gray-500 text-sm">
+                  <td colSpan={8} className={`py-6 text-center text-sm transition-all duration-300 ${
+                    theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
+                  }`}>
                     Aucun tenant trouvé
                   </td>
                 </tr>
@@ -446,7 +517,11 @@ const TenantsList: React.FC<TenantsListProps> = ({ tenants, onViewDetails, onAdd
                 paginatedTenants.map((tenant, index) => (
                   <motion.tr
                     key={`tenant-row-${tenant.id}`}
-                    className="border-b border-gray-100/50 hover:bg-gradient-to-r hover:from-white/30 hover:to-[#f57c00]/10 transition-all duration-300"
+                    className={`border-b transition-all duration-300 ${
+                      theme === 'dark' 
+                        ? 'border-[#2b4a6a]/30 hover:bg-gradient-to-r hover:from-[#1a2634]/50 hover:to-[#f57c00]/10' 
+                        : 'border-gray-100/50 hover:bg-gradient-to-r hover:from-white/30 hover:to-[#f57c00]/10'
+                    }`}
                     initial="hidden"
                     animate="visible"
                     custom={index}
@@ -465,13 +540,21 @@ const TenantsList: React.FC<TenantsListProps> = ({ tenants, onViewDetails, onAdd
                             tenant.name.charAt(0)
                           )}
                         </motion.div>
-                        <p className="font-semibold text-gray-900">{tenant.name}</p>
+                        <p className={`font-semibold transition-all duration-300 ${
+                          theme === 'dark' ? 'text-gray-100' : 'text-gray-900'
+                        }`}>{tenant.name}</p>
                       </div>
                     </td>
                     <td className="py-3 px-4">
-                      <span className="font-mono text-xs text-gray-600 bg-gray-100 px-2 py-1 rounded-md">{tenant.code}</span>
+                      <span className={`font-mono text-xs px-2 py-1 rounded-md transition-all duration-300 ${
+                        theme === 'dark' 
+                          ? 'text-gray-300 bg-[#2b4a6a]/30' 
+                          : 'text-gray-600 bg-gray-100'
+                      }`}>{tenant.code}</span>
                     </td>
-                    <td className="py-3 px-4 text-gray-700">{tenant.domain}</td>
+                    <td className={`py-3 px-4 transition-all duration-300 ${
+                      theme === 'dark' ? 'text-gray-200' : 'text-gray-700'
+                    }`}>{tenant.domain}</td>
                     <td className="py-3 px-4">
                       <motion.span
                         variants={badgeVariants}
@@ -490,12 +573,16 @@ const TenantsList: React.FC<TenantsListProps> = ({ tenants, onViewDetails, onAdd
                         {tenant.status === 'active' ? 'Actif' : tenant.status === 'inactive' ? 'Inactif' : 'Suspendu'}
                       </motion.span>
                     </td>
-                    <td className="py-3 px-4 text-gray-600">{new Date(tenant.createdAt).toLocaleDateString('fr-FR')}</td>
+                    <td className={`py-3 px-4 transition-all duration-300 ${
+                      theme === 'dark' ? 'text-gray-300' : 'text-gray-600'
+                    }`}>{new Date(tenant.createdAt).toLocaleDateString('fr-FR')}</td>
                     <td className="py-3 px-4">
                       <motion.span
                         variants={badgeVariants}
                         whileHover="hover"
-                        className="text-gray-700 font-medium"
+                        className={`font-medium transition-all duration-300 ${
+                          theme === 'dark' ? 'text-gray-200' : 'text-gray-700'
+                        }`}
                       >
                         {tenant.users.toLocaleString()}
                       </motion.span>
@@ -505,7 +592,11 @@ const TenantsList: React.FC<TenantsListProps> = ({ tenants, onViewDetails, onAdd
                         variants={iconVariants}
                         whileHover="hover"
                         onClick={() => onViewDetails(tenant)}
-                        className="text-[#2b4a6a] p-1 rounded-full hover:bg-[#2b4a6a]/10 transition-all duration-300"
+                        className={`p-1 rounded-full transition-all duration-300 ${
+                          theme === 'dark' 
+                            ? 'text-gray-300 hover:bg-[#2b4a6a]/30' 
+                            : 'text-[#2b4a6a] hover:bg-[#2b4a6a]/10'
+                        }`}
                         title="Voir détails"
                       >
                         <EyeIcon className="h-5 w-5" />
@@ -514,7 +605,11 @@ const TenantsList: React.FC<TenantsListProps> = ({ tenants, onViewDetails, onAdd
                         variants={iconVariants}
                         whileHover="hover"
                         onClick={() => onEditTenant(tenant.id)}
-                        className="text-[#f57c00] p-1 rounded-full hover:bg-[#f57c00]/10 transition-all duration-300"
+                        className={`p-1 rounded-full transition-all duration-300 ${
+                          theme === 'dark' 
+                            ? 'text-[#f57c00] hover:bg-[#f57c00]/20' 
+                            : 'text-[#f57c00] hover:bg-[#f57c00]/10'
+                        }`}
                         title="Modifier"
                       >
                         <PencilIcon className="h-5 w-5" />
@@ -523,7 +618,11 @@ const TenantsList: React.FC<TenantsListProps> = ({ tenants, onViewDetails, onAdd
                         variants={iconVariants}
                         whileHover="hover"
                         onClick={() => onDeleteTenant(tenant.id)}
-                        className="text-red-600 p-1 rounded-full hover:bg-red-600/10 transition-all duration-300"
+                        className={`p-1 rounded-full transition-all duration-300 ${
+                          theme === 'dark' 
+                            ? 'text-red-400 hover:bg-red-600/20' 
+                            : 'text-red-600 hover:bg-red-600/10'
+                        }`}
                         title="Supprimer"
                       >
                         <TrashIcon className="h-5 w-5" />
@@ -538,7 +637,9 @@ const TenantsList: React.FC<TenantsListProps> = ({ tenants, onViewDetails, onAdd
       ) : (
         <div>
           {paginatedTenants.length === 0 ? (
-            <div className="py-12 text-center text-gray-500 text-sm">
+            <div className={`py-12 text-center text-sm transition-all duration-300 ${
+              theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
+            }`}>
               Aucun tenant trouvé
             </div>
           ) : (
@@ -565,11 +666,11 @@ const TenantsList: React.FC<TenantsListProps> = ({ tenants, onViewDetails, onAdd
           whileTap={currentPage === 1 ? {} : "tap"}
           onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
           disabled={currentPage === 1}
-          className={`p-2 rounded-full border border-[#f57c00]/50 ${
+          className={`p-2 rounded-full border transition-all duration-300 ${
             currentPage === 1
               ? 'bg-[#f57c00]/10 text-[#f57c00]/50 cursor-not-allowed'
               : 'bg-[#f57c00]/10 text-[#f57c00] hover:bg-[#f57c00] hover:text-white'
-          } transition-all duration-300`}
+          }`}
         >
           ←
         </motion.button>
@@ -580,11 +681,11 @@ const TenantsList: React.FC<TenantsListProps> = ({ tenants, onViewDetails, onAdd
             whileHover="hover"
             whileTap="tap"
             onClick={() => setCurrentPage(page)}
-            className={`px-4 py-2 rounded-full text-sm font-medium border border-[#f57c00]/50 ${
+            className={`px-4 py-2 rounded-full text-sm font-medium border transition-all duration-300 ${
               currentPage === page
                 ? 'bg-[#f57c00] text-white'
                 : 'bg-[#f57c00]/10 text-[#f57c00] hover:bg-[#f57c00] hover:text-white'
-            } transition-all duration-300`}
+            }`}
           >
             {page}
           </motion.button>
@@ -595,11 +696,11 @@ const TenantsList: React.FC<TenantsListProps> = ({ tenants, onViewDetails, onAdd
           whileTap={currentPage === totalPages ? {} : "tap"}
           onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
           disabled={currentPage === totalPages}
-          className={`p-2 rounded-full border border-[#f57c00]/50 ${
+          className={`p-2 rounded-full border transition-all duration-300 ${
             currentPage === totalPages
               ? 'bg-[#f57c00]/10 text-[#f57c00]/50 cursor-not-allowed'
               : 'bg-[#f57c00]/10 text-[#f57c00] hover:bg-[#f57c00] hover:text-white'
-          } transition-all duration-300`}
+          }`}
         >
           →
         </motion.button>

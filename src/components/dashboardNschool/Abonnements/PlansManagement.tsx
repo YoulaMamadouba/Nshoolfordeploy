@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { motion, Variants } from 'framer-motion';
 import CountUp from 'react-countup';
+import { useTheme } from '@/contexts/ThemeContext';
 import {
   PlusIcon,
   ArrowLeftIcon,
@@ -87,6 +88,7 @@ interface SubscriptionMetricsProps {
 }
 
 const SubscriptionMetrics = ({ mrr, arr, retentionRate, clv }: SubscriptionMetricsProps) => {
+  const { theme } = useTheme();
   const metrics: Metric[] = [
     {
       title: 'MRR',
@@ -127,7 +129,11 @@ const SubscriptionMetrics = ({ mrr, arr, retentionRate, clv }: SubscriptionMetri
           initial="hidden"
           animate="visible"
           whileHover="hover"
-          className="relative bg-white rounded-2xl p-4 shadow-sm border border-gray-100/50 overflow-hidden"
+          className={`relative rounded-2xl p-4 shadow-sm border overflow-hidden ${
+            theme === 'dark'
+              ? 'bg-gray-800 border-gray-700/50'
+              : 'bg-white border-gray-100/50'
+          }`}
         >
           {/* Gradient Accent Border */}
           <div className="absolute inset-0 border-2 border-transparent bg-gradient-to-r from-[#f57c00]/0 via-[#f57c00]/20 to-[#f57c00]/0 rounded-2xl pointer-events-none" />
@@ -135,10 +141,14 @@ const SubscriptionMetrics = ({ mrr, arr, retentionRate, clv }: SubscriptionMetri
           {/* Content */}
           <div className="flex items-start justify-between">
             <div>
-              <p className="text-xs font-bold text-gray-500 uppercase tracking-wide">{metric.title}</p>
+              <p className={`text-xs font-bold uppercase tracking-wide ${
+                theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
+              }`}>{metric.title}</p>
               <motion.p
                 variants={valueVariants}
-                className="text-2xl font-semibold text-gray-900 mt-0.5"
+                className={`text-2xl font-semibold mt-0.5 ${
+                  theme === 'dark' ? 'text-white' : 'text-gray-900'
+                }`}
               >
                 {metric.prefix || ''}
                 <CountUp
@@ -154,11 +164,17 @@ const SubscriptionMetrics = ({ mrr, arr, retentionRate, clv }: SubscriptionMetri
                 />
                 {metric.suffix || ''}
               </motion.p>
-              <p className="text-xs text-gray-600 mt-0.5">{metric.description}</p>
+              <p className={`text-xs mt-0.5 ${
+                theme === 'dark' ? 'text-gray-400' : 'text-gray-600'
+              }`}>{metric.description}</p>
             </div>
             <motion.div
               variants={iconVariants}
-              className="w-10 h-10 text-[#2b4a6a] flex items-center justify-center rounded-full bg-[#f57c00]/10"
+              className={`w-10 h-10 flex items-center justify-center rounded-full ${
+                theme === 'dark' 
+                  ? 'text-white bg-[#f57c00]/20' 
+                  : 'text-[#2b4a6a] bg-[#f57c00]/10'
+              }`}
             >
               {React.isValidElement(metric.icon)
                 ? React.cloneElement(metric.icon as React.ReactElement<any>, { className: 'w-5 h-5' })
@@ -277,6 +293,7 @@ const mockPlans: Plan[] = [
 const PlansManagement = ({ onBack }: PlansManagementProps) => {
   const [plans, setPlans] = useState<Plan[]>(mockPlans);
   const [showCreateModal, setShowCreateModal] = useState(false);
+  const { theme } = useTheme();
 
   const totalMRR = plans.reduce((sum, plan) => sum + (plan.revenue || 0), 0);
   const totalARR = totalMRR * 12;
@@ -333,10 +350,14 @@ const PlansManagement = ({ onBack }: PlansManagementProps) => {
               <ArrowLeftIcon className="w-6 h-6" />
             </button>
             <div>
-              <h1 className="text-3xl font-bold text-[#2b4a6a] tracking-tight" style={{ textShadow: '0 2px 4px rgba(0,0,0,0.1)' }}>
+              <h1 className={`text-3xl font-bold tracking-tight ${
+                theme === 'dark' ? 'text-white' : 'text-[#2b4a6a]'
+              }`} style={{ textShadow: '0 2px 4px rgba(0,0,0,0.1)' }}>
                 Gestion des Plans d&apos;Abonnement
               </h1>
-              <p className="text-lg text-gray-600 mt-1 font-medium">
+              <p className={`text-lg mt-1 font-medium ${
+                theme === 'dark' ? 'text-gray-300' : 'text-gray-600'
+              }`}>
                 Gérez vos plans d&apos;abonnement et métriques
               </p>
             </div>
@@ -364,8 +385,12 @@ const PlansManagement = ({ onBack }: PlansManagementProps) => {
 
       <div className="mb-8">
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-2xl font-bold text-[#2b4a6a] tracking-tight">Plans Disponibles</h2>
-          <p className="text-sm text-gray-600">{plans.length} plans configurés</p>
+          <h2 className={`text-2xl font-bold tracking-tight ${
+            theme === 'dark' ? 'text-white' : 'text-[#2b4a6a]'
+          }`}>Plans Disponibles</h2>
+          <p className={`text-sm ${
+            theme === 'dark' ? 'text-gray-400' : 'text-gray-600'
+          }`}>{plans.length} plans configurés</p>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {plans.map((plan) => (

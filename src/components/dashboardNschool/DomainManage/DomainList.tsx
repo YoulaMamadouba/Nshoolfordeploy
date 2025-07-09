@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, Variants } from 'framer-motion';
 import { PencilIcon, TrashIcon, BeakerIcon, MagnifyingGlassIcon, ChevronDownIcon, ArrowPathIcon, ArrowDownTrayIcon } from '@heroicons/react/24/outline';
+import { useTheme } from '@/contexts/ThemeContext';
 
 interface Domain {
   id: number;
@@ -124,6 +125,7 @@ const mockDomains: Domain[] = [
 ];
 
 const DomainList: React.FC<DomainListProps> = ({ domains = mockDomains }) => {
+  const { theme } = useTheme();
   const [searchTerm, setSearchTerm] = useState('');
   const [filters, setFilters] = useState({
     status: 'all',
@@ -237,19 +239,36 @@ const DomainList: React.FC<DomainListProps> = ({ domains = mockDomains }) => {
   console.log('Domaines paginés :', paginatedDomains.length, paginatedDomains); // Débogage : Vérifier les domaines paginés
 
   const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'Actif': return { bg: 'bg-green-100 bg-opacity-80', text: 'text-green-800' };
-      case 'Inactif': return { bg: 'bg-red-100 bg-opacity-80', text: 'text-red-800' };
-      default: return { bg: 'bg-gray-100 bg-opacity-80', text: 'text-gray-800' };
+    if (theme === 'dark') {
+      switch (status) {
+        case 'Actif': return 'bg-green-900/30 text-green-300 border-green-600/50';
+        case 'Inactif': return 'bg-red-900/30 text-red-300 border-red-600/50';
+        default: return 'bg-gray-700/30 text-gray-300 border-gray-600/50';
+      }
+    } else {
+      switch (status) {
+        case 'Actif': return 'bg-green-100 text-green-800 border-green-200';
+        case 'Inactif': return 'bg-red-100 text-red-800 border-red-200';
+        default: return 'bg-gray-100 text-gray-800 border-gray-200';
+      }
     }
   };
 
   const getSslColor = (ssl: string) => {
-    switch (ssl) {
-      case 'Valide': return { bg: 'bg-green-100 bg-opacity-80', text: 'text-green-800' };
-      case 'Expiré': return { bg: 'bg-red-100 bg-opacity-80', text: 'text-red-800' };
-      case 'En attente': return { bg: 'bg-yellow-100 bg-opacity-80', text: 'text-yellow-800' };
-      default: return { bg: 'bg-gray-100 bg-opacity-80', text: 'text-gray-800' };
+    if (theme === 'dark') {
+      switch (ssl) {
+        case 'Valide': return 'bg-green-900/30 text-green-300 border-green-600/50';
+        case 'Expiré': return 'bg-red-900/30 text-red-300 border-red-600/50';
+        case 'En attente': return 'bg-yellow-900/30 text-yellow-300 border-yellow-600/50';
+        default: return 'bg-gray-700/30 text-gray-300 border-gray-600/50';
+      }
+    } else {
+      switch (ssl) {
+        case 'Valide': return 'bg-green-100 text-green-800 border-green-200';
+        case 'Expiré': return 'bg-red-100 text-red-800 border-red-200';
+        case 'En attente': return 'bg-yellow-100 text-yellow-800 border-yellow-200';
+        default: return 'bg-gray-100 text-gray-800 border-gray-200';
+      }
     }
   };
 
@@ -258,13 +277,19 @@ const DomainList: React.FC<DomainListProps> = ({ domains = mockDomains }) => {
       variants={cardVariants}
       initial="hidden"
       animate="visible"
-      className="relative bg-gradient-to-br from-white/90 to-gray-50/80 rounded-2xl p-4 shadow-sm border border-[#f57c00]/30 backdrop-blur-sm overflow-visible"
+      className={`relative rounded-2xl p-4 shadow-sm border backdrop-blur-sm overflow-visible ${
+        theme === 'dark'
+          ? 'bg-gradient-to-br from-gray-800/90 to-gray-900/80 border-[#f57c00]/30'
+          : 'bg-gradient-to-br from-white/90 to-gray-50/80 border-[#f57c00]/30'
+      }`}
     >
       <motion.h3
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ type: 'spring', stiffness: 150, damping: 12 }}
-        className="text-lg font-bold text-[#2b4a6a] text-center mb-4 tracking-tight"
+        className={`text-lg font-bold text-center mb-4 tracking-tight ${
+          theme === 'dark' ? 'text-white' : 'text-[#2b4a6a]'
+        }`}
         style={{ textShadow: '0 1px 2px rgba(0, 0, 0, 0.1)' }}
       >
         Liste des Domaines
@@ -281,19 +306,29 @@ const DomainList: React.FC<DomainListProps> = ({ domains = mockDomains }) => {
         className="flex flex-col sm:flex-row gap-4 mb-6 items-center"
       >
         <div className="relative flex-1">
-          <MagnifyingGlassIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+          <MagnifyingGlassIcon className={`absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 ${
+            theme === 'dark' ? 'text-gray-400' : 'text-gray-400'
+          }`} />
           <input
             type="text"
             placeholder="Rechercher par domaine ou tenant..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-10 pr-4 py-2.5 text-sm bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#f57c00]/50 focus:border-[#f57c00] transition-all duration-300"
+            className={`w-full pl-10 pr-4 py-2.5 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#f57c00]/50 focus:border-[#f57c00] transition-all duration-300 ${
+              theme === 'dark'
+                ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400'
+                : 'bg-gray-50 border-gray-200 text-gray-900 placeholder-gray-500'
+            }`}
           />
         </div>
         {(['status', 'type', 'ssl', 'date'] as const).map((filterName) => (
           <div className="relative" key={filterName}>
             <motion.button
-              className="w-full text-sm text-[#2b4a6a] bg-gradient-to-r from-white/70 to-[#f57c00]/10 border border-[#f57c00]/50 rounded-lg p-2.5 pl-3 pr-8 focus:outline-none focus:ring-2 focus:ring-[#f57c00]/50 transition-all appearance-none cursor-pointer flex justify-between items-center"
+              className={`w-full text-sm border rounded-lg p-2.5 pl-3 pr-8 focus:outline-none focus:ring-2 focus:ring-[#f57c00]/50 transition-all appearance-none cursor-pointer flex justify-between items-center ${
+                theme === 'dark'
+                  ? 'text-gray-300 bg-gradient-to-r from-gray-700/70 to-[#f57c00]/10 border-[#f57c00]/50'
+                  : 'text-[#2b4a6a] bg-gradient-to-r from-white/70 to-[#f57c00]/10 border-[#f57c00]/50'
+              }`}
               onClick={() => setIsDropdownOpen((prev) => ({ ...prev, [filterName]: !prev[filterName] }))}
             >
               <span>{filterOptions[filterName].find((opt) => opt.value === filters[filterName])?.label}</span>
@@ -309,7 +344,11 @@ const DomainList: React.FC<DomainListProps> = ({ domains = mockDomains }) => {
                 variants={dropdownVariants}
                 initial="hidden"
                 animate="visible"
-                className="absolute top-full left-0 w-full mt-2 bg-gradient-to-br from-white to-[#f5f7fa] border border-[#f57c00]/30 rounded-xl shadow-lg z-50 overflow-hidden"
+                className={`absolute top-full left-0 w-full mt-2 border border-[#f57c00]/30 rounded-xl shadow-lg z-50 overflow-hidden ${
+                  theme === 'dark'
+                    ? 'bg-gradient-to-br from-gray-800 to-gray-900'
+                    : 'bg-gradient-to-br from-white to-[#f5f7fa]'
+                }`}
               >
                 {filterOptions[filterName].map((option, index) => (
                   <motion.div
@@ -318,9 +357,15 @@ const DomainList: React.FC<DomainListProps> = ({ domains = mockDomains }) => {
                     custom={index}
                     initial="hidden"
                     animate="visible"
-                    className={`px-4 py-2.5 text-sm text-[#2b4a6a] hover:bg-[#f57c00]/10 cursor-pointer transition-all duration-300 font-medium ${
-                      filters[filterName] === option.value ? 'bg-[#f57c00]/20 text-[#f57c00]' : ''
-                    } border-b border-[#f57c00]/10 last:border-b-0 flex items-center gap-2`}
+                    className={`px-4 py-2.5 text-sm cursor-pointer transition-all duration-300 font-medium border-b border-[#f57c00]/10 last:border-b-0 flex items-center gap-2 ${
+                      theme === 'dark'
+                        ? `text-gray-300 hover:bg-[#f57c00]/20 ${
+                            filters[filterName] === option.value ? 'bg-[#f57c00]/30 text-[#f57c00]' : ''
+                          }`
+                        : `text-[#2b4a6a] hover:bg-[#f57c00]/10 ${
+                            filters[filterName] === option.value ? 'bg-[#f57c00]/20 text-[#f57c00]' : ''
+                          }`
+                    }`}
                     onClick={() => handleFilterChange(filterName, option.value)}
                   >
                     <span className="w-2 h-2 rounded-full bg-[#f57c00]/50" />
@@ -358,8 +403,14 @@ const DomainList: React.FC<DomainListProps> = ({ domains = mockDomains }) => {
       {/* Tableau */}
       <div className="overflow-x-auto">
         <table className="w-full text-sm">
-          <thead className="sticky top-0 bg-gradient-to-r from-white/90 to-gray-50/80 border-b border-[#f57c00]/30">
-            <tr className="text-left text-[#2b4a6a] font-bold">
+          <thead className={`sticky top-0 border-b border-[#f57c00]/30 ${
+            theme === 'dark'
+              ? 'bg-gradient-to-r from-gray-800/90 to-gray-900/80'
+              : 'bg-gradient-to-r from-white/90 to-gray-50/80'
+          }`}>
+            <tr className={`text-left font-bold ${
+              theme === 'dark' ? 'text-gray-300' : 'text-[#2b4a6a]'
+            }`}>
               <th className="py-3 px-4">Domaine</th>
               <th className="py-3 px-4">Tenant</th>
               <th className="py-3 px-4">Type</th>
@@ -372,7 +423,9 @@ const DomainList: React.FC<DomainListProps> = ({ domains = mockDomains }) => {
           <tbody>
             {paginatedDomains.length === 0 ? (
               <tr>
-                <td colSpan={7} className="py-6 text-center text-gray-500 text-sm">
+                <td colSpan={7} className={`py-6 text-center text-sm ${
+                  theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
+                }`}>
                   Aucun domaine trouvé
                 </td>
               </tr>
@@ -380,20 +433,30 @@ const DomainList: React.FC<DomainListProps> = ({ domains = mockDomains }) => {
               paginatedDomains.map((domain, index) => (
                 <motion.tr
                   key={`domain-row-${domain.id}`}
-                  className="border-b border-gray-100/50 hover:bg-gradient-to-r hover:from-white/30 hover:to-[#f57c00]/10 transition-all duration-300"
+                  className={`border-b transition-all duration-300 ${
+                    theme === 'dark'
+                      ? 'border-gray-700/50 hover:bg-gradient-to-r hover:from-gray-700/30 hover:to-[#f57c00]/10'
+                      : 'border-gray-100/50 hover:bg-gradient-to-r hover:from-white/30 hover:to-[#f57c00]/10'
+                  }`}
                   initial="hidden"
                   animate="visible"
                   custom={index}
                   variants={rowVariants}
                 >
-                  <td className="py-3 px-4 text-gray-700">{domain.name}</td>
-                  <td className="py-3 px-4 text-gray-700 font-medium">{domain.tenant}</td>
-                  <td className="py-3 px-4 text-gray-600">{domain.type}</td>
+                  <td className={`py-3 px-4 ${
+                    theme === 'dark' ? 'text-gray-300' : 'text-gray-700'
+                  }`}>{domain.name}</td>
+                  <td className={`py-3 px-4 font-medium ${
+                    theme === 'dark' ? 'text-gray-300' : 'text-gray-700'
+                  }`}>{domain.tenant}</td>
+                  <td className={`py-3 px-4 ${
+                    theme === 'dark' ? 'text-gray-400' : 'text-gray-600'
+                  }`}>{domain.type}</td>
                   <td className="py-3 px-4">
                     <motion.span
                       variants={badgeVariants}
                       whileHover="hover"
-                      className={`inline-block px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(domain.status).bg} ${getStatusColor(domain.status).text}`}
+                      className={`inline-block px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(domain.status)}`}
                     >
                       {domain.status}
                     </motion.span>
@@ -402,18 +465,24 @@ const DomainList: React.FC<DomainListProps> = ({ domains = mockDomains }) => {
                     <motion.span
                       variants={badgeVariants}
                       whileHover="hover"
-                      className={`inline-block px-3 py-1 rounded-full text-sm font-medium ${getSslColor(domain.ssl).bg} ${getSslColor(domain.ssl).text}`}
+                      className={`inline-block px-3 py-1 rounded-full text-sm font-medium ${getSslColor(domain.ssl)}`}
                     >
                       {domain.ssl}
                     </motion.span>
                   </td>
-                  <td className="py-3 px-4 text-gray-600">{new Date(domain.createdAt).toLocaleDateString('fr-FR')}</td>
+                  <td className={`py-3 px-4 ${
+                    theme === 'dark' ? 'text-gray-400' : 'text-gray-600'
+                  }`}>{new Date(domain.createdAt).toLocaleDateString('fr-FR')}</td>
                   <td className="py-3 px-4 flex justify-end gap-2">
                     <motion.button
                       variants={iconVariants}
                       whileHover="hover"
                       onClick={() => handleEdit(domain.id)}
-                      className="text-[#2b4a6a] p-1 rounded-full hover:bg-[#2b4a6a]/10 transition-all duration-300"
+                      className={`p-1 rounded-full transition-all duration-300 ${
+                        theme === 'dark'
+                          ? 'text-gray-400 hover:bg-gray-700/50'
+                          : 'text-[#2b4a6a] hover:bg-[#2b4a6a]/10'
+                      }`}
                       title="Modifier"
                     >
                       <PencilIcon className="h-5 w-5" />
@@ -433,7 +502,11 @@ const DomainList: React.FC<DomainListProps> = ({ domains = mockDomains }) => {
                       variants={iconVariants}
                       whileHover="hover"
                       onClick={() => handleTest(domain.id)}
-                      className="text-[#2b4a6a] p-1 rounded-full hover:bg-[#2b4a6a]/10 transition-all duration-300"
+                      className={`p-1 rounded-full transition-all duration-300 ${
+                        theme === 'dark'
+                          ? 'text-gray-400 hover:bg-gray-700/50'
+                          : 'text-[#2b4a6a] hover:bg-[#2b4a6a]/10'
+                      }`}
                       title="Tester"
                     >
                       <BeakerIcon className="h-5 w-5" />

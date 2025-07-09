@@ -7,6 +7,7 @@ import DomainConfig from '@/components/dashboardNschool/DomainManage/DomainConfi
 import DiagnosticTools from '@/components/dashboardNschool/DomainManage/DiagnosticTools';
 import { GlobeAltIcon, CogIcon, WrenchScrewdriverIcon, ChartBarIcon } from '@heroicons/react/24/outline';
 import { AnimatePresence } from 'framer-motion';
+import { useTheme } from '@/contexts/ThemeContext';
 
 const containerVariants: Variants = {
   hidden: { opacity: 0, y: 20 },
@@ -63,6 +64,7 @@ const mockDomainData = {
 };
 
 const DomainManage = () => {
+  const { theme } = useTheme();
   const [data, setData] = useState<typeof mockDomainData | null>(null);
   const [loading, setLoading] = useState(true);
   const [activeSection, setActiveSection] = useState<'overview' | 'config' | 'diagnostic'>('overview');
@@ -120,7 +122,11 @@ const DomainManage = () => {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, delay: 0.1 }}
-        className="bg-gradient-to-br from-white via-white to-gray-50/50 rounded-3xl p-6 shadow-xl border border-gray-200/50 backdrop-blur-sm"
+        className={`rounded-3xl p-6 shadow-xl border backdrop-blur-sm ${
+          theme === 'dark'
+            ? 'bg-gradient-to-br from-gray-800 via-gray-800 to-gray-900/50 border-gray-700/50'
+            : 'bg-gradient-to-br from-white via-white to-gray-50/50 border-gray-200/50'
+        }`}
       >
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-4">
@@ -128,10 +134,18 @@ const DomainManage = () => {
               <GlobeAltIcon className="w-8 h-8 text-white" />
             </div>
             <div>
-              <h1 className="text-3xl font-bold text-[#2b4a6a] tracking-tight" style={{ textShadow: '0 2px 4px rgba(0,0,0,0.1)' }}>
+              <h1 className={`text-3xl font-bold tracking-tight ${
+                theme === 'dark' ? 'text-white' : 'text-[#2b4a6a]'
+              }`} style={{ 
+                textShadow: theme === 'dark' 
+                  ? '0 2px 4px rgba(0,0,0,0.3)' 
+                  : '0 2px 4px rgba(0,0,0,0.1)' 
+              }}>
                 Gestion des Domaines
               </h1>
-              <p className="text-lg text-gray-600 mt-1 font-medium">
+              <p className={`text-lg mt-1 font-medium ${
+                theme === 'dark' ? 'text-gray-300' : 'text-gray-600'
+              }`}>
                 Gérez vos domaines et configurations DNS
               </p>
             </div>
@@ -149,13 +163,17 @@ const DomainManage = () => {
               className={`px-6 py-3 rounded-xl font-semibold transition-all duration-300 flex items-center gap-3 ${
                 activeSection === item.id
                   ? 'bg-[#f57c00] text-white shadow-lg'
-                  : 'bg-white text-[#2b4a6a] border border-[#2b4a6a]/20 hover:bg-[#2b4a6a]/5'
+                  : theme === 'dark'
+                    ? 'bg-gray-700 text-gray-200 border border-gray-600/20 hover:bg-gray-600/20'
+                    : 'bg-white text-[#2b4a6a] border border-[#2b4a6a]/20 hover:bg-[#2b4a6a]/5'
               }`}
             >
               <item.icon className="h-5 w-5" />
               <div className="text-left">
                 <div className="font-semibold">{item.name}</div>
-                <div className="text-xs opacity-80">{item.description}</div>
+                <div className={`text-xs ${
+                  theme === 'dark' ? 'opacity-70' : 'opacity-80'
+                }`}>{item.description}</div>
               </div>
             </motion.button>
           ))}

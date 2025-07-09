@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useTheme } from '@/contexts/ThemeContext';
 import {
   XMarkIcon,
   PlusIcon,
@@ -30,6 +31,7 @@ interface CreatePlanModalProps {
 }
 
 const CreatePlanModal = ({ isOpen, onClose, onSave }: CreatePlanModalProps) => {
+  const { theme } = useTheme();
   const [formData, setFormData] = useState({
     name: '',
     description: '',
@@ -127,7 +129,9 @@ const CreatePlanModal = ({ isOpen, onClose, onSave }: CreatePlanModalProps) => {
             initial="hidden"
             animate="visible"
             exit="exit"
-            className="bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden"
+            className={`rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden ${
+              theme === 'dark' ? 'bg-gray-800' : 'bg-white'
+            }`}
             onClick={(e) => e.stopPropagation()}
           >
             {/* Header */}
@@ -179,24 +183,34 @@ const CreatePlanModal = ({ isOpen, onClose, onSave }: CreatePlanModalProps) => {
                     className="space-y-6"
                   >
                     <div>
-                      <h3 className="text-xl font-bold text-[#2b4a6a] mb-4">Informations Générales</h3>
+                      <h3 className={`text-xl font-bold mb-4 ${
+                        theme === 'dark' ? 'text-white' : 'text-[#2b4a6a]'
+                      }`}>Informations Générales</h3>
                       
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-2">
+                          <label className={`block text-sm font-medium mb-2 ${
+                            theme === 'dark' ? 'text-gray-200' : 'text-gray-700'
+                          }`}>
                             Nom du Plan
                           </label>
                           <input
                             type="text"
                             value={formData.name}
                             onChange={(e) => handleInputChange('name', e.target.value)}
-                            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#f57c00] focus:border-[#f57c00] transition-all"
+                            className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-[#f57c00] focus:border-[#f57c00] transition-all ${
+                              theme === 'dark'
+                                ? 'border-gray-600 bg-gray-700 text-white placeholder-gray-400'
+                                : 'border-gray-300'
+                            }`}
                             placeholder="Ex: Premium Plus"
                           />
                         </div>
                         
                         <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-2">
+                          <label className={`block text-sm font-medium mb-2 ${
+                            theme === 'dark' ? 'text-gray-200' : 'text-gray-700'
+                          }`}>
                             Prix
                           </label>
                           <div className="relative">
@@ -204,7 +218,11 @@ const CreatePlanModal = ({ isOpen, onClose, onSave }: CreatePlanModalProps) => {
                               type="number"
                               value={formData.price}
                               onChange={(e) => handleInputChange('price', parseFloat(e.target.value) || 0)}
-                              className="w-full px-4 py-3 pl-8 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#f57c00] focus:border-[#f57c00] transition-all"
+                              className={`w-full px-4 py-3 pl-8 border rounded-lg focus:ring-2 focus:ring-[#f57c00] focus:border-[#f57c00] transition-all ${
+                                theme === 'dark'
+                                  ? 'border-gray-600 bg-gray-700 text-white placeholder-gray-400'
+                                  : 'border-gray-300'
+                              }`}
                               placeholder="0"
                             />
                             <CurrencyDollarIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
@@ -212,13 +230,19 @@ const CreatePlanModal = ({ isOpen, onClose, onSave }: CreatePlanModalProps) => {
                         </div>
                         
                         <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-2">
+                          <label className={`block text-sm font-medium mb-2 ${
+                            theme === 'dark' ? 'text-gray-200' : 'text-gray-700'
+                          }`}>
                             Périodicité
                           </label>
                           <select
                             value={formData.period}
                             onChange={(e) => handleInputChange('period', e.target.value)}
-                            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#f57c00] focus:border-[#f57c00] transition-all"
+                            className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-[#f57c00] focus:border-[#f57c00] transition-all ${
+                              theme === 'dark'
+                                ? 'border-gray-600 bg-gray-700 text-white placeholder-gray-400'
+                                : 'border-gray-300'
+                            }`}
                           >
                             <option value="monthly">Mensuel</option>
                             <option value="quarterly">Trimestriel</option>
@@ -227,7 +251,9 @@ const CreatePlanModal = ({ isOpen, onClose, onSave }: CreatePlanModalProps) => {
                         </div>
                         
                         <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-2">
+                          <label className={`block text-sm font-medium mb-2 ${
+                            theme === 'dark' ? 'text-gray-200' : 'text-gray-700'
+                          }`}>
                             Couleur
                           </label>
                           <div className="grid grid-cols-6 gap-2">
@@ -247,14 +273,20 @@ const CreatePlanModal = ({ isOpen, onClose, onSave }: CreatePlanModalProps) => {
                       </div>
                       
                       <div className="mt-6">
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                        <label className={`block text-sm font-medium mb-2 ${
+                          theme === 'dark' ? 'text-gray-200' : 'text-gray-700'
+                        }`}>
                           Description
                         </label>
                         <textarea
                           value={formData.description}
                           onChange={(e) => handleInputChange('description', e.target.value)}
                           rows={3}
-                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#f57c00] focus:border-[#f57c00] transition-all"
+                          className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-[#f57c00] focus:border-[#f57c00] transition-all ${
+                            theme === 'dark'
+                              ? 'border-gray-600 bg-gray-700 text-white placeholder-gray-400'
+                              : 'border-gray-300'
+                          }`}
                           placeholder="Décrivez les avantages de ce plan..."
                         />
                       </div>
@@ -272,11 +304,15 @@ const CreatePlanModal = ({ isOpen, onClose, onSave }: CreatePlanModalProps) => {
                     className="space-y-6"
                   >
                     <div>
-                      <h3 className="text-xl font-bold text-[#2b4a6a] mb-4">Limites et Capacités</h3>
+                      <h3 className={`text-xl font-bold mb-4 ${
+                        theme === 'dark' ? 'text-white' : 'text-[#2b4a6a]'
+                      }`}>Limites et Capacités</h3>
                       
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-2 items-center">
+                          <label className={`block text-sm font-medium mb-2 items-center ${
+                            theme === 'dark' ? 'text-gray-200' : 'text-gray-700'
+                          }`}>
                             <UsersIcon className="w-4 h-4 mr-2" />
                             Nombre d&apos;Utilisateurs
                           </label>
@@ -284,14 +320,20 @@ const CreatePlanModal = ({ isOpen, onClose, onSave }: CreatePlanModalProps) => {
                             type="number"
                             value={formData.users}
                             onChange={(e) => handleInputChange('users', parseInt(e.target.value) || 0)}
-                            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#f57c00] focus:border-[#f57c00] transition-all"
+                            className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-[#f57c00] focus:border-[#f57c00] transition-all ${
+                              theme === 'dark'
+                                ? 'border-gray-600 bg-gray-700 text-white placeholder-gray-400'
+                                : 'border-gray-300'
+                            }`}
                             placeholder="100"
                           />
                           <p className="text-xs text-gray-500 mt-1">Utilisez -1 pour illimité</p>
                         </div>
                         
                         <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-2 items-center">
+                          <label className={`block text-sm font-medium mb-2 items-center ${
+                            theme === 'dark' ? 'text-gray-200' : 'text-gray-700'
+                          }`}>
                             <CloudIcon className="w-4 h-4 mr-2" />
                             Stockage
                           </label>
@@ -299,27 +341,39 @@ const CreatePlanModal = ({ isOpen, onClose, onSave }: CreatePlanModalProps) => {
                             type="text"
                             value={formData.storage}
                             onChange={(e) => handleInputChange('storage', e.target.value)}
-                            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#f57c00] focus:border-[#f57c00] transition-all"
+                            className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-[#f57c00] focus:border-[#f57c00] transition-all ${
+                              theme === 'dark'
+                                ? 'border-gray-600 bg-gray-700 text-white placeholder-gray-400'
+                                : 'border-gray-300'
+                            }`}
                             placeholder="5GB"
                           />
                         </div>
                       </div>
                       
                       <div className="mt-6">
-                        <label className="text-sm font-medium text-gray-700 mb-2 flex items-center">
+                        <label className={`text-sm font-medium mb-2 flex items-center ${
+                          theme === 'dark' ? 'text-gray-200' : 'text-gray-700'
+                        }`}>
                           <Cog6ToothIcon className="w-4 h-4 mr-2" />
                           Fonctionnalités Incluses
                         </label>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                           {availableFeatures.map((feature) => (
-                            <label key={feature} className="flex items-center p-3 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors">
+                            <label key={feature} className={`flex items-center p-3 border rounded-lg cursor-pointer transition-colors ${
+                              theme === 'dark'
+                                ? 'border-gray-600 hover:bg-gray-700'
+                                : 'border-gray-200 hover:bg-gray-50'
+                            }`}>
                               <input
                                 type="checkbox"
                                 checked={formData.features.includes(feature)}
                                 onChange={() => handleFeatureToggle(feature)}
                                 className="w-4 h-4 text-[#f57c00] border-gray-300 rounded focus:ring-[#f57c00]"
                               />
-                              <span className="ml-3 text-sm text-gray-700">{feature}</span>
+                              <span className={`ml-3 text-sm ${
+                                theme === 'dark' ? 'text-gray-300' : 'text-gray-700'
+                              }`}>{feature}</span>
                             </label>
                           ))}
                         </div>
@@ -338,18 +392,30 @@ const CreatePlanModal = ({ isOpen, onClose, onSave }: CreatePlanModalProps) => {
                     className="space-y-6"
                   >
                     <div>
-                      <h3 className="text-xl font-bold text-[#2b4a6a] mb-4">Aperçu du Plan</h3>
+                      <h3 className={`text-xl font-bold mb-4 ${
+                        theme === 'dark' ? 'text-white' : 'text-[#2b4a6a]'
+                      }`}>Aperçu du Plan</h3>
                       
-                      <div className="bg-gradient-to-br from-gray-50 to-white rounded-xl p-6 border border-gray-200">
+                      <div className={`rounded-xl p-6 border ${
+                        theme === 'dark'
+                          ? 'bg-gradient-to-br from-gray-700 to-gray-800 border-gray-600'
+                          : 'bg-gradient-to-br from-gray-50 to-white border-gray-200'
+                      }`}>
                         <div className="flex items-start justify-between mb-4">
                           <div>
-                            <h4 className="text-xl font-bold text-[#2b4a6a]">{formData.name || 'Nouveau Plan'}</h4>
-                            <p className="text-gray-600 mt-1">{formData.description || 'Description du plan'}</p>
+                            <h4 className={`text-xl font-bold ${
+                              theme === 'dark' ? 'text-white' : 'text-[#2b4a6a]'
+                            }`}>{formData.name || 'Nouveau Plan'}</h4>
+                            <p className={`mt-1 ${
+                              theme === 'dark' ? 'text-gray-300' : 'text-gray-600'
+                            }`}>{formData.description || 'Description du plan'}</p>
                           </div>
                           <div className="text-right">
                             <div className="text-2xl font-bold text-[#f57c00]">
                               €{formData.price}
-                              <span className="text-sm text-gray-500 ml-1">
+                              <span className={`text-sm ml-1 ${
+                                theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
+                              }`}>
                                 /{formData.period === 'monthly' ? 'mois' : formData.period === 'quarterly' ? 'trimestre' : 'an'}
                               </span>
                             </div>
@@ -359,21 +425,29 @@ const CreatePlanModal = ({ isOpen, onClose, onSave }: CreatePlanModalProps) => {
                         <div className="grid grid-cols-2 gap-4 mb-4">
                           <div className="flex items-center space-x-2">
                             <UsersIcon className="w-4 h-4 text-[#f57c00]" />
-                            <span className="text-sm text-gray-600">
+                            <span className={`text-sm ${
+                              theme === 'dark' ? 'text-gray-300' : 'text-gray-600'
+                            }`}>
                               {formData.users === -1 ? 'Illimité' : formData.users} utilisateurs
                             </span>
                           </div>
                           <div className="flex items-center space-x-2">
                             <CloudIcon className="w-4 h-4 text-[#f57c00]" />
-                            <span className="text-sm text-gray-600">{formData.storage}</span>
+                            <span className={`text-sm ${
+                              theme === 'dark' ? 'text-gray-300' : 'text-gray-600'
+                            }`}>{formData.storage}</span>
                           </div>
                         </div>
                         
                         <div>
-                          <h5 className="text-sm font-semibold text-[#2b4a6a] mb-2">Fonctionnalités :</h5>
+                          <h5 className={`text-sm font-semibold mb-2 ${
+                            theme === 'dark' ? 'text-white' : 'text-[#2b4a6a]'
+                          }`}>Fonctionnalités :</h5>
                           <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                             {formData.features.map((feature) => (
-                              <div key={feature} className="flex items-center text-sm text-gray-600">
+                              <div key={feature} className={`flex items-center text-sm ${
+                                theme === 'dark' ? 'text-gray-300' : 'text-gray-600'
+                              }`}>
                                 <CheckIcon className="w-4 h-4 text-green-500 mr-2" />
                                 {feature}
                               </div>
@@ -390,7 +464,9 @@ const CreatePlanModal = ({ isOpen, onClose, onSave }: CreatePlanModalProps) => {
                             onChange={(e) => handleInputChange('isPopular', e.target.checked)}
                             className="w-4 h-4 text-[#f57c00] border-gray-300 rounded focus:ring-[#f57c00]"
                           />
-                          <span className="ml-3 text-sm text-gray-700">Marquer comme plan populaire</span>
+                          <span className={`ml-3 text-sm ${
+                            theme === 'dark' ? 'text-gray-300' : 'text-gray-700'
+                          }`}>Marquer comme plan populaire</span>
                         </label>
                       </div>
                     </div>
@@ -400,12 +476,18 @@ const CreatePlanModal = ({ isOpen, onClose, onSave }: CreatePlanModalProps) => {
             </div>
 
             {/* Footer */}
-            <div className="bg-gray-50 px-6 py-4 flex justify-between">
+            <div className={`px-6 py-4 flex justify-between ${
+              theme === 'dark' ? 'bg-gray-800' : 'bg-gray-50'
+            }`}>
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => currentStep > 1 ? setCurrentStep(currentStep - 1) : onClose()}
-                className="px-6 py-2 text-gray-600 hover:text-gray-800 transition-colors"
+                className={`px-6 py-2 transition-colors ${
+                  theme === 'dark'
+                    ? 'text-gray-300 hover:text-white'
+                    : 'text-gray-600 hover:text-gray-800'
+                }`}
               >
                 {currentStep === 1 ? 'Annuler' : 'Précédent'}
               </motion.button>

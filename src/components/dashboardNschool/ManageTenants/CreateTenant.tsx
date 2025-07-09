@@ -1,6 +1,7 @@
 'use client';
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useTheme } from '@/contexts/ThemeContext';
 import {
   ArrowLeftIcon,
   BuildingOffice2Icon,
@@ -35,6 +36,7 @@ interface CreateTenantProps {
 type Step = 1 | 2 | 3 | 4;
 
 const CreateTenant = ({ onBack, onTenantCreated }: CreateTenantProps) => {
+  const { theme } = useTheme();
   const [currentStep, setCurrentStep] = useState<Step>(1);
   const [formData, setFormData] = useState({
     name: '',
@@ -169,7 +171,11 @@ const CreateTenant = ({ onBack, onTenantCreated }: CreateTenantProps) => {
       {/* Header */}
       <motion.div
         variants={cardVariants}
-        className="bg-gradient-to-br from-white via-white to-gray-50/50 rounded-3xl p-4 shadow-xl border border-gray-200/50 backdrop-blur-sm"
+        className={`rounded-3xl p-4 shadow-xl border backdrop-blur-sm ${
+          theme === 'dark'
+            ? 'bg-gradient-to-br from-gray-800 via-gray-900 to-gray-800 border-gray-700/50'
+            : 'bg-gradient-to-br from-white via-white to-gray-50/50 border-gray-200/50'
+        }`}
       >
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-4">
@@ -182,10 +188,16 @@ const CreateTenant = ({ onBack, onTenantCreated }: CreateTenantProps) => {
               <ArrowLeftIcon className="w-5 h-5" />
             </motion.button>
             <div>
-              <h1 className="text-2xl font-bold text-[#2b4a6a] tracking-tight" style={{ textShadow: '0 2px 4px rgba(0,0,0,0.1)' }}>
+              <h1 className={`text-2xl font-bold tracking-tight ${
+                theme === 'dark' 
+                  ? 'text-white' 
+                  : 'text-[#2b4a6a]'
+              }`} style={{ textShadow: '0 2px 4px rgba(0,0,0,0.1)' }}>
                 Création d'un Nouveau Tenant
               </h1>
-              <p className="text-md text-gray-600 font-medium">Formulaire multi-étapes</p>
+              <p className={`text-md font-medium ${
+                theme === 'dark' ? 'text-gray-300' : 'text-gray-600'
+              }`}>Formulaire multi-étapes</p>
             </div>
           </div>
         </div>
@@ -208,7 +220,9 @@ const CreateTenant = ({ onBack, onTenantCreated }: CreateTenantProps) => {
                   className={`flex items-center justify-center w-10 h-10 rounded-full border-2 transition-all duration-500 ${
                     currentStep >= step.id
                       ? 'bg-gradient-to-r from-[#f57c00] to-[#ff9800] border-[#f57c00] text-white shadow-lg'
-                      : 'bg-white border-gray-300 text-gray-400'
+                      : theme === 'dark'
+                        ? 'bg-gray-700 border-gray-600 text-gray-400'
+                        : 'bg-white border-gray-300 text-gray-400'
                   }`}
                 >
                   <motion.div
@@ -227,7 +241,9 @@ const CreateTenant = ({ onBack, onTenantCreated }: CreateTenantProps) => {
                 {index < steps.length - 1 && (
                   <div className="relative w-20 h-1.5 ml-3">
                     {/* Barre de fond */}
-                    <div className="absolute inset-0 bg-gray-200 rounded-full" />
+                    <div className={`absolute inset-0 rounded-full ${
+                      theme === 'dark' ? 'bg-gray-600' : 'bg-gray-200'
+                    }`} />
                     
                     {/* Barre de progression avec effet 3D - Remplissage depuis le début */}
                     <motion.div
@@ -282,7 +298,7 @@ const CreateTenant = ({ onBack, onTenantCreated }: CreateTenantProps) => {
               <motion.span
                 key={step.id}
                 className={`text-xs font-medium transition-all duration-300 ${
-                  currentStep >= step.id ? 'text-[#f57c00]' : 'text-gray-400'
+                  currentStep >= step.id ? 'text-[#f57c00]' : theme === 'dark' ? 'text-gray-400' : 'text-gray-400'
                 }`}
                 animate={{
                   scale: currentStep === step.id ? 1.05 : 1,
@@ -304,7 +320,11 @@ const CreateTenant = ({ onBack, onTenantCreated }: CreateTenantProps) => {
       {/* Form Content */}
       <motion.div
         variants={cardVariants}
-        className="bg-white rounded-3xl shadow-xl border border-gray-200/50 overflow-hidden backdrop-blur-sm"
+        className={`rounded-3xl shadow-xl border overflow-hidden backdrop-blur-sm ${
+          theme === 'dark'
+            ? 'bg-gray-800 border-gray-700/50'
+            : 'bg-white border-gray-200/50'
+        }`}
       >
         <div className="p-8">
           <AnimatePresence mode="wait">
@@ -318,29 +338,41 @@ const CreateTenant = ({ onBack, onTenantCreated }: CreateTenantProps) => {
                 className="space-y-6"
               >
                 <div>
-                  <h2 className="text-2xl font-bold text-[#2b4a6a] mb-2 flex items-center gap-2">
+                  <h2 className={`text-2xl font-bold mb-2 flex items-center gap-2 ${
+                    theme === 'dark' ? 'text-white' : 'text-[#2b4a6a]'
+                  }`}>
                     <BuildingOffice2Icon className="w-6 h-6 text-[#f57c00]" />
                     Informations de base
                   </h2>
-                  <p className="text-gray-600">Renseignez les informations essentielles de votre établissement</p>
+                  <p className={`${
+                    theme === 'dark' ? 'text-gray-300' : 'text-gray-600'
+                  }`}>Renseignez les informations essentielles de votre établissement</p>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <motion.div whileHover={{ scale: 1.02 }} className="space-y-2">
-                    <label className="block text-sm font-semibold text-gray-700">
+                    <label className={`block text-sm font-semibold ${
+                      theme === 'dark' ? 'text-gray-200' : 'text-gray-700'
+                    }`}>
                       Nom de l'établissement *
                     </label>
                     <input
                       type="text"
                       value={formData.name}
                       onChange={(e) => handleInputChange('name', e.target.value)}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#f57c00]/50 focus:border-[#f57c00] focus:text-[#f57c00] transition-all duration-300 bg-white/80 backdrop-blur-sm"
+                      className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-[#f57c00]/50 focus:border-[#f57c00] focus:text-[#f57c00] transition-all duration-300 backdrop-blur-sm ${
+                        theme === 'dark'
+                          ? 'border-gray-600 bg-gray-700/80 text-white placeholder-gray-400'
+                          : 'border-gray-300 bg-white/80'
+                      }`}
                       placeholder="Ex: Lycée Victor Hugo"
                     />
                   </motion.div>
 
                   <motion.div whileHover={{ scale: 1.02 }} className="space-y-2">
-                    <label className="block text-sm font-semibold text-gray-700">
+                    <label className={`block text-sm font-semibold ${
+                      theme === 'dark' ? 'text-gray-200' : 'text-gray-700'
+                    }`}>
                       Code tenant * (généré automatiquement, modifiable)
                     </label>
                     <div className="flex gap-2">
@@ -348,7 +380,11 @@ const CreateTenant = ({ onBack, onTenantCreated }: CreateTenantProps) => {
                         type="text"
                         value={formData.code}
                         onChange={(e) => handleInputChange('code', e.target.value)}
-                        className="flex-1 px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#f57c00]/50 focus:border-[#f57c00] focus:text-[#f57c00] transition-all duration-300 bg-white/80 backdrop-blur-sm font-mono"
+                        className={`flex-1 px-4 py-3 border rounded-xl focus:ring-2 focus:ring-[#f57c00]/50 focus:border-[#f57c00] focus:text-[#f57c00] transition-all duration-300 backdrop-blur-sm font-mono ${
+                          theme === 'dark'
+                            ? 'border-gray-600 bg-gray-700/80 text-white placeholder-gray-400'
+                            : 'border-gray-300 bg-white/80'
+                        }`}
                         placeholder="Code généré automatiquement"
                       />
                       <motion.button
@@ -363,13 +399,19 @@ const CreateTenant = ({ onBack, onTenantCreated }: CreateTenantProps) => {
                   </motion.div>
 
                   <motion.div whileHover={{ scale: 1.02 }} className="space-y-2">
-                    <label className="block text-sm font-semibold text-gray-700">
+                    <label className={`block text-sm font-semibold ${
+                      theme === 'dark' ? 'text-gray-200' : 'text-gray-700'
+                    }`}>
                       Type d'établissement
                     </label>
                     <select
                       value={formData.type}
                       onChange={(e) => handleInputChange('type', e.target.value)}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#f57c00]/50 focus:border-[#f57c00] focus:text-[#f57c00] transition-all duration-300 bg-[#2b4a6a]/5 backdrop-blur-sm"
+                      className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-[#f57c00]/50 focus:border-[#f57c00] focus:text-[#f57c00] transition-all duration-300 backdrop-blur-sm ${
+                        theme === 'dark'
+                          ? 'border-gray-600 bg-gray-700/80 text-white'
+                          : 'border-gray-300 bg-[#2b4a6a]/5'
+                      }`}
                     >
                       <option value="">Sélectionner un type</option>
                       {establishmentTypes.map((type) => (
@@ -381,27 +423,39 @@ const CreateTenant = ({ onBack, onTenantCreated }: CreateTenantProps) => {
                   </motion.div>
 
                   <motion.div whileHover={{ scale: 1.02 }} className="space-y-2">
-                    <label className="block text-sm font-semibold text-gray-700">
+                    <label className={`block text-sm font-semibold ${
+                      theme === 'dark' ? 'text-gray-200' : 'text-gray-700'
+                    }`}>
                       Email de contact *
                     </label>
                     <input
                       type="email"
                       value={formData.email}
                       onChange={(e) => handleInputChange('email', e.target.value)}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#f57c00]/50 focus:border-[#f57c00] focus:text-[#f57c00] transition-all duration-300 bg-white/80 backdrop-blur-sm"
+                      className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-[#f57c00]/50 focus:border-[#f57c00] focus:text-[#f57c00] transition-all duration-300 backdrop-blur-sm ${
+                        theme === 'dark'
+                          ? 'border-gray-600 bg-gray-700/80 text-white placeholder-gray-400'
+                          : 'border-gray-300 bg-white/80'
+                      }`}
                       placeholder="admin@etablissement.edu"
                     />
                   </motion.div>
 
                   <motion.div whileHover={{ scale: 1.02 }} className="space-y-2">
-                    <label className="block text-sm font-semibold text-gray-700">
+                    <label className={`block text-sm font-semibold ${
+                      theme === 'dark' ? 'text-gray-200' : 'text-gray-700'
+                    }`}>
                       Téléphone
                     </label>
                     <input
                       type="tel"
                       value={formData.phone}
                       onChange={(e) => handleInputChange('phone', e.target.value)}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#f57c00]/50 focus:border-[#f57c00] focus:text-[#f57c00] transition-all duration-300 bg-white/80 backdrop-blur-sm"
+                      className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-[#f57c00]/50 focus:border-[#f57c00] focus:text-[#f57c00] transition-all duration-300 backdrop-blur-sm ${
+                        theme === 'dark'
+                          ? 'border-gray-600 bg-gray-700/80 text-white placeholder-gray-400'
+                          : 'border-gray-300 bg-white/80'
+                      }`}
                       placeholder="+33 1 42 XX XX XX"
                     />
                   </motion.div>
@@ -432,16 +486,22 @@ const CreateTenant = ({ onBack, onTenantCreated }: CreateTenantProps) => {
                 className="space-y-6"
               >
                 <div>
-                  <h2 className="text-2xl font-bold text-[#2b4a6a] mb-2 flex items-center gap-2">
+                  <h2 className={`text-2xl font-bold mb-2 flex items-center gap-2 ${
+                    theme === 'dark' ? 'text-white' : 'text-[#2b4a6a]'
+                  }`}>
                     <Cog6ToothIcon className="w-6 h-6 text-[#f57c00]" />
                     Configuration technique
                   </h2>
-                  <p className="text-gray-600">Configurez les paramètres techniques de votre tenant</p>
+                  <p className={`${
+                    theme === 'dark' ? 'text-gray-300' : 'text-gray-600'
+                  }`}>Configurez les paramètres techniques de votre tenant</p>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <motion.div whileHover={{ scale: 1.02 }} className="space-y-2">
-                    <label className="block text-sm font-semibold text-gray-700">
+                    <label className={`block text-sm font-semibold ${
+                      theme === 'dark' ? 'text-gray-200' : 'text-gray-700'
+                    }`}>
                       Domaine principal * (disponibilité vérifiée en temps réel)
                     </label>
                     <div className="flex items-center gap-2">
@@ -449,35 +509,53 @@ const CreateTenant = ({ onBack, onTenantCreated }: CreateTenantProps) => {
                         type="text"
                         value={formData.domain}
                         onChange={(e) => handleInputChange('domain', e.target.value)}
-                        className="flex-1 px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#f57c00]/50 focus:border-[#f57c00] transition-all duration-300 bg-white/80 backdrop-blur-sm"
+                        className={`flex-1 px-4 py-3 border rounded-xl focus:ring-2 focus:ring-[#f57c00]/50 focus:border-[#f57c00] transition-all duration-300 backdrop-blur-sm ${
+                          theme === 'dark'
+                            ? 'border-gray-600 bg-gray-700/80 text-white placeholder-gray-400'
+                            : 'border-gray-300 bg-white/80'
+                        }`}
                         placeholder="etablissement"
                       />
-                      <span className="text-gray-600 font-medium text-sm">.nschool.fr</span>
+                      <span className={`font-medium text-sm ${
+                        theme === 'dark' ? 'text-gray-300' : 'text-gray-600'
+                      }`}>.nschool.fr</span>
                     </div>
                     <p className="text-xs text-green-600">✓ Domaine disponible</p>
                   </motion.div>
 
                   <motion.div whileHover={{ scale: 1.02 }} className="space-y-2">
-                    <label className="block text-sm font-semibold text-gray-700">
+                    <label className={`block text-sm font-semibold ${
+                      theme === 'dark' ? 'text-gray-200' : 'text-gray-700'
+                    }`}>
                       Domaines secondaires (optionnel)
                     </label>
                     <input
                       type="text"
                       value={formData.secondaryDomains}
                       onChange={(e) => handleInputChange('secondaryDomains', e.target.value)}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#f57c00]/50 focus:border-[#f57c00] transition-all duration-300 bg-white/80 backdrop-blur-sm"
+                      className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-[#f57c00]/50 focus:border-[#f57c00] transition-all duration-300 backdrop-blur-sm ${
+                        theme === 'dark'
+                          ? 'border-gray-600 bg-gray-700/80 text-white placeholder-gray-400'
+                          : 'border-gray-300 bg-white/80'
+                      }`}
                       placeholder="www.etablissement.edu"
                     />
                   </motion.div>
 
                   <motion.div whileHover={{ scale: 1.02 }} className="space-y-2">
-                    <label className="block text-sm font-semibold text-gray-700">
+                    <label className={`block text-sm font-semibold ${
+                      theme === 'dark' ? 'text-gray-200' : 'text-gray-700'
+                    }`}>
                       Langue par défaut
                     </label>
                     <select
                       value={formData.language}
                       onChange={(e) => handleInputChange('language', e.target.value)}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#f57c00]/50 focus:border-[#f57c00] transition-all duration-300 bg-white/80 backdrop-blur-sm"
+                      className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-[#f57c00]/50 focus:border-[#f57c00] transition-all duration-300 backdrop-blur-sm ${
+                        theme === 'dark'
+                          ? 'border-gray-600 bg-gray-700/80 text-white'
+                          : 'border-gray-300 bg-white/80'
+                      }`}
                     >
                       <option value="fr">Français</option>
                       <option value="en">English</option>
@@ -486,13 +564,19 @@ const CreateTenant = ({ onBack, onTenantCreated }: CreateTenantProps) => {
                   </motion.div>
 
                   <motion.div whileHover={{ scale: 1.02 }} className="space-y-2">
-                    <label className="block text-sm font-semibold text-gray-700">
+                    <label className={`block text-sm font-semibold ${
+                      theme === 'dark' ? 'text-gray-200' : 'text-gray-700'
+                    }`}>
                       Fuseau horaire
                     </label>
                     <select
                       value={formData.timezone}
                       onChange={(e) => handleInputChange('timezone', e.target.value)}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#f57c00]/50 focus:border-[#f57c00] transition-all duration-300 bg-white/80 backdrop-blur-sm"
+                      className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-[#f57c00]/50 focus:border-[#f57c00] transition-all duration-300 backdrop-blur-sm ${
+                        theme === 'dark'
+                          ? 'border-gray-600 bg-gray-700/80 text-white'
+                          : 'border-gray-300 bg-white/80'
+                      }`}
                     >
                       <option value="Europe/Paris">Europe/Paris (UTC+1)</option>
                       <option value="Europe/London">Europe/London (UTC+0)</option>
@@ -501,14 +585,20 @@ const CreateTenant = ({ onBack, onTenantCreated }: CreateTenantProps) => {
                   </motion.div>
 
                   <motion.div whileHover={{ scale: 1.02 }} className="space-y-2 md:col-span-2">
-                    <label className="block text-sm font-semibold text-gray-700">
+                    <label className={`block text-sm font-semibold ${
+                      theme === 'dark' ? 'text-gray-200' : 'text-gray-700'
+                    }`}>
                       Configuration initiale
                     </label>
                     <textarea
                       value={formData.initialConfig}
                       onChange={(e) => handleInputChange('initialConfig', e.target.value)}
                       rows={3}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#f57c00]/50 focus:border-[#f57c00] transition-all duration-300 bg-white/80 backdrop-blur-sm resize-none"
+                      className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-[#f57c00]/50 focus:border-[#f57c00] transition-all duration-300 backdrop-blur-sm resize-none ${
+                        theme === 'dark'
+                          ? 'border-gray-600 bg-gray-700/80 text-white placeholder-gray-400'
+                          : 'border-gray-300 bg-white/80'
+                      }`}
                       placeholder="Configuration spécifique à votre établissement..."
                     />
                   </motion.div>
@@ -526,11 +616,15 @@ const CreateTenant = ({ onBack, onTenantCreated }: CreateTenantProps) => {
                 className="space-y-6"
               >
                 <div>
-                  <h2 className="text-2xl font-bold text-[#2b4a6a] mb-2 flex items-center gap-2">
+                  <h2 className={`text-2xl font-bold mb-2 flex items-center gap-2 ${
+                    theme === 'dark' ? 'text-white' : 'text-[#2b4a6a]'
+                  }`}>
                     <CreditCardIcon className="w-6 h-6 text-[#f57c00]" />
                     Abonnement et paiement
                   </h2>
-                  <p className="text-gray-600">Choisissez le plan qui correspond à vos besoins</p>
+                  <p className={`${
+                    theme === 'dark' ? 'text-gray-300' : 'text-gray-600'
+                  }`}>Choisissez le plan qui correspond à vos besoins</p>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -543,13 +637,19 @@ const CreateTenant = ({ onBack, onTenantCreated }: CreateTenantProps) => {
                       className={`p-6 rounded-2xl border-2 cursor-pointer transition-all duration-300 ${
                         formData.plan === plan.id
                           ? 'border-[#f57c00] bg-gradient-to-br from-orange-50 to-orange-100/50 shadow-lg'
-                          : 'border-gray-200 bg-white hover:border-[#f57c00]/50 hover:bg-orange-50/30'
+                          : theme === 'dark'
+                            ? 'border-gray-600 bg-gray-700 hover:border-[#f57c00]/50 hover:bg-gray-600'
+                            : 'border-gray-200 bg-white hover:border-[#f57c00]/50 hover:bg-orange-50/30'
                       }`}
                     >
                       <div className="text-center">
-                        <h3 className="text-lg font-bold text-[#2b4a6a] mb-2">{plan.name}</h3>
+                        <h3 className={`text-lg font-bold mb-2 ${
+                          theme === 'dark' ? 'text-white' : 'text-[#2b4a6a]'
+                        }`}>{plan.name}</h3>
                         <p className="text-2xl font-bold text-[#f57c00] mb-4">{plan.price}</p>
-                        <ul className="space-y-2 text-sm text-gray-600">
+                        <ul className={`space-y-2 text-sm ${
+                          theme === 'dark' ? 'text-gray-300' : 'text-gray-600'
+                        }`}>
                           {plan.features.map((feature, index) => (
                             <li key={index} className="flex items-center gap-2">
                               <CheckIcon className="w-4 h-4 text-green-500" />
@@ -571,32 +671,46 @@ const CreateTenant = ({ onBack, onTenantCreated }: CreateTenantProps) => {
                       onChange={(e) => handleInputChange('trialPeriod', e.target.checked)}
                       className="w-4 h-4 text-[#f57c00] border-[#f57c00]/20 rounded focus:ring-[#f57c00]/30"
                     />
-                    <label htmlFor="trialPeriod" className="text-sm font-medium text-gray-700">
+                    <label htmlFor="trialPeriod" className={`text-sm font-medium ${
+                      theme === 'dark' ? 'text-gray-200' : 'text-gray-700'
+                    }`}>
                       Période d'essai (optionnel)
                     </label>
                   </div>
 
                   <motion.div whileHover={{ scale: 1.02 }} className="space-y-2">
-                    <label className="block text-sm font-semibold text-gray-700">
+                    <label className={`block text-sm font-semibold ${
+                      theme === 'dark' ? 'text-gray-200' : 'text-gray-700'
+                    }`}>
                       Code promotionnel (optionnel)
                     </label>
                     <input
                       type="text"
                       value={formData.promoCode}
                       onChange={(e) => handleInputChange('promoCode', e.target.value)}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#f57c00]/50 focus:border-[#f57c00] transition-all duration-300 bg-white/80 backdrop-blur-sm"
+                      className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-[#f57c00]/50 focus:border-[#f57c00] transition-all duration-300 backdrop-blur-sm ${
+                        theme === 'dark'
+                          ? 'border-gray-600 bg-gray-700/80 text-white placeholder-gray-400'
+                          : 'border-gray-300 bg-white/80'
+                      }`}
                       placeholder="PROMO2024"
                     />
                   </motion.div>
 
                   <motion.div whileHover={{ scale: 1.02 }} className="space-y-2">
-                    <label className="block text-sm font-semibold text-gray-700">
+                    <label className={`block text-sm font-semibold ${
+                      theme === 'dark' ? 'text-gray-200' : 'text-gray-700'
+                    }`}>
                       Méthode de paiement
                     </label>
                     <select
                       value={formData.paymentMethod}
                       onChange={(e) => handleInputChange('paymentMethod', e.target.value)}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#f57c00]/50 focus:border-[#f57c00] transition-all duration-300 bg-white/80 backdrop-blur-sm"
+                      className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-[#f57c00]/50 focus:border-[#f57c00] transition-all duration-300 backdrop-blur-sm ${
+                        theme === 'dark'
+                          ? 'border-gray-600 bg-gray-700/80 text-white'
+                          : 'border-gray-300 bg-white/80'
+                      }`}
                     >
                       <option value="card">Carte bancaire</option>
                       <option value="sepa">Prélèvement SEPA</option>
@@ -617,69 +731,112 @@ const CreateTenant = ({ onBack, onTenantCreated }: CreateTenantProps) => {
                 className="space-y-6"
               >
                 <div>
-                  <h2 className="text-2xl font-bold text-[#2b4a6a] mb-2 flex items-center gap-2">
+                  <h2 className={`text-2xl font-bold mb-2 flex items-center gap-2 ${
+                    theme === 'dark' ? 'text-white' : 'text-[#2b4a6a]'
+                  }`}>
                     <CheckIcon className="w-6 h-6 text-[#f57c00]" />
                     Récapitulatif et validation
                   </h2>
-                  <p className="text-gray-600">Vérifiez les informations avant de créer votre tenant</p>
+                  <p className={`${
+                    theme === 'dark' ? 'text-gray-300' : 'text-gray-600'
+                  }`}>Vérifiez les informations avant de créer votre tenant</p>
                 </div>
 
                 <motion.div
                   whileHover={{ scale: 1.02 }}
-                  className="bg-gradient-to-br from-green-50 to-green-100/30 p-6 rounded-2xl border border-green-200/50"
+                  className={`p-6 rounded-2xl border ${
+                    theme === 'dark'
+                      ? 'bg-gradient-to-br from-gray-700 to-gray-800 border-gray-600/50'
+                      : 'bg-gradient-to-br from-green-50 to-green-100/30 border-green-200/50'
+                  }`}
                 >
-                  <h3 className="text-lg font-semibold text-[#2b4a6a] mb-4">Résumé de toutes les informations</h3>
+                  <h3 className={`text-lg font-semibold mb-4 ${
+                    theme === 'dark' ? 'text-white' : 'text-[#2b4a6a]'
+                  }`}>Résumé de toutes les informations</h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-3">
                       <div className="flex justify-between items-center py-2">
-                        <span className="text-gray-600 font-medium">Nom</span>
-                        <span className="text-gray-900 font-semibold">{formData.name}</span>
+                        <span className={`font-medium ${
+                          theme === 'dark' ? 'text-gray-300' : 'text-gray-600'
+                        }`}>Nom</span>
+                        <span className={`font-semibold ${
+                          theme === 'dark' ? 'text-white' : 'text-gray-900'
+                        }`}>{formData.name}</span>
                       </div>
                       <div className="flex justify-between items-center py-2">
-                        <span className="text-gray-600 font-medium">Code</span>
-                        <span className="text-gray-900 font-mono font-semibold">{formData.code}</span>
+                        <span className={`font-medium ${
+                          theme === 'dark' ? 'text-gray-300' : 'text-gray-600'
+                        }`}>Code</span>
+                        <span className={`font-mono font-semibold ${
+                          theme === 'dark' ? 'text-white' : 'text-gray-900'
+                        }`}>{formData.code}</span>
                       </div>
                       <div className="flex justify-between items-center py-2">
-                        <span className="text-gray-600 font-medium">Type</span>
-                        <span className="text-gray-900 font-semibold">{establishmentTypes.find(t => t.value === formData.type)?.label}</span>
+                        <span className={`font-medium ${
+                          theme === 'dark' ? 'text-gray-300' : 'text-gray-600'
+                        }`}>Type</span>
+                        <span className={`font-semibold ${
+                          theme === 'dark' ? 'text-white' : 'text-gray-900'
+                        }`}>{establishmentTypes.find(t => t.value === formData.type)?.label}</span>
                       </div>
                       <div className="flex justify-between items-center py-2">
-                        <span className="text-gray-600 font-medium">Email</span>
-                        <span className="text-gray-900 font-semibold">{formData.email}</span>
+                        <span className={`font-medium ${
+                          theme === 'dark' ? 'text-gray-300' : 'text-gray-600'
+                        }`}>Email</span>
+                        <span className={`font-semibold ${
+                          theme === 'dark' ? 'text-white' : 'text-gray-900'
+                        }`}>{formData.email}</span>
                       </div>
                     </div>
                     <div className="space-y-3">
                       <div className="flex justify-between items-center py-2">
-                        <span className="text-gray-600 font-medium">Domaine</span>
-                        <span className="text-gray-900 font-semibold">{formData.domain}.nschool.fr</span>
+                        <span className={`font-medium ${
+                          theme === 'dark' ? 'text-gray-300' : 'text-gray-600'
+                        }`}>Domaine</span>
+                        <span className={`font-semibold ${
+                          theme === 'dark' ? 'text-white' : 'text-gray-900'
+                        }`}>{formData.domain}.nschool.fr</span>
                       </div>
                       <div className="flex justify-between items-center py-2">
-                        <span className="text-gray-600 font-medium">Plan</span>
-                        <span className="text-gray-900 font-semibold">{formData.plan}</span>
+                        <span className={`font-medium ${
+                          theme === 'dark' ? 'text-gray-300' : 'text-gray-600'
+                        }`}>Plan</span>
+                        <span className={`font-semibold ${
+                          theme === 'dark' ? 'text-white' : 'text-gray-900'
+                        }`}>{formData.plan}</span>
                       </div>
                       <div className="flex justify-between items-center py-2">
-                        <span className="text-gray-600 font-medium">Période d'essai</span>
-                        <span className="text-gray-900 font-semibold">{formData.trialPeriod ? 'Oui' : 'Non'}</span>
+                        <span className={`font-medium ${
+                          theme === 'dark' ? 'text-gray-300' : 'text-gray-600'
+                        }`}>Période d'essai</span>
+                        <span className={`font-semibold ${
+                          theme === 'dark' ? 'text-white' : 'text-gray-900'
+                        }`}>{formData.trialPeriod ? 'Oui' : 'Non'}</span>
                       </div>
                       <div className="flex justify-between items-center py-2">
-                        <span className="text-gray-600 font-medium">Méthode de paiement</span>
-                        <span className="text-gray-900 font-semibold capitalize">{formData.paymentMethod}</span>
+                        <span className={`font-medium ${
+                          theme === 'dark' ? 'text-gray-300' : 'text-gray-600'
+                        }`}>Méthode de paiement</span>
+                        <span className={`font-semibold ${
+                          theme === 'dark' ? 'text-white' : 'text-gray-900'
+                        }`}>{formData.paymentMethod}</span>
                       </div>
                     </div>
                   </div>
                 </motion.div>
 
-                <div className="flex items-start gap-3">
+                <div className="flex items-center gap-3">
                   <input
                     type="checkbox"
                     id="termsAccepted"
                     checked={formData.termsAccepted}
                     onChange={(e) => handleInputChange('termsAccepted', e.target.checked)}
-                    className="w-4 h-4 text-[#f57c00] border-[#f57c00]/20 rounded focus:ring-[#f57c00]/30 mt-0.5"
+                    className="w-4 h-4 text-[#f57c00] border-[#f57c00]/20 rounded focus:ring-[#f57c00]/30"
                   />
-                  <label htmlFor="termsAccepted" className="text-sm text-gray-700">
-                    J'accepte les <a href="#" className="text-[#f57c00] hover:underline">conditions générales</a> et la{' '}
-                    <a href="#" className="text-[#f57c00] hover:underline">politique de confidentialité</a>
+                  <label htmlFor="termsAccepted" className={`text-sm font-medium ${
+                    theme === 'dark' ? 'text-gray-200' : 'text-gray-700'
+                  }`}>
+                    J'accepte les conditions d'utilisation et la politique de confidentialité
                   </label>
                 </div>
               </motion.div>
@@ -688,7 +845,11 @@ const CreateTenant = ({ onBack, onTenantCreated }: CreateTenantProps) => {
         </div>
 
         {/* Navigation Buttons */}
-        <div className="px-8 py-6 bg-gray-50 border-t border-gray-200">
+        <div className={`px-8 py-6 border-t ${
+          theme === 'dark'
+            ? 'bg-gray-800 border-gray-700'
+            : 'bg-gray-50 border-gray-200'
+        }`}>
           <div className="flex justify-between items-center">
             <motion.button
               whileHover={{ scale: 1.05 }}

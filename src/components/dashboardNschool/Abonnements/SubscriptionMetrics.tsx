@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion, Variants } from 'framer-motion';
 import CountUp from 'react-countup';
+import { useTheme } from '@/contexts/ThemeContext';
 import { CurrencyDollarIcon, ChartBarIcon, UsersIcon, StarIcon } from '@heroicons/react/24/outline';
 
 const cardVariants: Variants = {
@@ -52,6 +53,7 @@ interface SubscriptionMetricsProps {
 }
 
 const SubscriptionMetrics = ({ mrr, arr, retentionRate, clv }: SubscriptionMetricsProps) => {
+  const { theme } = useTheme();
   const metrics = [
     {
       title: 'MRR',
@@ -91,14 +93,22 @@ const SubscriptionMetrics = ({ mrr, arr, retentionRate, clv }: SubscriptionMetri
           variants={cardVariants}
           initial="hidden"
           animate="visible"
-          className="relative bg-white/90 backdrop-blur-sm rounded-2xl p-4 shadow-sm border border-gray-100/50 overflow-hidden"
+          className={`relative backdrop-blur-sm rounded-2xl p-4 shadow-sm border overflow-hidden ${
+            theme === 'dark'
+              ? 'bg-gray-800/90 border-gray-700/50'
+              : 'bg-white/90 border-gray-100/50'
+          }`}
         >
           <div className="flex items-start justify-between">
             <div>
-              <p className="text-xs font-bold text-gray-500 uppercase tracking-wide">{metric.title}</p>
+              <p className={`text-xs font-bold uppercase tracking-wide ${
+                theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
+              }`}>{metric.title}</p>
               <motion.p
                 variants={valueVariants}
-                className="text-2xl font-semibold text-gray-900 mt-0.5"
+                className={`text-2xl font-semibold mt-0.5 ${
+                  theme === 'dark' ? 'text-white' : 'text-gray-900'
+                }`}
               >
                 {metric.prefix || ''}
                 <CountUp
@@ -114,11 +124,17 @@ const SubscriptionMetrics = ({ mrr, arr, retentionRate, clv }: SubscriptionMetri
                 />
                 {metric.suffix || ''}
               </motion.p>
-              <p className="text-xs text-gray-600 mt-0.5">{metric.description}</p>
+              <p className={`text-xs mt-0.5 ${
+                theme === 'dark' ? 'text-gray-400' : 'text-gray-600'
+              }`}>{metric.description}</p>
             </div>
             <motion.div
               variants={iconVariants}
-              className="w-10 h-10 text-gray-600 flex items-center justify-center rounded-full bg-gray-100"
+              className={`w-10 h-10 flex items-center justify-center rounded-full ${
+                theme === 'dark'
+                  ? 'text-gray-300 bg-gray-700'
+                  : 'text-gray-600 bg-gray-100'
+              }`}
             >
               {React.cloneElement(metric.icon, { className: 'w-5 h-5' })}
             </motion.div>

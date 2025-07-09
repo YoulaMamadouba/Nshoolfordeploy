@@ -1,7 +1,8 @@
 'use client';
 import React, { useState } from 'react';
 import { motion, Variants } from 'framer-motion';
-import { CogIcon, ArrowPathIcon } from '@heroicons/react/24/outline';
+import { GlobeAltIcon, CogIcon, ShieldCheckIcon, ExclamationTriangleIcon, CheckCircleIcon } from '@heroicons/react/24/outline';
+import { useTheme } from '@/contexts/ThemeContext';
 
 const cardVariants: Variants = {
   hidden: { opacity: 0, y: 30 },
@@ -39,16 +40,24 @@ const buttonVariants: Variants = {
 };
 
 const DomainConfig: React.FC = () => {
+  const { theme } = useTheme();
   const [dnsStatus, setDnsStatus] = useState('Vérifié');
   const [sslStatus, setSslStatus] = useState('Valide jusqu\'au 31/12/2025');
   const [redirects, setRedirects] = useState('301 Activée');
   const [cdnCache, setCdnCache] = useState('Activé');
 
   const getStatusBadge = (status: string) => {
-    if (status.includes('Vérifié') || status.includes('Valide') || status.includes('Activé')) {
-      return { bg: 'bg-green-100 bg-opacity-80', text: 'text-green-800' };
+    if (theme === 'dark') {
+      if (status.includes('Vérifié') || status.includes('Valide') || status.includes('Activé')) {
+        return { bg: 'bg-green-900/30', text: 'text-green-300' };
+      }
+      return { bg: 'bg-yellow-900/30', text: 'text-yellow-300' };
+    } else {
+      if (status.includes('Vérifié') || status.includes('Valide') || status.includes('Activé')) {
+        return { bg: 'bg-green-100 bg-opacity-80', text: 'text-green-800' };
+      }
+      return { bg: 'bg-yellow-100 bg-opacity-80', text: 'text-yellow-800' };
     }
-    return { bg: 'bg-yellow-100 bg-opacity-80', text: 'text-yellow-800' };
   };
 
   return (
@@ -56,13 +65,19 @@ const DomainConfig: React.FC = () => {
       variants={cardVariants}
       initial="hidden"
       animate="visible"
-      className="relative bg-gradient-to-br from-white/90 to-gray-50/80 rounded-2xl p-6 shadow-sm border border-[#f57c00]/30 backdrop-blur-sm overflow-visible"
+      className={`relative rounded-2xl p-6 shadow-sm border backdrop-blur-sm overflow-visible ${
+        theme === 'dark'
+          ? 'bg-gradient-to-br from-gray-800/90 to-gray-900/80 border-[#f57c00]/30'
+          : 'bg-gradient-to-br from-white/90 to-gray-50/80 border-[#f57c00]/30'
+      }`}
     >
       <motion.h2
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ type: 'spring', stiffness: 150, damping: 12 }}
-        className="text-xl font-bold text-[#2b4a6a] text-center mb-6 tracking-tight"
+        className={`text-xl font-bold text-center mb-6 tracking-tight ${
+          theme === 'dark' ? 'text-white' : 'text-[#2b4a6a]'
+        }`}
         style={{ textShadow: '0 1px 2px rgba(0, 0, 0, 0.1)' }}
       >
         Configuration des Domaines
@@ -87,7 +102,7 @@ const DomainConfig: React.FC = () => {
             onClick: () => console.log('Renouvellement SSL'),
           },
           {
-            icon: ArrowPathIcon,
+            icon: CogIcon,
             title: 'Redirections',
             status: redirects,
             action: 'Gérer',
@@ -107,13 +122,19 @@ const DomainConfig: React.FC = () => {
             custom={index}
             initial="hidden"
             animate="visible"
-            className="flex items-center p-4 bg-white/50 rounded-xl border border-[#f57c00]/20 hover:bg-[#f57c00]/5 transition-all duration-300"
+            className={`flex items-center p-4 rounded-xl border transition-all duration-300 ${
+              theme === 'dark'
+                ? 'bg-gray-800/50 border-[#f57c00]/20 hover:bg-[#f57c00]/10'
+                : 'bg-white/50 border-[#f57c00]/20 hover:bg-[#f57c00]/5'
+            }`}
           >
             <motion.div variants={iconVariants} whileHover="hover">
               <item.icon className="w-6 h-6 text-[#f57c00] mr-3" />
             </motion.div>
             <div className="flex-1">
-              <h3 className="text-lg font-medium text-[#2b4a6a]">{item.title}</h3>
+              <h3 className={`text-lg font-medium ${
+                theme === 'dark' ? 'text-gray-300' : 'text-[#2b4a6a]'
+              }`}>{item.title}</h3>
               <motion.span
                 className={`inline-block px-3 py-1 mt-1 rounded-full text-sm font-medium ${getStatusBadge(item.status).bg} ${getStatusBadge(item.status).text}`}
               >

@@ -20,6 +20,7 @@ import {
   ExclamationTriangleIcon,
 } from '@heroicons/react/24/outline';
 import { GlobalUser } from './data';
+import { useTheme } from '@/contexts/ThemeContext';
 
 interface GlobalUsersListCardsProps {
   users: GlobalUser[];
@@ -53,6 +54,7 @@ const GlobalUsersListCards: React.FC<GlobalUsersListCardsProps> = ({
   onToggleStatus,
   onDeleteUser,
 }) => {
+  const { theme } = useTheme();
   const [searchTerm, setSearchTerm] = useState('');
   const [filters, setFilters] = useState({
     status: 'all',
@@ -161,20 +163,38 @@ const GlobalUsersListCards: React.FC<GlobalUsersListCardsProps> = ({
   };
 
   const getRoleColor = (role: string) => {
-    switch (role) {
-      case 'Super Admin': return { bg: 'bg-red-100', text: 'text-red-800', border: 'border-red-200', icon: 'text-red-600' };
-      case 'Support': return { bg: 'bg-blue-100', text: 'text-blue-800', border: 'border-blue-200', icon: 'text-blue-600' };
-      case 'Commercial': return { bg: 'bg-green-100', text: 'text-green-800', border: 'border-green-200', icon: 'text-green-600' };
-      default: return { bg: 'bg-gray-100', text: 'text-gray-800', border: 'border-gray-200', icon: 'text-gray-600' };
+    if (theme === 'dark') {
+      switch (role) {
+        case 'Super Admin': return { bg: 'bg-red-900/30', text: 'text-red-300', border: 'border-red-600/50', icon: 'text-red-400' };
+        case 'Support': return { bg: 'bg-blue-900/30', text: 'text-blue-300', border: 'border-blue-600/50', icon: 'text-blue-400' };
+        case 'Commercial': return { bg: 'bg-green-900/30', text: 'text-green-300', border: 'border-green-600/50', icon: 'text-green-400' };
+        default: return { bg: 'bg-gray-700/30', text: 'text-gray-300', border: 'border-gray-600/50', icon: 'text-gray-400' };
+      }
+    } else {
+      switch (role) {
+        case 'Super Admin': return { bg: 'bg-red-100', text: 'text-red-800', border: 'border-red-200', icon: 'text-red-600' };
+        case 'Support': return { bg: 'bg-blue-100', text: 'text-blue-800', border: 'border-blue-200', icon: 'text-blue-600' };
+        case 'Commercial': return { bg: 'bg-green-100', text: 'text-green-800', border: 'border-green-200', icon: 'text-green-600' };
+        default: return { bg: 'bg-gray-100', text: 'text-gray-800', border: 'border-gray-200', icon: 'text-gray-600' };
+      }
     }
   };
 
   const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'active': return { bg: 'bg-green-100', text: 'text-green-800', border: 'border-green-200', icon: 'text-green-600' };
-      case 'inactive': return { bg: 'bg-gray-100', text: 'text-gray-800', border: 'border-gray-200', icon: 'text-gray-600' };
-      case 'suspended': return { bg: 'bg-red-100', text: 'text-red-800', border: 'border-red-200', icon: 'text-red-600' };
-      default: return { bg: 'bg-gray-100', text: 'text-gray-800', border: 'border-gray-200', icon: 'text-gray-600' };
+    if (theme === 'dark') {
+      switch (status) {
+        case 'active': return { bg: 'bg-green-900/30', text: 'text-green-300', border: 'border-green-600/50', icon: 'text-green-400' };
+        case 'inactive': return { bg: 'bg-gray-700/30', text: 'text-gray-300', border: 'border-gray-600/50', icon: 'text-gray-400' };
+        case 'suspended': return { bg: 'bg-red-900/30', text: 'text-red-300', border: 'border-red-600/50', icon: 'text-red-400' };
+        default: return { bg: 'bg-gray-700/30', text: 'text-gray-300', border: 'border-gray-600/50', icon: 'text-gray-400' };
+      }
+    } else {
+      switch (status) {
+        case 'active': return { bg: 'bg-green-100', text: 'text-green-800', border: 'border-green-200', icon: 'text-green-600' };
+        case 'inactive': return { bg: 'bg-gray-100', text: 'text-gray-800', border: 'border-gray-200', icon: 'text-gray-600' };
+        case 'suspended': return { bg: 'bg-red-100', text: 'text-red-800', border: 'border-red-200', icon: 'text-red-600' };
+        default: return { bg: 'bg-gray-100', text: 'text-gray-800', border: 'border-gray-200', icon: 'text-gray-600' };
+      }
     }
   };
 
@@ -208,24 +228,38 @@ const GlobalUsersListCards: React.FC<GlobalUsersListCardsProps> = ({
       {/* Filters Section */}
       <motion.div
         variants={cardVariants}
-        className="bg-gradient-to-br from-white via-white to-gray-50/50 rounded-3xl p-6 shadow-xl border border-gray-200/50 backdrop-blur-sm"
+        className={`rounded-3xl p-6 shadow-xl border backdrop-blur-sm ${
+          theme === 'dark'
+            ? 'bg-gradient-to-br from-gray-800 via-gray-800 to-gray-900/50 border-gray-700/50'
+            : 'bg-gradient-to-br from-white via-white to-gray-50/50 border-gray-200/50'
+        }`}
       >
         <div className="flex flex-col sm:flex-row gap-4 mb-6 items-center">
           <div className="relative flex-1">
-            <MagnifyingGlassIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+            <MagnifyingGlassIcon className={`absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 ${
+              theme === 'dark' ? 'text-gray-400' : 'text-gray-400'
+            }`} />
             <input
               type="text"
               placeholder="Rechercher par nom ou email..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-2.5 text-sm bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#f57c00]/50 focus:border-[#f57c00] transition-all duration-300"
+              className={`w-full pl-10 pr-4 py-2.5 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#f57c00]/50 focus:border-[#f57c00] transition-all duration-300 ${
+                theme === 'dark'
+                  ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400'
+                  : 'bg-gray-50 border-gray-200 text-gray-900 placeholder-gray-500'
+              }`}
             />
           </div>
           
           {(['status', 'role'] as const).map((filterName) => (
             <div className="relative" key={filterName}>
               <motion.button
-                className="w-full text-sm text-[#2b4a6a] bg-gradient-to-r from-white/70 to-[#f57c00]/10 border border-[#f57c00]/50 rounded-lg p-2.5 pl-3 pr-8 focus:outline-none focus:ring-2 focus:ring-[#f57c00]/50 transition-all appearance-none cursor-pointer flex justify-between items-center"
+                className={`w-full text-sm border rounded-lg p-2.5 pl-3 pr-8 focus:outline-none focus:ring-2 focus:ring-[#f57c00]/50 transition-all appearance-none cursor-pointer flex justify-between items-center ${
+                  theme === 'dark'
+                    ? 'text-gray-300 bg-gradient-to-r from-gray-700/70 to-[#f57c00]/10 border-[#f57c00]/50'
+                    : 'text-[#2b4a6a] bg-gradient-to-r from-white/70 to-[#f57c00]/10 border-[#f57c00]/50'
+                }`}
                 onClick={() => setIsDropdownOpen((prev) => ({ ...prev, [filterName]: !prev[filterName] }))}
               >
                 <span>{filterOptions[filterName].find((opt) => opt.value === filters[filterName])?.label}</span>
@@ -241,7 +275,11 @@ const GlobalUsersListCards: React.FC<GlobalUsersListCardsProps> = ({
                   variants={dropdownVariants}
                   initial="hidden"
                   animate="visible"
-                  className="absolute top-full left-0 w-full mt-2 bg-gradient-to-br from-white to-[#f5f7fa] border border-[#f57c00]/30 rounded-xl shadow-lg z-50 overflow-hidden"
+                  className={`absolute top-full left-0 w-full mt-2 border border-[#f57c00]/30 rounded-xl shadow-lg z-50 overflow-hidden ${
+                    theme === 'dark'
+                      ? 'bg-gradient-to-br from-gray-800 to-gray-900'
+                      : 'bg-gradient-to-br from-white to-[#f5f7fa]'
+                  }`}
                 >
                   {filterOptions[filterName].map((option, index) => (
                     <motion.div
@@ -249,9 +287,15 @@ const GlobalUsersListCards: React.FC<GlobalUsersListCardsProps> = ({
                       initial={{ opacity: 0, x: -10 }}
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: index * 0.05 }}
-                      className={`px-4 py-2.5 text-sm text-[#2b4a6a] hover:bg-[#f57c00]/10 cursor-pointer transition-all duration-300 font-medium ${
-                        filters[filterName] === option.value ? 'bg-[#f57c00]/20 text-[#f57c00]' : ''
-                      } border-b border-[#f57c00]/10 last:border-b-0 flex items-center gap-2`}
+                      className={`px-4 py-2.5 text-sm cursor-pointer transition-all duration-300 font-medium border-b border-[#f57c00]/10 last:border-b-0 flex items-center gap-2 ${
+                        theme === 'dark'
+                          ? `text-gray-300 hover:bg-[#f57c00]/20 ${
+                              filters[filterName] === option.value ? 'bg-[#f57c00]/30 text-[#f57c00]' : ''
+                            }`
+                          : `text-[#2b4a6a] hover:bg-[#f57c00]/10 ${
+                              filters[filterName] === option.value ? 'bg-[#f57c00]/20 text-[#f57c00]' : ''
+                            }`
+                      }`}
                       onClick={() => handleFilterChange(filterName, option.value)}
                     >
                       <span className="w-2 h-2 rounded-full bg-[#f57c00]/50" />
@@ -293,10 +337,16 @@ const GlobalUsersListCards: React.FC<GlobalUsersListCardsProps> = ({
       </motion.div>
 
       {/* Cards Grid */}
-      <motion.div variants={cardVariants} className="bg-white rounded-3xl shadow-xl border border-gray-200/50 overflow-hidden backdrop-blur-sm">
+      <motion.div variants={cardVariants} className={`rounded-3xl shadow-xl border overflow-hidden backdrop-blur-sm ${
+        theme === 'dark'
+          ? 'bg-gray-800 border-gray-700/50'
+          : 'bg-white border-gray-200/50'
+      }`}>
         <div className="p-6">
           {paginatedUsers.length === 0 ? (
-            <div className="py-12 text-center text-gray-500 text-sm">
+            <div className={`py-12 text-center text-sm ${
+              theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
+            }`}>
               Aucun utilisateur trouvé
             </div>
           ) : (
@@ -314,7 +364,11 @@ const GlobalUsersListCards: React.FC<GlobalUsersListCardsProps> = ({
                     variants={cardVariants}
                     initial="hidden"
                     animate="visible"
-                    className="relative bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden transition-all duration-300 min-h-[320px]"
+                    className={`relative rounded-2xl shadow-lg border overflow-hidden transition-all duration-300 min-h-[320px] ${
+                      theme === 'dark'
+                        ? 'bg-gray-800 border-gray-700'
+                        : 'bg-white border-gray-100'
+                    }`}
                     whileHover={{
                       scale: 1.02,
                       transition: { duration: 0.3, ease: "easeOut" }
@@ -350,8 +404,12 @@ const GlobalUsersListCards: React.FC<GlobalUsersListCardsProps> = ({
                             )}
                           </motion.div>
                           <div className="min-w-0 flex-1">
-                            <h3 className="font-bold text-gray-900 text-lg leading-tight mb-1 truncate">{user.name}</h3>
-                            <p className="text-sm text-gray-500 truncate">{user.email}</p>
+                            <h3 className={`font-bold text-lg leading-tight mb-1 truncate ${
+                              theme === 'dark' ? 'text-gray-300' : 'text-gray-900'
+                            }`}>{user.name}</h3>
+                            <p className={`text-sm truncate ${
+                              theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
+                            }`}>{user.email}</p>
                           </div>
                         </div>
                       </div>

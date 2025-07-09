@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { motion, Variants } from 'framer-motion';
+import { useTheme } from '@/contexts/ThemeContext';
 import {
   
   CheckIcon,
@@ -48,6 +49,7 @@ interface PlanCardProps {
 
 const PlanCard = ({ plan, onEdit, onDelete }: PlanCardProps) => {
   const [, setIsHovered] = useState(false);
+  const { theme } = useTheme();
 
   const getPeriodText = (period: Plan['period']) => {
     switch (period) {
@@ -76,7 +78,11 @@ const PlanCard = ({ plan, onEdit, onDelete }: PlanCardProps) => {
       animate="visible"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      className="relative bg-white rounded-2xl p-6 shadow-sm border border-gray-100/50 overflow-hidden group"
+      className={`relative rounded-2xl p-6 shadow-sm border overflow-hidden group ${
+        theme === 'dark'
+          ? 'bg-gray-800 border-gray-700/50'
+          : 'bg-white border-gray-100/50'
+      }`}
     >
       {/* Gradient Accent Border */}
       <div className="absolute inset-0 border-2 border-transparent bg-gradient-to-r from-[#f57c00]/0 via-[#f57c00]/20 to-[#f57c00]/0 rounded-2xl pointer-events-none" />
@@ -98,14 +104,20 @@ const PlanCard = ({ plan, onEdit, onDelete }: PlanCardProps) => {
         {/* Header */}
         <div className="flex items-start justify-between mb-4">
           <div>
-            <h3 className="text-xl font-bold text-[#2b4a6a] mb-1">{plan.name}</h3>
-            <p className="text-sm text-gray-600">{plan.description}</p>
+            <h3 className={`text-xl font-bold mb-1 ${
+              theme === 'dark' ? 'text-white' : 'text-[#2b4a6a]'
+            }`}>{plan.name}</h3>
+            <p className={`text-sm ${
+              theme === 'dark' ? 'text-gray-300' : 'text-gray-600'
+            }`}>{plan.description}</p>
           </div>
           <div className="text-right">
             <div className="text-2xl font-bold text-[#f57c00]">
               {plan.price === 0 ? 'Gratuit' : `€${plan.price}`}
             </div>
-            <div className="text-xs text-gray-500">
+            <div className={`text-xs ${
+              theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
+            }`}>
               {plan.price === 0 ? '' : getPeriodText(plan.period)}
             </div>
           </div>
@@ -113,10 +125,14 @@ const PlanCard = ({ plan, onEdit, onDelete }: PlanCardProps) => {
 
         {/* Features */}
         <div className="mb-6">
-          <h4 className="text-sm font-semibold text-[#2b4a6a] mb-3">Fonctionnalités incluses :</h4>
+          <h4 className={`text-sm font-semibold mb-3 ${
+            theme === 'dark' ? 'text-white' : 'text-[#2b4a6a]'
+          }`}>Fonctionnalités incluses :</h4>
           <ul className="space-y-2">
             {plan.features.map((feature, index) => (
-              <li key={index} className="flex items-center text-sm text-gray-600">
+              <li key={index} className={`flex items-center text-sm ${
+                theme === 'dark' ? 'text-gray-300' : 'text-gray-600'
+              }`}>
                 <CheckIcon className="w-4 h-4 text-green-500 mr-2 flex-shrink-0" />
                 {feature}
               </li>
@@ -126,15 +142,27 @@ const PlanCard = ({ plan, onEdit, onDelete }: PlanCardProps) => {
 
         {/* Stats */}
         <div className="grid grid-cols-2 gap-4 mb-6 text-sm">
-          <div className="bg-gray-50 p-3 rounded-lg">
-            <div className="text-gray-500">Utilisateurs</div>
-            <div className="font-semibold text-[#2b4a6a]">
+          <div className={`p-3 rounded-lg ${
+            theme === 'dark' ? 'bg-gray-700' : 'bg-gray-50'
+          }`}>
+            <div className={`${
+              theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
+            }`}>Utilisateurs</div>
+            <div className={`font-semibold ${
+              theme === 'dark' ? 'text-white' : 'text-[#2b4a6a]'
+            }`}>
               {plan.users === -1 ? 'Illimité' : plan.users.toLocaleString('fr-FR')}
             </div>
           </div>
-          <div className="bg-gray-50 p-3 rounded-lg">
-            <div className="text-gray-500">Stockage</div>
-            <div className="font-semibold text-[#2b4a6a]">{plan.storage}</div>
+          <div className={`p-3 rounded-lg ${
+            theme === 'dark' ? 'bg-gray-700' : 'bg-gray-50'
+          }`}>
+            <div className={`${
+              theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
+            }`}>Stockage</div>
+            <div className={`font-semibold ${
+              theme === 'dark' ? 'text-white' : 'text-[#2b4a6a]'
+            }`}>{plan.storage}</div>
           </div>
         </div>
 
@@ -154,21 +182,31 @@ const PlanCard = ({ plan, onEdit, onDelete }: PlanCardProps) => {
             whileHover="hover"
             whileTap="tap"
             onClick={() => onDelete(plan.id)}
-            className="flex-1 bg-red-50 text-red-600 py-2 px-4 rounded-lg hover:bg-red-100 transition-colors text-sm font-medium"
+            className={`flex-1 py-2 px-4 rounded-lg transition-colors text-sm font-medium ${
+              theme === 'dark'
+                ? 'bg-red-900/20 text-red-400 hover:bg-red-900/30'
+                : 'bg-red-50 text-red-600 hover:bg-red-100'
+            }`}
           >
             Supprimer
           </motion.button>
         </div>
 
         {/* Stats Footer */}
-        <div className="flex items-center justify-between pt-4 border-t border-gray-100">
+        <div className={`flex items-center justify-between pt-4 border-t ${
+          theme === 'dark' ? 'border-gray-700' : 'border-gray-100'
+        }`}>
           <div className="text-center">
             <p className="text-lg font-bold text-[#f57c00]">{plan.tenantCount}</p>
-            <p className="text-xs text-gray-500">Tenants</p>
+            <p className={`text-xs ${
+              theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
+            }`}>Tenants</p>
           </div>
           <div className="text-center">
             <p className="text-lg font-bold text-green-600">€{(plan.revenue || 0).toLocaleString('fr-FR')}</p>
-            <p className="text-xs text-gray-500">Revenus/mois</p>
+            <p className={`text-xs ${
+              theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
+            }`}>Revenus/mois</p>
           </div>
         </div>
       </div>

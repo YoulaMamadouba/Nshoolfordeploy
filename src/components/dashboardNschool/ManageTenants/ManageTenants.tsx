@@ -5,6 +5,7 @@ import TenantsList from './TenantsList';
 import TenantDetails from './TenantDetails';
 import CreateTenant from './CreateTenant';
 import { CheckCircleIcon, XMarkIcon } from '@heroicons/react/24/outline';
+import { useTheme } from '@/contexts/ThemeContext';
 
 type View = 'list' | 'details' | 'create';
 
@@ -21,6 +22,7 @@ interface Tenant {
 }
 
 const ManageTenants = () => {
+  const { theme } = useTheme();
   const [currentView, setCurrentView] = useState<View>('list');
   const [selectedTenant, setSelectedTenant] = useState<Tenant | null>(null);
   const [showNotification, setShowNotification] = useState(false);
@@ -281,10 +283,20 @@ const ManageTenants = () => {
       >
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
-            <h1 className="text-3xl font-bold text-[#2b4a6a] tracking-tight" style={{ textShadow: '0 2px 4px rgba(0,0,0,0.1)' }}>
+            <h1 className={`text-3xl font-bold tracking-tight transition-all duration-300 ${
+              theme === 'dark' 
+                ? 'text-gray-100' 
+                : 'text-[#2b4a6a]'
+            }`} style={{ 
+              textShadow: theme === 'dark' 
+                ? '0 2px 4px rgba(0,0,0,0.3)' 
+                : '0 2px 4px rgba(0,0,0,0.1)' 
+            }}>
               Gestion des Tenants
             </h1>
-            <p className="text-lg text-gray-600 mt-1 font-medium">
+            <p className={`text-lg mt-1 font-medium transition-all duration-300 ${
+              theme === 'dark' ? 'text-gray-300' : 'text-gray-600'
+            }`}>
               Gérez vos tenants et leurs configurations
             </p>
           </div>
@@ -378,18 +390,22 @@ const ManageTenants = () => {
             exit="exit"
             className="fixed top-20 right-6 z-50"
           >
-            <div className="bg-gradient-to-r from-orange-500/90 to-amber-600/90 text-white px-6 py-4 rounded-2xl shadow-2xl border border-orange-400/30 backdrop-blur-sm">
+            <div className={`px-6 py-4 rounded-2xl shadow-2xl border backdrop-blur-sm transition-all duration-300 ${
+              theme === 'dark'
+                ? 'bg-gradient-to-r from-orange-500/80 to-amber-600/80 border-orange-400/40'
+                : 'bg-gradient-to-r from-orange-500/90 to-amber-600/90 border-orange-400/30'
+            }`}>
               <div className="flex items-center gap-3">
                 <CheckCircleIcon className="w-6 h-6 text-orange-100" />
                 <div>
-                  <p className="font-semibold text-lg">{notificationMessage}</p>
+                  <p className="font-semibold text-lg text-white">{notificationMessage}</p>
                   <p className="text-orange-100 text-sm">Le tenant a été ajouté à votre liste</p>
                 </div>
                 <button
                   onClick={() => setShowNotification(false)}
                   className="ml-4 p-1 rounded-full hover:bg-white/20 transition-colors"
                 >
-                  <XMarkIcon className="w-5 h-5" />
+                  <XMarkIcon className="w-5 h-5 text-white" />
                 </button>
               </div>
             </div>

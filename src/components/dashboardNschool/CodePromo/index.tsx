@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import PromoListView from './PromoListView';
 import PromoForm from './PromoForm';
+import { useTheme } from '@/contexts/ThemeContext';
 
 interface PromoCode {
   id: number;
@@ -25,6 +26,7 @@ interface PromoCode {
 type View = 'list' | 'create' | 'edit';
 
 const CodePromo = () => {
+  const { theme } = useTheme();
   const [currentView, setCurrentView] = useState<View>('list');
   const [selectedPromoCode, setSelectedPromoCode] = useState<PromoCode | null>(null);
   const [promoCodes, setPromoCodes] = useState<PromoCode[]>([
@@ -151,7 +153,9 @@ const CodePromo = () => {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ type: 'spring', stiffness: 100, damping: 15, duration: 0.6 }}
-      className="pt-2 px-2 min-h-full"
+      className={`pt-2 px-2 min-h-full ${
+        theme === 'dark' ? 'bg-gray-900' : 'bg-gray-50'
+      }`}
     >
       <AnimatePresence mode="wait">
         {currentView === 'list' && (

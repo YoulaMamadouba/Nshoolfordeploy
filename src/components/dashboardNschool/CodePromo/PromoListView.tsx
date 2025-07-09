@@ -14,6 +14,7 @@ import {
 import PromoCard from './PromoCard';
 import PromoTableView from './PromoTableView';
 import PromoStats from './PromoStats';
+import { useTheme } from '@/contexts/ThemeContext';
 
 interface PromoCode {
   id: number;
@@ -73,6 +74,7 @@ const PromoListView: React.FC<PromoListViewProps> = ({
   onDeletePromo,
   onAddPromo,
 }) => {
+  const { theme } = useTheme();
   const [searchTerm, setSearchTerm] = useState('');
   const [filters, setFilters] = useState({
     status: 'all',
@@ -166,14 +168,26 @@ const PromoListView: React.FC<PromoListViewProps> = ({
       {/* Header Section */}
       <motion.div
         variants={cardVariants}
-        className="bg-gradient-to-br from-white via-white to-gray-50/50 rounded-3xl p-6 shadow-xl border border-gray-200/50 backdrop-blur-sm"
+        className={`rounded-3xl p-6 shadow-xl border backdrop-blur-sm ${
+          theme === 'dark'
+            ? 'bg-gradient-to-br from-gray-800 via-gray-800 to-gray-900/50 border-gray-700/50'
+            : 'bg-gradient-to-br from-white via-white to-gray-50/50 border-gray-200/50'
+        }`}
       >
         <div className="flex items-center justify-between mb-6">
           <div>
-            <h1 className="text-3xl font-bold text-[#2b4a6a] tracking-tight" style={{ textShadow: '0 2px 4px rgba(0,0,0,0.1)' }}>
+            <h1 className={`text-3xl font-bold tracking-tight ${
+              theme === 'dark' ? 'text-white' : 'text-[#2b4a6a]'
+            }`} style={{ 
+              textShadow: theme === 'dark' 
+                ? '0 2px 4px rgba(0,0,0,0.3)' 
+                : '0 2px 4px rgba(0,0,0,0.1)' 
+            }}>
               Codes Promotionnels
             </h1>
-            <p className="text-lg text-gray-600 mt-1 font-medium">
+            <p className={`text-lg mt-1 font-medium ${
+              theme === 'dark' ? 'text-gray-300' : 'text-gray-600'
+            }`}>
               Gérez vos campagnes marketing et boostez vos conversions
             </p>
           </div>
@@ -187,7 +201,9 @@ const PromoListView: React.FC<PromoListViewProps> = ({
               className={`p-3 rounded-xl border-2 transition-all duration-300 ${
                 showStats 
                   ? 'bg-[#f57c00] text-white border-[#f57c00] shadow-lg ring-2 ring-[#f57c00]/20' 
-                  : 'bg-white text-[#f57c00] border-[#f57c00] hover:bg-[#f57c00] hover:text-white hover:shadow-lg'
+                  : theme === 'dark'
+                    ? 'bg-gray-700 text-[#f57c00] border-[#f57c00] hover:bg-[#f57c00] hover:text-white hover:shadow-lg'
+                    : 'bg-white text-[#f57c00] border-[#f57c00] hover:bg-[#f57c00] hover:text-white hover:shadow-lg'
               }`}
               title="Afficher les statistiques"
             >

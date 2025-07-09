@@ -13,10 +13,12 @@ import {
   ShieldCheckIcon,
   PlusIcon,
 } from '@heroicons/react/24/outline';
+import { useTheme } from '@/contexts/ThemeContext';
 
 type View = 'overview' | 'cards' | 'table' | 'permissions';
 
 const GlobalUsersPage: React.FC = () => {
+  const { theme } = useTheme();
   const [currentView, setCurrentView] = useState<View>('overview');
   const [users, setUsers] = useState<GlobalUser[]>(mockUsers);
   const [selectedUser, setSelectedUser] = useState<GlobalUser | null>(null);
@@ -86,14 +88,26 @@ const GlobalUsersPage: React.FC = () => {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, delay: 0.1 }}
-        className="bg-gradient-to-br from-white via-white to-gray-50/50 rounded-3xl p-4 shadow-xl border border-gray-200/50 backdrop-blur-sm"
+        className={`rounded-3xl p-4 shadow-xl border backdrop-blur-sm ${
+          theme === 'dark'
+            ? 'bg-gradient-to-br from-gray-800 via-gray-800 to-gray-900/50 border-gray-700/50'
+            : 'bg-gradient-to-br from-white via-white to-gray-50/50 border-gray-200/50'
+        }`}
       >
         <div className="flex items-center justify-between mb-3">
           <div>
-            <h1 className="text-3xl font-bold text-[#2b4a6a] tracking-tight" style={{ textShadow: '0 2px 4px rgba(0,0,0,0.1)' }}>
+            <h1 className={`text-3xl font-bold tracking-tight ${
+              theme === 'dark' ? 'text-white' : 'text-[#2b4a6a]'
+            }`} style={{ 
+              textShadow: theme === 'dark' 
+                ? '0 2px 4px rgba(0,0,0,0.3)' 
+                : '0 2px 4px rgba(0,0,0,0.1)' 
+            }}>
               Utilisateurs Globaux
             </h1>
-            <p className="text-lg text-gray-600 mt-1 font-medium">
+            <p className={`text-lg mt-1 font-medium ${
+              theme === 'dark' ? 'text-gray-300' : 'text-gray-600'
+            }`}>
               Gérez votre équipe d'administration et les permissions
             </p>
           </div>
@@ -159,7 +173,9 @@ const GlobalUsersPage: React.FC = () => {
 
         {/* Quick Actions */}
         <div className="flex items-center justify-end">
-          <div className="text-sm text-gray-500">
+          <div className={`text-sm ${
+            theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
+          }`}>
             {users.length} utilisateurs au total
           </div>
         </div>

@@ -20,6 +20,7 @@ import {
   ExclamationTriangleIcon,
 } from '@heroicons/react/24/outline';
 import { GlobalUser } from './data';
+import { useTheme } from '@/contexts/ThemeContext';
 
 interface GlobalUsersListTableProps {
   users: GlobalUser[];
@@ -53,6 +54,7 @@ const GlobalUsersListTable: React.FC<GlobalUsersListTableProps> = ({
   onToggleStatus,
   onDeleteUser,
 }) => {
+  const { theme } = useTheme();
   const [searchTerm, setSearchTerm] = useState('');
   const [filters, setFilters] = useState({
     status: 'all',
@@ -151,20 +153,38 @@ const GlobalUsersListTable: React.FC<GlobalUsersListTableProps> = ({
   };
 
   const getRoleColor = (role: string) => {
-    switch (role) {
-      case 'Super Admin': return { bg: 'bg-red-100 bg-opacity-80', text: 'text-red-800' };
-      case 'Support': return { bg: 'bg-blue-100 bg-opacity-80', text: 'text-blue-800' };
-      case 'Commercial': return { bg: 'bg-green-100 bg-opacity-80', text: 'text-green-800' };
-      default: return { bg: 'bg-gray-100 bg-opacity-80', text: 'text-gray-800' };
+    if (theme === 'dark') {
+      switch (role) {
+        case 'Super Admin': return { bg: 'bg-red-900/30', text: 'text-red-300' };
+        case 'Support': return { bg: 'bg-blue-900/30', text: 'text-blue-300' };
+        case 'Commercial': return { bg: 'bg-green-900/30', text: 'text-green-300' };
+        default: return { bg: 'bg-gray-700/30', text: 'text-gray-300' };
+      }
+    } else {
+      switch (role) {
+        case 'Super Admin': return { bg: 'bg-red-100 bg-opacity-80', text: 'text-red-800' };
+        case 'Support': return { bg: 'bg-blue-100 bg-opacity-80', text: 'text-blue-800' };
+        case 'Commercial': return { bg: 'bg-green-100 bg-opacity-80', text: 'text-green-800' };
+        default: return { bg: 'bg-gray-100 bg-opacity-80', text: 'text-gray-800' };
+      }
     }
   };
 
   const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'active': return { bg: 'bg-green-100 bg-opacity-80', text: 'text-green-800' };
-      case 'inactive': return { bg: 'bg-gray-100 bg-opacity-80', text: 'text-gray-800' };
-      case 'suspended': return { bg: 'bg-red-100 bg-opacity-80', text: 'text-red-800' };
-      default: return { bg: 'bg-gray-100 bg-opacity-80', text: 'text-gray-800' };
+    if (theme === 'dark') {
+      switch (status) {
+        case 'active': return { bg: 'bg-green-900/30', text: 'text-green-300' };
+        case 'inactive': return { bg: 'bg-gray-700/30', text: 'text-gray-300' };
+        case 'suspended': return { bg: 'bg-red-900/30', text: 'text-red-300' };
+        default: return { bg: 'bg-gray-700/30', text: 'text-gray-300' };
+      }
+    } else {
+      switch (status) {
+        case 'active': return { bg: 'bg-green-100 bg-opacity-80', text: 'text-green-800' };
+        case 'inactive': return { bg: 'bg-gray-100 bg-opacity-80', text: 'text-gray-800' };
+        case 'suspended': return { bg: 'bg-red-100 bg-opacity-80', text: 'text-red-800' };
+        default: return { bg: 'bg-gray-100 bg-opacity-80', text: 'text-gray-800' };
+      }
     }
   };
 

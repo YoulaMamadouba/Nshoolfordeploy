@@ -10,10 +10,12 @@ import {
   DocumentChartBarIcon,
   CogIcon,
 } from '@heroicons/react/24/outline';
+import { useTheme } from '@/contexts/ThemeContext';
 
 type MonitoringView = 'health' | 'usage' | 'reports';
 
 const MonitoringPage: React.FC = () => {
+  const { theme } = useTheme();
   const [currentView, setCurrentView] = useState<MonitoringView>('health');
   const [isRefreshing, setIsRefreshing] = useState(false);
 
@@ -74,14 +76,26 @@ const MonitoringPage: React.FC = () => {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, delay: 0.1 }}
-        className="bg-gradient-to-br from-white via-white to-gray-50/50 rounded-3xl p-6 shadow-xl border border-gray-200/50 backdrop-blur-sm"
+        className={`rounded-3xl p-6 shadow-xl border backdrop-blur-sm ${
+          theme === 'dark'
+            ? 'bg-gradient-to-br from-gray-800 via-gray-800 to-gray-900/50 border-gray-700/50'
+            : 'bg-gradient-to-br from-white via-white to-gray-50/50 border-gray-200/50'
+        }`}
       >
         <div className="flex items-center justify-between mb-6">
           <div>
-            <h1 className="text-3xl font-bold text-[#2b4a6a] tracking-tight" style={{ textShadow: '0 2px 4px rgba(0,0,0,0.1)' }}>
+            <h1 className={`text-3xl font-bold tracking-tight ${
+              theme === 'dark' ? 'text-white' : 'text-[#2b4a6a]'
+            }`} style={{ 
+              textShadow: theme === 'dark' 
+                ? '0 2px 4px rgba(0,0,0,0.3)' 
+                : '0 2px 4px rgba(0,0,0,0.1)' 
+            }}>
               Monitoring & Analytics
             </h1>
-            <p className="text-lg text-gray-600 mt-1 font-medium">
+            <p className={`text-lg mt-1 font-medium ${
+              theme === 'dark' ? 'text-gray-300' : 'text-gray-600'
+            }`}>
               Surveillez la santé de votre plateforme et analysez les performances
             </p>
           </div>
@@ -109,13 +123,17 @@ const MonitoringPage: React.FC = () => {
               className={`px-4 py-2 rounded-lg font-medium transition-all duration-300 flex items-center gap-2 ${
                 currentView === item.id
                   ? 'bg-[#f57c00] text-white shadow-md'
-                  : 'bg-white text-[#2b4a6a] border border-[#2b4a6a]/20 hover:bg-[#2b4a6a]/5'
+                  : theme === 'dark'
+                    ? 'bg-gray-700 text-gray-200 border border-gray-600/20 hover:bg-gray-600/20'
+                    : 'bg-white text-[#2b4a6a] border border-[#2b4a6a]/20 hover:bg-[#2b4a6a]/5'
               }`}
             >
               <item.icon className="h-4 w-4" />
               <div className="text-left">
                 <div className="font-medium text-sm">{item.name}</div>
-                <div className="text-xs opacity-70">{item.description}</div>
+                <div className={`text-xs ${
+                  theme === 'dark' ? 'opacity-60' : 'opacity-70'
+                }`}>{item.description}</div>
               </div>
             </motion.button>
           ))}
@@ -166,24 +184,42 @@ const MonitoringPage: React.FC = () => {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, delay: 0.4 }}
-        className="bg-gradient-to-r from-[#f57c00]/10 via-[#ff9800]/10 to-[#f57c00]/10 rounded-3xl p-4 border border-[#f57c00]/20"
+        className={`rounded-3xl p-4 border ${
+          theme === 'dark'
+            ? 'bg-gradient-to-r from-[#f57c00]/20 via-[#ff9800]/20 to-[#f57c00]/20 border-[#f57c00]/30'
+            : 'bg-gradient-to-r from-[#f57c00]/10 via-[#ff9800]/10 to-[#f57c00]/10 border-[#f57c00]/20'
+        }`}
       >
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
           <div>
-            <div className="text-2xl font-bold text-[#2b4a6a]">99.9%</div>
-            <div className="text-sm text-gray-600">Uptime</div>
+            <div className={`text-2xl font-bold ${
+              theme === 'dark' ? 'text-white' : 'text-[#2b4a6a]'
+            }`}>99.9%</div>
+            <div className={`text-sm ${
+              theme === 'dark' ? 'text-gray-300' : 'text-gray-600'
+            }`}>Uptime</div>
           </div>
           <div>
-            <div className="text-2xl font-bold text-[#2b4a6a]">245ms</div>
-            <div className="text-sm text-gray-600">Temps de réponse</div>
+            <div className={`text-2xl font-bold ${
+              theme === 'dark' ? 'text-white' : 'text-[#2b4a6a]'
+            }`}>245ms</div>
+            <div className={`text-sm ${
+              theme === 'dark' ? 'text-gray-300' : 'text-gray-600'
+            }`}>Temps de réponse</div>
           </div>
           <div>
-            <div className="text-2xl font-bold text-[#2b4a6a]">1.2M</div>
-            <div className="text-sm text-gray-600">Requêtes/jour</div>
+            <div className={`text-2xl font-bold ${
+              theme === 'dark' ? 'text-white' : 'text-[#2b4a6a]'
+            }`}>1.2M</div>
+            <div className={`text-sm ${
+              theme === 'dark' ? 'text-gray-300' : 'text-gray-600'
+            }`}>Requêtes/jour</div>
           </div>
           <div>
             <div className="text-2xl font-bold text-[#f57c00]">0.01%</div>
-            <div className="text-sm text-gray-600">Taux d'erreur</div>
+            <div className={`text-sm ${
+              theme === 'dark' ? 'text-gray-300' : 'text-gray-600'
+            }`}>Taux d'erreur</div>
           </div>
         </div>
       </motion.div>
