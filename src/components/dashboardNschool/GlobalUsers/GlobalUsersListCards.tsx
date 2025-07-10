@@ -442,21 +442,27 @@ const GlobalUsersListCards: React.FC<GlobalUsersListCardsProps> = ({
                     <div className="px-6 pb-6">
                       {/* Informations détaillées */}
                       <div className="space-y-3 mb-6">
-                        <div className="flex items-center gap-3 text-sm text-gray-600">
+                        <div className={`flex items-center gap-3 text-sm ${
+                          theme === 'dark' ? 'text-gray-400' : 'text-gray-600'
+                        }`}>
                           <CalendarIcon className="w-4 h-4 text-[#f57c00] flex-shrink-0" />
                           <span className="font-medium">
                             Dernière connexion : {formatLastLogin(user.lastLogin)}
                           </span>
                         </div>
                         
-                        <div className="flex items-center gap-3 text-sm text-gray-600">
+                        <div className={`flex items-center gap-3 text-sm ${
+                          theme === 'dark' ? 'text-gray-400' : 'text-gray-600'
+                        }`}>
                           <GlobeAltIcon className="w-4 h-4 text-[#f57c00] flex-shrink-0" />
                           <span className="font-medium">
                             {user.tenantAccess.length} tenants accessibles
                           </span>
                         </div>
                         
-                        <div className="flex items-center gap-3 text-sm text-gray-600">
+                        <div className={`flex items-center gap-3 text-sm ${
+                          theme === 'dark' ? 'text-gray-400' : 'text-gray-600'
+                        }`}>
                           <ShieldCheckIcon className="w-4 h-4 text-[#f57c00] flex-shrink-0" />
                           <span className="font-medium">
                             {user.permissions.length} permissions
@@ -466,15 +472,25 @@ const GlobalUsersListCards: React.FC<GlobalUsersListCardsProps> = ({
 
                       {/* Permissions principales */}
                       <div className="mb-6">
-                        <p className="text-xs text-gray-500 mb-2">Permissions principales :</p>
+                        <p className={`text-xs mb-2 ${
+                          theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
+                        }`}>Permissions principales :</p>
                         <div className="flex flex-wrap gap-1">
                           {user.permissions.slice(0, 3).map((permission, idx) => (
-                            <span key={idx} className="px-2 py-1 bg-gray-100 text-gray-600 text-xs rounded-md">
+                            <span key={idx} className={`px-2 py-1 text-xs rounded-md ${
+                              theme === 'dark'
+                                ? 'bg-gray-700 text-gray-300'
+                                : 'bg-gray-100 text-gray-600'
+                            }`}>
                               {permission}
                             </span>
                           ))}
                           {user.permissions.length > 3 && (
-                            <span className="px-2 py-1 bg-gray-100 text-gray-600 text-xs rounded-md">
+                            <span className={`px-2 py-1 text-xs rounded-md ${
+                              theme === 'dark'
+                                ? 'bg-gray-700 text-gray-300'
+                                : 'bg-gray-100 text-gray-600'
+                            }`}>
                               +{user.permissions.length - 3}
                             </span>
                           )}
@@ -482,13 +498,19 @@ const GlobalUsersListCards: React.FC<GlobalUsersListCardsProps> = ({
                       </div>
 
                       {/* Actions */}
-                      <div className="flex items-center justify-between pt-4 border-t border-gray-100">
+                      <div className={`flex items-center justify-between pt-4 border-t ${
+                        theme === 'dark' ? 'border-gray-700' : 'border-gray-100'
+                      }`}>
                         <div className="flex gap-2">
                           <motion.button
                             variants={iconVariants}
                             whileHover="hover"
                             onClick={() => onViewDetails(user)}
-                            className="p-2.5 text-[#2b4a6a] bg-gray-50 rounded-lg hover:bg-[#2b4a6a] hover:text-white transition-all duration-300 shadow-sm hover:shadow-md"
+                            className={`p-2.5 rounded-lg transition-all duration-300 shadow-sm hover:shadow-md ${
+                              theme === 'dark'
+                                ? 'text-gray-300 bg-gray-700 hover:bg-[#2b4a6a] hover:text-white'
+                                : 'text-[#2b4a6a] bg-gray-50 hover:bg-[#2b4a6a] hover:text-white'
+                            }`}
                             title="Voir détails"
                           >
                             <EyeIcon className="h-4 w-4" />
@@ -498,7 +520,11 @@ const GlobalUsersListCards: React.FC<GlobalUsersListCardsProps> = ({
                             variants={iconVariants}
                             whileHover="hover"
                             onClick={() => onEditUser(user.id)}
-                            className="p-2.5 text-[#f57c00] bg-orange-50 rounded-lg hover:bg-[#f57c00] hover:text-white transition-all duration-300 shadow-sm hover:shadow-md"
+                            className={`p-2.5 rounded-lg transition-all duration-300 shadow-sm hover:shadow-md ${
+                              theme === 'dark'
+                                ? 'text-[#f57c00] bg-orange-900/20 hover:bg-[#f57c00] hover:text-white'
+                                : 'text-[#f57c00] bg-orange-50 hover:bg-[#f57c00] hover:text-white'
+                            }`}
                             title="Modifier"
                           >
                             <PencilIcon className="h-4 w-4" />
@@ -510,8 +536,12 @@ const GlobalUsersListCards: React.FC<GlobalUsersListCardsProps> = ({
                             onClick={() => onToggleStatus(user.id)}
                             className={`p-2.5 rounded-lg transition-all duration-300 shadow-sm hover:shadow-md ${
                               user.status === 'active' 
-                                ? 'text-yellow-600 bg-yellow-50 hover:bg-yellow-600 hover:text-white' 
-                                : 'text-green-600 bg-green-50 hover:bg-green-600 hover:text-white'
+                                ? theme === 'dark'
+                                  ? 'text-yellow-400 bg-yellow-900/20 hover:bg-yellow-600 hover:text-white'
+                                  : 'text-yellow-600 bg-yellow-50 hover:bg-yellow-600 hover:text-white'
+                                : theme === 'dark'
+                                  ? 'text-green-400 bg-green-900/20 hover:bg-green-600 hover:text-white'
+                                  : 'text-green-600 bg-green-50 hover:bg-green-600 hover:text-white'
                             }`}
                             title={user.status === 'active' ? 'Suspendre' : 'Activer'}
                           >
@@ -522,7 +552,11 @@ const GlobalUsersListCards: React.FC<GlobalUsersListCardsProps> = ({
                             variants={iconVariants}
                             whileHover="hover"
                             onClick={() => onDeleteUser(user.id)}
-                            className="p-2.5 text-red-600 bg-red-50 rounded-lg hover:bg-red-600 hover:text-white transition-all duration-300 shadow-sm hover:shadow-md"
+                            className={`p-2.5 rounded-lg transition-all duration-300 shadow-sm hover:shadow-md ${
+                              theme === 'dark'
+                                ? 'text-red-400 bg-red-900/20 hover:bg-red-600 hover:text-white'
+                                : 'text-red-600 bg-red-50 hover:bg-red-600 hover:text-white'
+                            }`}
                             title="Supprimer"
                           >
                             <TrashIcon className="h-4 w-4" />
@@ -542,7 +576,11 @@ const GlobalUsersListCards: React.FC<GlobalUsersListCardsProps> = ({
 
         {/* Pagination */}
         {totalPages > 1 && (
-          <div className="px-6 py-4 bg-gray-50 border-t border-gray-200">
+          <div className={`px-6 py-4 border-t ${
+            theme === 'dark'
+              ? 'bg-gray-700 border-gray-600'
+              : 'bg-gray-50 border-gray-200'
+          }`}>
             <div className="flex justify-center gap-2">
               <motion.button
                 variants={buttonVariants}

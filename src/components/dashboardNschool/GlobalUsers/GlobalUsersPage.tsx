@@ -251,13 +251,21 @@ const GlobalUsersPage: React.FC = () => {
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.9 }}
-            className="bg-white rounded-3xl p-6 max-w-2xl w-full max-h-[90vh] overflow-y-auto"
+            className={`rounded-3xl p-6 max-w-2xl w-full max-h-[90vh] overflow-y-auto ${
+              theme === 'dark'
+                ? 'bg-gray-800 border border-gray-700'
+                : 'bg-white'
+            }`}
           >
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-2xl font-bold text-[#2b4a6a]">Détails de l'utilisateur</h2>
+              <h2 className={`text-2xl font-bold ${
+                theme === 'dark' ? 'text-white' : 'text-[#2b4a6a]'
+              }`}>Détails de l'utilisateur</h2>
               <button
                 onClick={() => setShowUserDetails(false)}
-                className="text-gray-500 hover:text-gray-700 text-2xl"
+                className={`text-2xl hover:opacity-70 transition-opacity ${
+                  theme === 'dark' ? 'text-gray-400 hover:text-gray-300' : 'text-gray-500 hover:text-gray-700'
+                }`}
               >
                 ×
               </button>
@@ -269,39 +277,61 @@ const GlobalUsersPage: React.FC = () => {
                   {selectedUser.name.charAt(0)}
                 </div>
                 <div>
-                  <h3 className="text-xl font-bold text-gray-900">{selectedUser.name}</h3>
-                  <p className="text-gray-600">{selectedUser.email}</p>
+                  <h3 className={`text-xl font-bold ${
+                    theme === 'dark' ? 'text-gray-300' : 'text-gray-900'
+                  }`}>{selectedUser.name}</h3>
+                  <p className={`${
+                    theme === 'dark' ? 'text-gray-400' : 'text-gray-600'
+                  }`}>{selectedUser.email}</p>
                 </div>
               </div>
               
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="text-sm font-semibold text-gray-700">Rôle</label>
-                  <p className="text-gray-900">{selectedUser.role}</p>
+                  <label className={`text-sm font-semibold ${
+                    theme === 'dark' ? 'text-gray-400' : 'text-gray-700'
+                  }`}>Rôle</label>
+                  <p className={`${
+                    theme === 'dark' ? 'text-gray-300' : 'text-gray-900'
+                  }`}>{selectedUser.role}</p>
                 </div>
                 <div>
-                  <label className="text-sm font-semibold text-gray-700">Statut</label>
-                  <p className="text-gray-900">{selectedUser.status}</p>
+                  <label className={`text-sm font-semibold ${
+                    theme === 'dark' ? 'text-gray-400' : 'text-gray-700'
+                  }`}>Statut</label>
+                  <p className={`${
+                    theme === 'dark' ? 'text-gray-300' : 'text-gray-900'
+                  }`}>{selectedUser.status}</p>
                 </div>
               </div>
               
               <div>
-                <label className="text-sm font-semibold text-gray-700">Permissions</label>
+                <label className={`text-sm font-semibold ${
+                  theme === 'dark' ? 'text-gray-400' : 'text-gray-700'
+                }`}>Permissions</label>
                 <div className="mt-2 space-y-1">
                   {selectedUser.permissions.map((permission, index) => (
                     <div key={index} className="flex items-center gap-2">
                       <div className="w-2 h-2 bg-[#f57c00] rounded-full"></div>
-                      <span className="text-sm text-gray-700">{permission}</span>
+                      <span className={`text-sm ${
+                        theme === 'dark' ? 'text-gray-400' : 'text-gray-700'
+                      }`}>{permission}</span>
                     </div>
                   ))}
                 </div>
               </div>
               
               <div>
-                <label className="text-sm font-semibold text-gray-700">Tenants accessibles</label>
+                <label className={`text-sm font-semibold ${
+                  theme === 'dark' ? 'text-gray-400' : 'text-gray-700'
+                }`}>Tenants accessibles</label>
                 <div className="mt-2 flex flex-wrap gap-2">
                   {selectedUser.tenantAccess.map((tenant, index) => (
-                    <span key={index} className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm">
+                    <span key={index} className={`px-3 py-1 rounded-full text-sm ${
+                      theme === 'dark'
+                        ? 'bg-gray-700 text-gray-300'
+                        : 'bg-gray-100 text-gray-700'
+                    }`}>
                       {tenant}
                     </span>
                   ))}
@@ -309,10 +339,16 @@ const GlobalUsersPage: React.FC = () => {
               </div>
             </div>
             
-            <div className="flex justify-end gap-3 mt-6 pt-6 border-t border-gray-200">
+            <div className={`flex justify-end gap-3 mt-6 pt-6 border-t ${
+              theme === 'dark' ? 'border-gray-600' : 'border-gray-200'
+            }`}>
               <button
                 onClick={() => setShowUserDetails(false)}
-                className="px-4 py-2 text-gray-600 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors"
+                className={`px-4 py-2 rounded-lg transition-colors ${
+                  theme === 'dark'
+                    ? 'text-gray-300 bg-gray-700 hover:bg-gray-600'
+                    : 'text-gray-600 bg-gray-100 hover:bg-gray-200'
+                }`}
               >
                 Fermer
               </button>

@@ -218,7 +218,11 @@ const GlobalUsersListTable: React.FC<GlobalUsersListTableProps> = ({
       {/* Filters Section */}
       <motion.div
         variants={containerVariants}
-        className="bg-gradient-to-br from-white via-white to-gray-50/50 rounded-3xl p-6 shadow-xl border border-gray-200/50 backdrop-blur-sm"
+        className={`rounded-3xl p-6 shadow-xl border backdrop-blur-sm ${
+          theme === 'dark'
+            ? 'bg-gradient-to-br from-gray-800 via-gray-800 to-gray-900/50 border-gray-700/50'
+            : 'bg-gradient-to-br from-white via-white to-gray-50/50 border-gray-200/50'
+        }`}
       >
         <div className="flex flex-col sm:flex-row gap-4 mb-6 items-center">
           <div className="relative flex-1">
@@ -228,14 +232,22 @@ const GlobalUsersListTable: React.FC<GlobalUsersListTableProps> = ({
               placeholder="Rechercher par nom ou email..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-2.5 text-sm bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#f57c00]/50 focus:border-[#f57c00] transition-all duration-300"
+              className={`w-full pl-10 pr-4 py-2.5 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#f57c00]/50 focus:border-[#f57c00] transition-all duration-300 ${
+                theme === 'dark'
+                  ? 'bg-gray-700 border-gray-600 text-gray-300 placeholder-gray-400'
+                  : 'bg-gray-50 border-gray-200'
+              }`}
             />
           </div>
           
           {(['status', 'role'] as const).map((filterName) => (
             <div className="relative" key={filterName}>
               <motion.button
-                className="w-full text-sm text-[#2b4a6a] bg-gradient-to-r from-white/70 to-[#f57c00]/10 border border-[#f57c00]/50 rounded-lg p-2.5 pl-3 pr-8 focus:outline-none focus:ring-2 focus:ring-[#f57c00]/50 transition-all appearance-none cursor-pointer flex justify-between items-center"
+                className={`w-full text-sm border rounded-lg p-2.5 pl-3 pr-8 focus:outline-none focus:ring-2 focus:ring-[#f57c00]/50 transition-all appearance-none cursor-pointer flex justify-between items-center ${
+                  theme === 'dark'
+                    ? 'text-gray-300 bg-gradient-to-r from-gray-700/70 to-[#f57c00]/10 border-[#f57c00]/50'
+                    : 'text-[#2b4a6a] bg-gradient-to-r from-white/70 to-[#f57c00]/10 border-[#f57c00]/50'
+                }`}
                 onClick={() => setIsDropdownOpen((prev) => ({ ...prev, [filterName]: !prev[filterName] }))}
               >
                 <span>{filterOptions[filterName].find((opt) => opt.value === filters[filterName])?.label}</span>
@@ -251,7 +263,11 @@ const GlobalUsersListTable: React.FC<GlobalUsersListTableProps> = ({
                   variants={dropdownVariants}
                   initial="hidden"
                   animate="visible"
-                  className="absolute top-full left-0 w-full mt-2 bg-gradient-to-br from-white to-[#f5f7fa] border border-[#f57c00]/30 rounded-xl shadow-lg z-50 overflow-hidden"
+                  className={`absolute top-full left-0 w-full mt-2 border rounded-xl shadow-lg z-50 overflow-hidden ${
+                    theme === 'dark'
+                      ? 'bg-gradient-to-br from-gray-800 to-gray-700 border-[#f57c00]/30'
+                      : 'bg-gradient-to-br from-white to-[#f5f7fa] border-[#f57c00]/30'
+                  }`}
                 >
                   {filterOptions[filterName].map((option, index) => (
                     <motion.div
@@ -259,9 +275,13 @@ const GlobalUsersListTable: React.FC<GlobalUsersListTableProps> = ({
                       initial={{ opacity: 0, x: -10 }}
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: index * 0.05 }}
-                      className={`px-4 py-2.5 text-sm text-[#2b4a6a] hover:bg-[#f57c00]/10 cursor-pointer transition-all duration-300 font-medium ${
+                      className={`px-4 py-2.5 text-sm hover:bg-[#f57c00]/10 cursor-pointer transition-all duration-300 font-medium border-b border-[#f57c00]/10 last:border-b-0 flex items-center gap-2 ${
+                        theme === 'dark'
+                          ? 'text-gray-300'
+                          : 'text-[#2b4a6a]'
+                      } ${
                         filters[filterName] === option.value ? 'bg-[#f57c00]/20 text-[#f57c00]' : ''
-                      } border-b border-[#f57c00]/10 last:border-b-0 flex items-center gap-2`}
+                      }`}
                       onClick={() => handleFilterChange(filterName, option.value)}
                     >
                       <span className="w-2 h-2 rounded-full bg-[#f57c00]/50" />
@@ -303,12 +323,22 @@ const GlobalUsersListTable: React.FC<GlobalUsersListTableProps> = ({
       </motion.div>
 
       {/* Table */}
-      <motion.div variants={containerVariants} className="bg-white rounded-3xl shadow-xl border border-gray-200/50 overflow-hidden backdrop-blur-sm">
+      <motion.div variants={containerVariants} className={`rounded-3xl shadow-xl border overflow-hidden backdrop-blur-sm ${
+        theme === 'dark'
+          ? 'bg-gray-800 border-gray-700/50'
+          : 'bg-white border-gray-200/50'
+      }`}>
         <div className="p-6">
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
-              <thead className="sticky top-0 bg-gradient-to-r from-white/90 to-gray-50/80 border-b border-[#f57c00]/30">
-                <tr className="text-left text-[#2b4a6a] font-bold">
+              <thead className={`sticky top-0 border-b ${
+                theme === 'dark'
+                  ? 'bg-gradient-to-r from-gray-800/90 to-gray-700/80 border-[#f57c00]/30'
+                  : 'bg-gradient-to-r from-white/90 to-gray-50/80 border-[#f57c00]/30'
+              }`}>
+                <tr className={`text-left font-bold ${
+                  theme === 'dark' ? 'text-gray-300' : 'text-[#2b4a6a]'
+                }`}>
                   <th className="py-3 px-4">
                     <div className="flex items-center gap-1">
                       <UserIcon className="w-4 h-4" />
@@ -326,7 +356,9 @@ const GlobalUsersListTable: React.FC<GlobalUsersListTableProps> = ({
               <tbody>
                 {paginatedUsers.length === 0 ? (
                   <tr>
-                    <td colSpan={7} className="py-6 text-center text-gray-500 text-sm">
+                    <td colSpan={7} className={`py-6 text-center text-sm ${
+                      theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
+                    }`}>
                       Aucun utilisateur trouvé
                     </td>
                   </tr>
@@ -340,7 +372,11 @@ const GlobalUsersListTable: React.FC<GlobalUsersListTableProps> = ({
                     return (
                       <motion.tr
                         key={`user-row-${user.id}`}
-                        className="border-b border-gray-100/50 hover:bg-gradient-to-r hover:from-white/30 hover:to-[#f57c00]/10 transition-all duration-300"
+                        className={`border-b transition-all duration-300 ${
+                          theme === 'dark'
+                            ? 'border-gray-700/50 hover:bg-gradient-to-r hover:from-gray-700/30 hover:to-[#f57c00]/10'
+                            : 'border-gray-100/50 hover:bg-gradient-to-r hover:from-white/30 hover:to-[#f57c00]/10'
+                        }`}
                         initial="hidden"
                         animate="visible"
                         custom={index}
@@ -360,13 +396,19 @@ const GlobalUsersListTable: React.FC<GlobalUsersListTableProps> = ({
                               )}
                             </motion.div>
                             <div>
-                              <p className="font-semibold text-gray-900">{user.name}</p>
-                              <p className="text-xs text-gray-500">{user.permissions.length} permissions</p>
+                              <p className={`font-semibold ${
+                                theme === 'dark' ? 'text-gray-300' : 'text-gray-900'
+                              }`}>{user.name}</p>
+                              <p className={`text-xs ${
+                                theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
+                              }`}>{user.permissions.length} permissions</p>
                             </div>
                           </div>
                         </td>
                         <td className="py-3 px-4">
-                          <p className="text-gray-700">{user.email}</p>
+                          <p className={`${
+                            theme === 'dark' ? 'text-gray-400' : 'text-gray-700'
+                          }`}>{user.email}</p>
                         </td>
                         <td className="py-3 px-4">
                           <motion.span
@@ -378,7 +420,9 @@ const GlobalUsersListTable: React.FC<GlobalUsersListTableProps> = ({
                             {user.role}
                           </motion.span>
                         </td>
-                        <td className="py-3 px-4 text-gray-600">
+                        <td className={`py-3 px-4 ${
+                          theme === 'dark' ? 'text-gray-400' : 'text-gray-600'
+                        }`}>
                           <div className="flex items-center gap-2">
                             <CalendarIcon className="w-4 h-4 text-[#f57c00]" />
                             <span>{formatLastLogin(user.lastLogin)}</span>
@@ -387,12 +431,16 @@ const GlobalUsersListTable: React.FC<GlobalUsersListTableProps> = ({
                         <td className="py-3 px-4">
                           <div className="flex items-center gap-2">
                             <GlobeAltIcon className="w-4 h-4 text-[#f57c00]" />
-                            <span className="font-medium text-gray-700">
+                            <span className={`font-medium ${
+                              theme === 'dark' ? 'text-gray-400' : 'text-gray-700'
+                            }`}>
                               {user.tenantAccess.length} tenants
                             </span>
                           </div>
                           {user.tenantAccess.length > 0 && (
-                            <p className="text-xs text-gray-500 mt-1">
+                            <p className={`text-xs mt-1 ${
+                              theme === 'dark' ? 'text-gray-500' : 'text-gray-500'
+                            }`}>
                               {user.tenantAccess.slice(0, 2).join(', ')}
                               {user.tenantAccess.length > 2 && ` +${user.tenantAccess.length - 2}`}
                             </p>
@@ -413,7 +461,11 @@ const GlobalUsersListTable: React.FC<GlobalUsersListTableProps> = ({
                             variants={iconVariants}
                             whileHover="hover"
                             onClick={() => onViewDetails(user)}
-                            className="text-[#2b4a6a] p-1 rounded-full hover:bg-[#2b4a6a]/10 transition-all duration-300"
+                            className={`p-1 rounded-full transition-all duration-300 ${
+                              theme === 'dark'
+                                ? 'text-gray-300 hover:bg-gray-700'
+                                : 'text-[#2b4a6a] hover:bg-[#2b4a6a]/10'
+                            }`}
                             title="Voir détails"
                           >
                             <EyeIcon className="h-5 w-5" />
@@ -461,7 +513,11 @@ const GlobalUsersListTable: React.FC<GlobalUsersListTableProps> = ({
 
         {/* Pagination */}
         {totalPages > 1 && (
-          <div className="px-6 py-4 bg-gray-50 border-t border-gray-200">
+          <div className={`px-6 py-4 border-t ${
+            theme === 'dark'
+              ? 'bg-gray-700 border-gray-600'
+              : 'bg-gray-50 border-gray-200'
+          }`}>
             <div className="flex justify-center gap-2">
               <motion.button
                 variants={buttonVariants}

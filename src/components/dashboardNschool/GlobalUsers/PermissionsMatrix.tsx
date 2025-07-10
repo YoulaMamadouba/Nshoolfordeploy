@@ -17,6 +17,7 @@ import {
   CreditCardIcon,
   DocumentTextIcon,
 } from '@heroicons/react/24/outline';
+import { useTheme } from '@/contexts/ThemeContext';
 
 interface Permission {
   id: string;
@@ -35,6 +36,7 @@ interface Role {
 }
 
 const PermissionsMatrix: React.FC = () => {
+  const { theme } = useTheme();
   const [selectedPermission, setSelectedPermission] = useState<string | null>(null);
   const [hoveredCell, setHoveredCell] = useState<{ permission: string; role: string } | null>(null);
 
@@ -168,15 +170,23 @@ const PermissionsMatrix: React.FC = () => {
         variants={containerVariants}
         initial="hidden"
         animate="visible"
-        className="bg-gradient-to-br from-white via-white to-gray-50/50 rounded-3xl p-6 shadow-xl border border-gray-200/50 backdrop-blur-sm"
+        className={`rounded-3xl p-6 shadow-xl border backdrop-blur-sm ${
+          theme === 'dark'
+            ? 'bg-gradient-to-br from-gray-800 via-gray-800 to-gray-900/50 border-gray-700/50'
+            : 'bg-gradient-to-br from-white via-white to-gray-50/50 border-gray-200/50'
+        }`}
       >
         <div className="flex items-center gap-3 mb-4">
           <div className="p-3 bg-gradient-to-r from-[#f57c00] to-[#ff9800] rounded-xl">
             <LockClosedIcon className="w-6 h-6 text-white" />
           </div>
           <div>
-            <h2 className="text-2xl font-bold text-[#2b4a6a]">Matrice des Permissions</h2>
-            <p className="text-gray-600">Gérez les permissions par rôle d'utilisateur</p>
+            <h2 className={`text-2xl font-bold ${
+              theme === 'dark' ? 'text-white' : 'text-[#2b4a6a]'
+            }`}>Matrice des Permissions</h2>
+            <p className={`${
+              theme === 'dark' ? 'text-gray-400' : 'text-gray-600'
+            }`}>Gérez les permissions par rôle d'utilisateur</p>
           </div>
         </div>
       </motion.div>
@@ -186,14 +196,24 @@ const PermissionsMatrix: React.FC = () => {
         variants={containerVariants}
         initial="hidden"
         animate="visible"
-        className="bg-white rounded-3xl shadow-xl border border-gray-200/50 overflow-hidden backdrop-blur-sm"
+        className={`rounded-3xl shadow-xl border overflow-hidden backdrop-blur-sm ${
+          theme === 'dark'
+            ? 'bg-gray-800 border-gray-700/50'
+            : 'bg-white border-gray-200/50'
+        }`}
       >
         <div className="p-6">
           <div className="overflow-x-auto">
             <table className="w-full">
-              <thead className="bg-gradient-to-r from-gray-50 to-gray-100/50 border-b border-gray-200">
+              <thead className={`border-b ${
+                theme === 'dark'
+                  ? 'bg-gradient-to-r from-gray-700 to-gray-800/50 border-gray-600'
+                  : 'bg-gradient-to-r from-gray-50 to-gray-100/50 border-gray-200'
+              }`}>
                 <tr>
-                  <th className="py-4 px-6 text-left text-[#2b4a6a] font-bold">
+                  <th className={`py-4 px-6 text-left font-bold ${
+                    theme === 'dark' ? 'text-gray-300' : 'text-[#2b4a6a]'
+                  }`}>
                     <div className="flex items-center gap-2">
                       <InformationCircleIcon className="w-5 h-5" />
                       Permissions
@@ -209,7 +229,9 @@ const PermissionsMatrix: React.FC = () => {
                         >
                           <role.icon className="w-6 h-6" />
                         </motion.div>
-                        <span className="font-bold text-[#2b4a6a] text-sm">{role.name}</span>
+                        <span className={`font-bold text-sm ${
+                          theme === 'dark' ? 'text-gray-300' : 'text-[#2b4a6a]'
+                        }`}>{role.name}</span>
                       </div>
                     </th>
                   ))}
@@ -222,7 +244,11 @@ const PermissionsMatrix: React.FC = () => {
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: index * 0.05 }}
-                    className="border-b border-gray-100 hover:bg-gray-50/30 transition-colors duration-200"
+                    className={`border-b transition-colors duration-200 ${
+                      theme === 'dark'
+                        ? 'border-gray-700 hover:bg-gray-700/30'
+                        : 'border-gray-100 hover:bg-gray-50/30'
+                    }`}
                   >
                     <td className="py-4 px-6">
                       <div className="flex items-center gap-3">
@@ -230,8 +256,12 @@ const PermissionsMatrix: React.FC = () => {
                           <permission.icon className="w-5 h-5 text-[#f57c00]" />
                         </div>
                         <div>
-                          <p className="font-semibold text-gray-900 text-sm">{permission.name}</p>
-                          <p className="text-xs text-gray-500">{permission.category}</p>
+                          <p className={`font-semibold text-sm ${
+                            theme === 'dark' ? 'text-gray-300' : 'text-gray-900'
+                          }`}>{permission.name}</p>
+                          <p className={`text-xs ${
+                            theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
+                          }`}>{permission.category}</p>
                         </div>
                       </div>
                     </td>
@@ -249,8 +279,12 @@ const PermissionsMatrix: React.FC = () => {
                             <motion.div
                               className={`w-12 h-12 rounded-xl flex items-center justify-center mx-auto cursor-pointer transition-all duration-300 ${
                                 hasAccess
-                                  ? 'bg-gradient-to-br from-green-100 to-emerald-100 border-2 border-green-200'
-                                  : 'bg-gradient-to-br from-gray-100 to-gray-200 border-2 border-gray-300'
+                                  ? theme === 'dark'
+                                    ? 'bg-gradient-to-br from-green-900/30 to-emerald-900/30 border-2 border-green-600/50'
+                                    : 'bg-gradient-to-br from-green-100 to-emerald-100 border-2 border-green-200'
+                                  : theme === 'dark'
+                                    ? 'bg-gradient-to-br from-gray-700/30 to-gray-800/30 border-2 border-gray-600/50'
+                                    : 'bg-gradient-to-br from-gray-100 to-gray-200 border-2 border-gray-300'
                               }`}
                               whileHover={{
                                 scale: 1.1,
@@ -258,9 +292,13 @@ const PermissionsMatrix: React.FC = () => {
                               }}
                             >
                               {hasAccess ? (
-                                <CheckIcon className="w-6 h-6 text-green-600" />
+                                <CheckIcon className={`w-6 h-6 ${
+                                  theme === 'dark' ? 'text-green-400' : 'text-green-600'
+                                }`} />
                               ) : (
-                                <XMarkIcon className="w-6 h-6 text-gray-400" />
+                                <XMarkIcon className={`w-6 h-6 ${
+                                  theme === 'dark' ? 'text-gray-500' : 'text-gray-400'
+                                }`} />
                               )}
                             </motion.div>
 
@@ -303,22 +341,44 @@ const PermissionsMatrix: React.FC = () => {
         variants={containerVariants}
         initial="hidden"
         animate="visible"
-        className="bg-gradient-to-br from-white via-white to-gray-50/50 rounded-3xl p-6 shadow-xl border border-gray-200/50 backdrop-blur-sm"
+        className={`rounded-3xl p-6 shadow-xl border backdrop-blur-sm ${
+          theme === 'dark'
+            ? 'bg-gradient-to-br from-gray-800 via-gray-800 to-gray-900/50 border-gray-700/50'
+            : 'bg-gradient-to-br from-white via-white to-gray-50/50 border-gray-200/50'
+        }`}
       >
-        <h3 className="text-lg font-bold text-[#2b4a6a] mb-4">Légende</h3>
+        <h3 className={`text-lg font-bold mb-4 ${
+          theme === 'dark' ? 'text-white' : 'text-[#2b4a6a]'
+        }`}>Légende</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="space-y-3">
             <div className="flex items-center gap-3">
-              <div className="w-8 h-8 bg-gradient-to-br from-green-100 to-emerald-100 border-2 border-green-200 rounded-lg flex items-center justify-center">
-                <CheckIcon className="w-4 h-4 text-green-600" />
+              <div className={`w-8 h-8 border-2 rounded-lg flex items-center justify-center ${
+                theme === 'dark'
+                  ? 'bg-gradient-to-br from-green-900/30 to-emerald-900/30 border-green-600/50'
+                  : 'bg-gradient-to-br from-green-100 to-emerald-100 border-green-200'
+              }`}>
+                <CheckIcon className={`w-4 h-4 ${
+                  theme === 'dark' ? 'text-green-400' : 'text-green-600'
+                }`} />
               </div>
-              <span className="text-sm text-gray-700">Permission accordée</span>
+              <span className={`text-sm ${
+                theme === 'dark' ? 'text-gray-300' : 'text-gray-700'
+              }`}>Permission accordée</span>
             </div>
             <div className="flex items-center gap-3">
-              <div className="w-8 h-8 bg-gradient-to-br from-gray-100 to-gray-200 border-2 border-gray-300 rounded-lg flex items-center justify-center">
-                <XMarkIcon className="w-4 h-4 text-gray-400" />
+              <div className={`w-8 h-8 border-2 rounded-lg flex items-center justify-center ${
+                theme === 'dark'
+                  ? 'bg-gradient-to-br from-gray-700/30 to-gray-800/30 border-gray-600/50'
+                  : 'bg-gradient-to-br from-gray-100 to-gray-200 border-gray-300'
+              }`}>
+                <XMarkIcon className={`w-4 h-4 ${
+                  theme === 'dark' ? 'text-gray-500' : 'text-gray-400'
+                }`} />
               </div>
-              <span className="text-sm text-gray-700">Permission refusée</span>
+              <span className={`text-sm ${
+                theme === 'dark' ? 'text-gray-300' : 'text-gray-700'
+              }`}>Permission refusée</span>
             </div>
           </div>
           <div className="space-y-3">
@@ -326,19 +386,25 @@ const PermissionsMatrix: React.FC = () => {
               <div className="w-8 h-8 bg-gradient-to-br from-red-500 to-pink-600 rounded-lg flex items-center justify-center">
                 <ShieldCheckIcon className="w-4 h-4 text-white" />
               </div>
-              <span className="text-sm text-gray-700">Super Admin - Accès complet</span>
+              <span className={`text-sm ${
+                theme === 'dark' ? 'text-gray-300' : 'text-gray-700'
+              }`}>Super Admin - Accès complet</span>
             </div>
             <div className="flex items-center gap-3">
               <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-lg flex items-center justify-center">
                 <UserGroupIcon className="w-4 h-4 text-white" />
               </div>
-              <span className="text-sm text-gray-700">Support - Assistance et gestion</span>
+              <span className={`text-sm ${
+                theme === 'dark' ? 'text-gray-300' : 'text-gray-700'
+              }`}>Support - Assistance et gestion</span>
             </div>
             <div className="flex items-center gap-3">
               <div className="w-8 h-8 bg-gradient-to-br from-green-500 to-emerald-600 rounded-lg flex items-center justify-center">
                 <CurrencyDollarIcon className="w-4 h-4 text-white" />
               </div>
-              <span className="text-sm text-gray-700">Commercial - Gestion commerciale</span>
+              <span className={`text-sm ${
+                theme === 'dark' ? 'text-gray-300' : 'text-gray-700'
+              }`}>Commercial - Gestion commerciale</span>
             </div>
           </div>
         </div>
@@ -349,18 +415,32 @@ const PermissionsMatrix: React.FC = () => {
         variants={containerVariants}
         initial="hidden"
         animate="visible"
-        className="bg-gradient-to-br from-white via-white to-gray-50/50 rounded-3xl p-6 shadow-xl border border-gray-200/50 backdrop-blur-sm"
+        className={`rounded-3xl p-6 shadow-xl border backdrop-blur-sm ${
+          theme === 'dark'
+            ? 'bg-gradient-to-br from-gray-800 via-gray-800 to-gray-900/50 border-gray-700/50'
+            : 'bg-gradient-to-br from-white via-white to-gray-50/50 border-gray-200/50'
+        }`}
       >
-        <h3 className="text-lg font-bold text-[#2b4a6a] mb-4">Résumé des Permissions</h3>
+        <h3 className={`text-lg font-bold mb-4 ${
+          theme === 'dark' ? 'text-white' : 'text-[#2b4a6a]'
+        }`}>Résumé des Permissions</h3>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {roles.map((role) => (
-            <div key={role.id} className="text-center p-4 bg-white rounded-xl border border-gray-200 shadow-sm">
+            <div key={role.id} className={`text-center p-4 rounded-xl border shadow-sm ${
+              theme === 'dark'
+                ? 'bg-gray-800 border-gray-700'
+                : 'bg-white border-gray-200'
+            }`}>
               <div className={`w-16 h-16 bg-gradient-to-br ${role.color} rounded-xl flex items-center justify-center mx-auto mb-3`}>
                 <role.icon className="w-8 h-8 text-white" />
               </div>
-              <h4 className="font-bold text-gray-900 mb-2">{role.name}</h4>
+              <h4 className={`font-bold mb-2 ${
+                theme === 'dark' ? 'text-gray-300' : 'text-gray-900'
+              }`}>{role.name}</h4>
               <p className="text-2xl font-bold text-[#f57c00] mb-1">{role.permissions.length}</p>
-              <p className="text-sm text-gray-600">permissions accordées</p>
+              <p className={`text-sm ${
+                theme === 'dark' ? 'text-gray-400' : 'text-gray-600'
+              }`}>permissions accordées</p>
             </div>
           ))}
         </div>

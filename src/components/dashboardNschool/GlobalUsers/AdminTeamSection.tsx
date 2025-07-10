@@ -10,6 +10,7 @@ import {
   ClockIcon,
   ExclamationTriangleIcon,
 } from '@heroicons/react/24/outline';
+import { useTheme } from '@/contexts/ThemeContext';
 
 interface AdminRole {
   id: string;
@@ -25,6 +26,7 @@ interface AdminRole {
 }
 
 const AdminTeamSection: React.FC = () => {
+  const { theme } = useTheme();
   const adminRoles: AdminRole[] = [
     {
       id: 'super-admin',
@@ -103,11 +105,20 @@ const AdminTeamSection: React.FC = () => {
   };
 
   const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'active': return { bg: 'bg-green-100', text: 'text-green-800', icon: 'text-green-600' };
-      case 'warning': return { bg: 'bg-yellow-100', text: 'text-yellow-800', icon: 'text-yellow-600' };
-      case 'critical': return { bg: 'bg-red-100', text: 'text-red-800', icon: 'text-red-600' };
-      default: return { bg: 'bg-gray-100', text: 'text-gray-800', icon: 'text-gray-600' };
+    if (theme === 'dark') {
+      switch (status) {
+        case 'active': return { bg: 'bg-green-900/30', text: 'text-green-300', icon: 'text-green-400' };
+        case 'warning': return { bg: 'bg-yellow-900/30', text: 'text-yellow-300', icon: 'text-yellow-400' };
+        case 'critical': return { bg: 'bg-red-900/30', text: 'text-red-300', icon: 'text-red-400' };
+        default: return { bg: 'bg-gray-700/30', text: 'text-gray-300', icon: 'text-gray-400' };
+      }
+    } else {
+      switch (status) {
+        case 'active': return { bg: 'bg-green-100', text: 'text-green-800', icon: 'text-green-600' };
+        case 'warning': return { bg: 'bg-yellow-100', text: 'text-yellow-800', icon: 'text-yellow-600' };
+        case 'critical': return { bg: 'bg-red-100', text: 'text-red-800', icon: 'text-red-600' };
+        default: return { bg: 'bg-gray-100', text: 'text-gray-800', icon: 'text-gray-600' };
+      }
     }
   };
 
@@ -127,15 +138,23 @@ const AdminTeamSection: React.FC = () => {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, delay: 0.2 }}
-        className="bg-white rounded-3xl p-6 shadow-xl border border-gray-200/50 backdrop-blur-sm"
+        className={`rounded-3xl p-6 shadow-xl border backdrop-blur-sm ${
+          theme === 'dark'
+            ? 'bg-gray-800 border-gray-700/50'
+            : 'bg-white border-gray-200/50'
+        }`}
       >
         <div className="flex items-center gap-3 mb-4">
           <div className="p-3 bg-gradient-to-r from-[#f57c00] to-[#ff9800] rounded-xl">
             <StarIcon className="w-6 h-6 text-white" />
           </div>
           <div>
-            <h2 className="text-2xl font-bold text-[#2b4a6a]">Équipe d'Administration</h2>
-            <p className="text-gray-600">Gérez les rôles et permissions de votre équipe</p>
+            <h2 className={`text-2xl font-bold ${
+              theme === 'dark' ? 'text-white' : 'text-[#2b4a6a]'
+            }`}>Équipe d'Administration</h2>
+            <p className={`${
+              theme === 'dark' ? 'text-gray-400' : 'text-gray-600'
+            }`}>Gérez les rôles et permissions de votre équipe</p>
           </div>
         </div>
       </motion.div>
@@ -153,7 +172,11 @@ const AdminTeamSection: React.FC = () => {
               variants={cardVariants}
               initial="hidden"
               animate="visible"
-              className="relative bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden transition-all duration-300"
+              className={`relative rounded-2xl shadow-lg border overflow-hidden transition-all duration-300 ${
+                theme === 'dark'
+                  ? 'bg-gray-800 border-gray-700'
+                  : 'bg-white border-gray-100'
+              }`}
               whileHover={{
                 scale: 1.02,
                 transition: { duration: 0.3, ease: "easeOut" }
@@ -185,8 +208,12 @@ const AdminTeamSection: React.FC = () => {
                       <role.icon className="w-7 h-7" />
                     </motion.div>
                     <div>
-                      <h3 className="font-bold text-gray-900 text-lg leading-tight mb-1">{role.title}</h3>
-                      <p className="text-sm text-gray-500">{role.description}</p>
+                      <h3 className={`font-bold text-lg leading-tight mb-1 ${
+                        theme === 'dark' ? 'text-gray-300' : 'text-gray-900'
+                      }`}>{role.title}</h3>
+                      <p className={`text-sm ${
+                        theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
+                      }`}>{role.description}</p>
                     </div>
                   </div>
                 </div>
@@ -204,8 +231,12 @@ const AdminTeamSection: React.FC = () => {
                   </motion.span>
                   
                   <div className="text-right">
-                    <p className="text-sm font-semibold text-gray-900">{role.activeUsers}/{role.totalUsers}</p>
-                    <p className="text-xs text-gray-500">Utilisateurs actifs</p>
+                    <p className={`text-sm font-semibold ${
+                      theme === 'dark' ? 'text-gray-300' : 'text-gray-900'
+                    }`}>{role.activeUsers}/{role.totalUsers}</p>
+                    <p className={`text-xs ${
+                      theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
+                    }`}>Utilisateurs actifs</p>
                   </div>
                 </div>
               </div>
@@ -214,7 +245,9 @@ const AdminTeamSection: React.FC = () => {
               <div className="px-6 pb-6">
                 {/* Permissions */}
                 <div className="mb-6">
-                  <h4 className="text-sm font-semibold text-gray-700 mb-3">Permissions principales :</h4>
+                  <h4 className={`text-sm font-semibold mb-3 ${
+                    theme === 'dark' ? 'text-gray-400' : 'text-gray-700'
+                  }`}>Permissions principales :</h4>
                   <div className="space-y-2">
                     {role.permissions.slice(0, 3).map((permission, idx) => (
                       <motion.div
@@ -222,7 +255,9 @@ const AdminTeamSection: React.FC = () => {
                         initial={{ opacity: 0, x: -10 }}
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ delay: index * 0.1 + idx * 0.05 }}
-                        className="flex items-center gap-2 text-sm text-gray-600"
+                        className={`flex items-center gap-2 text-sm ${
+                          theme === 'dark' ? 'text-gray-400' : 'text-gray-600'
+                        }`}
                       >
                         <div className="w-1.5 h-1.5 bg-[#f57c00] rounded-full flex-shrink-0" />
                         <span className="truncate">{permission}</span>
@@ -233,9 +268,13 @@ const AdminTeamSection: React.FC = () => {
                         initial={{ opacity: 0, x: -10 }}
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ delay: index * 0.1 + 0.15 }}
-                        className="flex items-center gap-2 text-sm text-gray-500"
+                        className={`flex items-center gap-2 text-sm ${
+                          theme === 'dark' ? 'text-gray-500' : 'text-gray-500'
+                        }`}
                       >
-                        <div className="w-1.5 h-1.5 bg-gray-400 rounded-full flex-shrink-0" />
+                        <div className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${
+                          theme === 'dark' ? 'bg-gray-500' : 'bg-gray-400'
+                        }`} />
                         <span>+{role.permissions.length - 3} autres permissions</span>
                       </motion.div>
                     )}
@@ -244,11 +283,15 @@ const AdminTeamSection: React.FC = () => {
 
                 {/* Progress Bar */}
                 <div className="mb-6">
-                  <div className="flex justify-between text-xs text-gray-500 mb-1">
+                  <div className={`flex justify-between text-xs mb-1 ${
+                    theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
+                  }`}>
                     <span>Utilisation</span>
                     <span>{Math.round((role.activeUsers / role.totalUsers) * 100)}%</span>
                   </div>
-                  <div className="w-full bg-gray-200 rounded-full h-2">
+                  <div className={`w-full rounded-full h-2 ${
+                    theme === 'dark' ? 'bg-gray-700' : 'bg-gray-200'
+                  }`}>
                     <motion.div
                       initial={{ width: 0 }}
                       animate={{ width: `${(role.activeUsers / role.totalUsers) * 100}%` }}
@@ -259,11 +302,17 @@ const AdminTeamSection: React.FC = () => {
                 </div>
 
                 {/* Actions */}
-                <div className="flex items-center justify-between pt-4 border-t border-gray-100">
+                <div className={`flex items-center justify-between pt-4 border-t ${
+                  theme === 'dark' ? 'border-gray-700' : 'border-gray-100'
+                }`}>
                   <motion.button
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
-                    className="px-4 py-2 text-[#f57c00] bg-orange-50 rounded-lg hover:bg-[#f57c00] hover:text-white transition-all duration-300 text-sm font-semibold"
+                    className={`px-4 py-2 rounded-lg hover:bg-[#f57c00] hover:text-white transition-all duration-300 text-sm font-semibold ${
+                      theme === 'dark'
+                        ? 'text-[#f57c00] bg-orange-900/20 hover:bg-[#f57c00]'
+                        : 'text-[#f57c00] bg-orange-50 hover:bg-[#f57c00]'
+                    }`}
                   >
                     Gérer les permissions
                   </motion.button>
@@ -271,7 +320,11 @@ const AdminTeamSection: React.FC = () => {
                   <motion.button
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
-                    className="px-4 py-2 text-[#2b4a6a] bg-gray-50 rounded-lg hover:bg-[#2b4a6a] hover:text-white transition-all duration-300 text-sm font-semibold"
+                    className={`px-4 py-2 rounded-lg hover:bg-[#2b4a6a] hover:text-white transition-all duration-300 text-sm font-semibold ${
+                      theme === 'dark'
+                        ? 'text-gray-300 bg-gray-700 hover:bg-[#2b4a6a]'
+                        : 'text-[#2b4a6a] bg-gray-50 hover:bg-[#2b4a6a]'
+                    }`}
                   >
                     Voir les utilisateurs
                   </motion.button>
@@ -290,26 +343,38 @@ const AdminTeamSection: React.FC = () => {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, delay: 0.4 }}
-        className="bg-gradient-to-br from-white via-white to-gray-50/50 rounded-3xl p-6 shadow-xl border border-gray-200/50 backdrop-blur-sm"
+        className={`rounded-3xl p-6 shadow-xl border backdrop-blur-sm ${
+          theme === 'dark'
+            ? 'bg-gradient-to-br from-gray-800 via-gray-800 to-gray-900/50 border-gray-700/50'
+            : 'bg-gradient-to-br from-white via-white to-gray-50/50 border-gray-200/50'
+        }`}
       >
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div className="text-center">
-            <div className="text-3xl font-bold text-[#2b4a6a] mb-2">
+            <div className={`text-3xl font-bold mb-2 ${
+              theme === 'dark' ? 'text-white' : 'text-[#2b4a6a]'
+            }`}>
               {adminRoles.reduce((sum, role) => sum + role.totalUsers, 0)}
             </div>
-            <p className="text-gray-600 font-medium">Total utilisateurs</p>
+            <p className={`font-medium ${
+              theme === 'dark' ? 'text-gray-400' : 'text-gray-600'
+            }`}>Total utilisateurs</p>
           </div>
           <div className="text-center">
             <div className="text-3xl font-bold text-green-600 mb-2">
               {adminRoles.reduce((sum, role) => sum + role.activeUsers, 0)}
             </div>
-            <p className="text-gray-600 font-medium">Utilisateurs actifs</p>
+            <p className={`font-medium ${
+              theme === 'dark' ? 'text-gray-400' : 'text-gray-600'
+            }`}>Utilisateurs actifs</p>
           </div>
           <div className="text-center">
             <div className="text-3xl font-bold text-[#f57c00] mb-2">
               {adminRoles.length}
             </div>
-            <p className="text-gray-600 font-medium">Rôles définis</p>
+            <p className={`font-medium ${
+              theme === 'dark' ? 'text-gray-400' : 'text-gray-600'
+            }`}>Rôles définis</p>
           </div>
         </div>
       </motion.div>
