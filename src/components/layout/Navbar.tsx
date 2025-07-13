@@ -14,7 +14,7 @@ export default function AppNavbar() {
     { name: 'Accueil', href: '/' },
     { name: 'Fonctionnalités', href: '#features' },
     { name: 'Tarifs', href: '/pricing' },
-    { name: 'Contact', href: '#contact' },
+    { name: 'Contact', href: '/contact' },
   ];
 
   return (
