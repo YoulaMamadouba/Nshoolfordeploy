@@ -461,14 +461,20 @@ const CreateTenant = ({ onBack, onTenantCreated }: CreateTenantProps) => {
                   </motion.div>
 
                   <motion.div whileHover={{ scale: 1.02 }} className="space-y-2 md:col-span-2">
-                    <label className="block text-sm font-semibold text-gray-700">
+                    <label className={`block text-sm font-semibold ${
+                      theme === 'dark' ? 'text-gray-200' : 'text-gray-700'
+                    }`}>
                       Adresse complète
                     </label>
                     <textarea
                       value={formData.address}
                       onChange={(e) => handleInputChange('address', e.target.value)}
                       rows={3}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#f57c00]/50 focus:border-[#f57c00] focus:text-[#f57c00] transition-all duration-300 bg-white/80 backdrop-blur-sm resize-none"
+                      className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-[#f57c00]/50 focus:border-[#f57c00] focus:text-[#f57c00] transition-all duration-300 backdrop-blur-sm resize-none ${
+                        theme === 'dark'
+                          ? 'border-gray-600 bg-gray-700/80 text-white placeholder-gray-400'
+                          : 'border-gray-300 bg-white/80'
+                      }`}
                       placeholder="123 Rue de la République, 75001 Paris, France"
                     />
                   </motion.div>

@@ -16,6 +16,7 @@ import {
   PercentBadgeIcon,
   SparklesIcon,
 } from '@heroicons/react/24/outline';
+import { useTheme } from '@/contexts/ThemeContext';
 
 interface PromoCode {
   id: number;
@@ -73,28 +74,53 @@ const PromoTableView: React.FC<PromoTableViewProps> = ({
   onToggleStatus,
   onDeletePromo,
 }) => {
+  const { theme } = useTheme();
+  
   const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'active': return { bg: 'bg-green-100 bg-opacity-80', text: 'text-green-800' };
-      case 'paused': return { bg: 'bg-yellow-100 bg-opacity-80', text: 'text-yellow-800' };
-      case 'expired': return { bg: 'bg-red-100 bg-opacity-80', text: 'text-red-800' };
-      default: return { bg: 'bg-gray-100 bg-opacity-80', text: 'text-gray-800' };
+    if (theme === 'dark') {
+      switch (status) {
+        case 'active': return { bg: 'bg-green-900/30 bg-opacity-80', text: 'text-green-400' };
+        case 'paused': return { bg: 'bg-yellow-900/30 bg-opacity-80', text: 'text-yellow-400' };
+        case 'expired': return { bg: 'bg-red-900/30 bg-opacity-80', text: 'text-red-400' };
+        default: return { bg: 'bg-gray-800/50 bg-opacity-80', text: 'text-gray-300' };
+      }
+    } else {
+      switch (status) {
+        case 'active': return { bg: 'bg-green-100 bg-opacity-80', text: 'text-green-800' };
+        case 'paused': return { bg: 'bg-yellow-100 bg-opacity-80', text: 'text-yellow-800' };
+        case 'expired': return { bg: 'bg-red-100 bg-opacity-80', text: 'text-red-800' };
+        default: return { bg: 'bg-gray-100 bg-opacity-80', text: 'text-gray-800' };
+      }
     }
   };
 
   const getTypeColor = (type: string) => {
-    switch (type) {
-      case 'percentage': return { bg: 'bg-purple-100 bg-opacity-80', text: 'text-purple-800' };
-      case 'fixed': return { bg: 'bg-blue-100 bg-opacity-80', text: 'text-blue-800' };
-      default: return { bg: 'bg-gray-100 bg-opacity-80', text: 'text-gray-800' };
+    if (theme === 'dark') {
+      switch (type) {
+        case 'percentage': return { bg: 'bg-purple-900/30 bg-opacity-80', text: 'text-purple-400' };
+        case 'fixed': return { bg: 'bg-blue-900/30 bg-opacity-80', text: 'text-blue-400' };
+        default: return { bg: 'bg-gray-800/50 bg-opacity-80', text: 'text-gray-300' };
+      }
+    } else {
+      switch (type) {
+        case 'percentage': return { bg: 'bg-purple-100 bg-opacity-80', text: 'text-purple-800' };
+        case 'fixed': return { bg: 'bg-blue-100 bg-opacity-80', text: 'text-blue-800' };
+        default: return { bg: 'bg-gray-100 bg-opacity-80', text: 'text-gray-800' };
+      }
     }
   };
 
   return (
     <div className="overflow-x-auto">
       <table className="w-full text-sm">
-        <thead className="sticky top-0 bg-gradient-to-r from-white/90 to-gray-50/80 border-b border-[#f57c00]/30">
-          <tr className="text-left text-[#2b4a6a] font-bold">
+        <thead className={`sticky top-0 border-b ${
+          theme === 'dark'
+            ? 'bg-gradient-to-r from-gray-800/90 to-gray-900/80 border-[#f57c00]/30'
+            : 'bg-gradient-to-r from-white/90 to-gray-50/80 border-[#f57c00]/30'
+        }`}>
+          <tr className={`text-left font-bold ${
+            theme === 'dark' ? 'text-white' : 'text-[#2b4a6a]'
+          }`}>
             <th className="py-3 px-4">
               <div className="flex items-center gap-1">
                 <SparklesIcon className="w-4 h-4" />
@@ -114,7 +140,9 @@ const PromoTableView: React.FC<PromoTableViewProps> = ({
         <tbody>
           {promoCodes.length === 0 ? (
             <tr>
-              <td colSpan={9} className="py-6 text-center text-gray-500 text-sm">
+              <td colSpan={9} className={`py-6 text-center text-sm ${
+                theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
+              }`}>
                 Aucun code promotionnel trouvé
               </td>
             </tr>
@@ -122,7 +150,11 @@ const PromoTableView: React.FC<PromoTableViewProps> = ({
             promoCodes.map((promoCode, index) => (
               <motion.tr
                 key={`promo-row-${promoCode.id}`}
-                className="border-b border-gray-100/50 hover:bg-gradient-to-r hover:from-white/30 hover:to-[#f57c00]/10 transition-all duration-300"
+                className={`border-b transition-all duration-300 ${
+                  theme === 'dark'
+                    ? 'border-gray-700/50 hover:bg-gradient-to-r hover:from-gray-800/30 hover:to-[#f57c00]/10'
+                    : 'border-gray-100/50 hover:bg-gradient-to-r hover:from-white/30 hover:to-[#f57c00]/10'
+                }`}
                 initial="hidden"
                 animate="visible"
                 custom={index}
@@ -138,13 +170,19 @@ const PromoTableView: React.FC<PromoTableViewProps> = ({
                       <SparklesIcon className="w-5 h-5" />
                     </motion.div>
                     <div>
-                      <p className="font-semibold text-gray-900 font-mono">{promoCode.code}</p>
-                      <p className="text-xs text-gray-500">{promoCode.applicablePlans.join(', ')}</p>
+                      <p className={`font-semibold font-mono ${
+                        theme === 'dark' ? 'text-white' : 'text-gray-900'
+                      }`}>{promoCode.code}</p>
+                      <p className={`text-xs ${
+                        theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
+                      }`}>{promoCode.applicablePlans.join(', ')}</p>
                     </div>
                   </div>
                 </td>
                 <td className="py-3 px-4 align-middle">
-                  <p className="text-gray-700 max-w-xs truncate">{promoCode.description}</p>
+                  <p className={`max-w-xs truncate ${
+                    theme === 'dark' ? 'text-gray-300' : 'text-gray-700'
+                  }`}>{promoCode.description}</p>
                 </td>
                 <td className="py-3 px-4 align-middle">
                   <motion.span
@@ -157,25 +195,35 @@ const PromoTableView: React.FC<PromoTableViewProps> = ({
                   </motion.span>
                 </td>
                 <td className="py-3 px-4 align-middle">
-                  <span className="font-semibold text-gray-900">
+                  <span className={`font-semibold ${
+                    theme === 'dark' ? 'text-white' : 'text-gray-900'
+                  }`}>
                     {promoCode.type === 'percentage' ? `${promoCode.value}%` : `${promoCode.value}€`}
                   </span>
                 </td>
-                <td className="py-3 px-4 align-middle text-gray-600">
+                <td className={`py-3 px-4 align-middle ${
+                  theme === 'dark' ? 'text-gray-300' : 'text-gray-600'
+                }`}>
                   {new Date(promoCode.startDate).toLocaleDateString('fr-FR')}
                 </td>
-                <td className="py-3 px-4 align-middle text-gray-600">
+                <td className={`py-3 px-4 align-middle ${
+                  theme === 'dark' ? 'text-gray-300' : 'text-gray-600'
+                }`}>
                   {new Date(promoCode.endDate).toLocaleDateString('fr-FR')}
                 </td>
                 <td className="py-3 px-4 align-middle">
                   <div className="flex items-center gap-2">
                     <UsersIcon className="w-4 h-4 text-[#f57c00]" />
-                    <span className="font-medium text-gray-700">
+                    <span className={`font-medium ${
+                      theme === 'dark' ? 'text-gray-300' : 'text-gray-700'
+                    }`}>
                       {promoCode.currentUses} / {promoCode.maxUses || '∞'}
                     </span>
                   </div>
                   {promoCode.maxUses && (
-                    <div className="w-full bg-gray-200 rounded-full h-1 mt-1">
+                    <div className={`w-full rounded-full h-1 mt-1 ${
+                      theme === 'dark' ? 'bg-gray-700' : 'bg-gray-200'
+                    }`}>
                       <div
                         className={`h-full rounded-full ${
                           (promoCode.currentUses / promoCode.maxUses) > 0.8 ? 'bg-red-500' : 
@@ -203,7 +251,11 @@ const PromoTableView: React.FC<PromoTableViewProps> = ({
                     variants={iconVariants}
                     whileHover="hover"
                     onClick={() => onViewStats(promoCode)}
-                    className="text-[#2b4a6a] p-1 rounded-full hover:bg-[#2b4a6a]/10 transition-all duration-300"
+                    className={`p-1 rounded-full transition-all duration-300 ${
+                      theme === 'dark'
+                        ? 'text-[#2b4a6a] hover:bg-[#2b4a6a]/20'
+                        : 'text-[#2b4a6a] hover:bg-[#2b4a6a]/10'
+                    }`}
                     title="Voir statistiques"
                   >
                     <ChartBarIcon className="h-5 w-5" />
@@ -212,7 +264,11 @@ const PromoTableView: React.FC<PromoTableViewProps> = ({
                     variants={iconVariants}
                     whileHover="hover"
                     onClick={() => onEditPromo(promoCode.id)}
-                    className="text-[#f57c00] p-1 rounded-full hover:bg-[#f57c00]/10 transition-all duration-300"
+                    className={`p-1 rounded-full transition-all duration-300 ${
+                      theme === 'dark'
+                        ? 'text-[#f57c00] hover:bg-[#f57c00]/20'
+                        : 'text-[#f57c00] hover:bg-[#f57c00]/10'
+                    }`}
                     title="Modifier"
                   >
                     <PencilIcon className="h-5 w-5" />
@@ -223,8 +279,12 @@ const PromoTableView: React.FC<PromoTableViewProps> = ({
                     onClick={() => onToggleStatus(promoCode.id)}
                     className={`p-1 rounded-full transition-all duration-300 ${
                       promoCode.status === 'active' 
-                        ? 'text-yellow-600 hover:bg-yellow-600/10' 
-                        : 'text-green-600 hover:bg-green-600/10'
+                        ? theme === 'dark'
+                          ? 'text-yellow-400 hover:bg-yellow-600/20'
+                          : 'text-yellow-600 hover:bg-yellow-600/10'
+                        : theme === 'dark'
+                          ? 'text-green-400 hover:bg-green-600/20'
+                          : 'text-green-600 hover:bg-green-600/10'
                     }`}
                     title={promoCode.status === 'active' ? 'Mettre en pause' : 'Activer'}
                   >
@@ -234,7 +294,11 @@ const PromoTableView: React.FC<PromoTableViewProps> = ({
                     variants={iconVariants}
                     whileHover="hover"
                     onClick={() => onDeletePromo(promoCode.id)}
-                    className="text-red-600 p-1 rounded-full hover:bg-red-600/10 transition-all duration-300"
+                    className={`p-1 rounded-full transition-all duration-300 ${
+                      theme === 'dark'
+                        ? 'text-red-400 hover:bg-red-600/20'
+                        : 'text-red-600 hover:bg-red-600/10'
+                    }`}
                     title="Supprimer"
                   >
                     <TrashIcon className="h-5 w-5" />

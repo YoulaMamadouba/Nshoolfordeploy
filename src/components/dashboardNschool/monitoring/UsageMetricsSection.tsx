@@ -16,6 +16,7 @@ import {
   ClockIcon,
   ChatBubbleLeftRightIcon,
 } from '@heroicons/react/24/outline';
+import { useTheme } from '@/contexts/ThemeContext';
 
 interface UsageMetricsSectionProps {
   isRefreshing: boolean;
@@ -42,6 +43,7 @@ interface FeatureUsage {
 }
 
 const UsageMetricsSection: React.FC<UsageMetricsSectionProps> = ({ isRefreshing }) => {
+  const { theme } = useTheme();
   const [tenantUsage, setTenantUsage] = useState<TenantUsage[]>([
     {
       id: '1',
@@ -162,11 +164,20 @@ const UsageMetricsSection: React.FC<UsageMetricsSectionProps> = ({ isRefreshing 
   };
 
   const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'active': return { bg: 'bg-[#f57c00]/10', text: 'text-[#2b4a6a]', border: 'border-[#f57c00]/20' };
-      case 'inactive': return { bg: 'bg-gray-100', text: 'text-gray-800', border: 'border-gray-200' };
-      case 'suspended': return { bg: 'bg-[#f57c00]/10', text: 'text-[#2b4a6a]', border: 'border-[#f57c00]/20' };
-      default: return { bg: 'bg-gray-100', text: 'text-gray-800', border: 'border-gray-200' };
+    if (theme === 'dark') {
+      switch (status) {
+        case 'active': return { bg: 'bg-[#f57c00]/20', text: 'text-white', border: 'border-[#f57c00]/30' };
+        case 'inactive': return { bg: 'bg-gray-800/50', text: 'text-gray-300', border: 'border-gray-600/50' };
+        case 'suspended': return { bg: 'bg-[#f57c00]/20', text: 'text-white', border: 'border-[#f57c00]/30' };
+        default: return { bg: 'bg-gray-800/50', text: 'text-gray-300', border: 'border-gray-600/50' };
+      }
+    } else {
+      switch (status) {
+        case 'active': return { bg: 'bg-[#f57c00]/10', text: 'text-[#2b4a6a]', border: 'border-[#f57c00]/20' };
+        case 'inactive': return { bg: 'bg-gray-100', text: 'text-gray-800', border: 'border-gray-200' };
+        case 'suspended': return { bg: 'bg-[#f57c00]/10', text: 'text-[#2b4a6a]', border: 'border-[#f57c00]/20' };
+        default: return { bg: 'bg-gray-100', text: 'text-gray-800', border: 'border-gray-200' };
+      }
     }
   };
 
@@ -192,240 +203,233 @@ const UsageMetricsSection: React.FC<UsageMetricsSectionProps> = ({ isRefreshing 
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, delay: 0.2 }}
-        className="bg-white rounded-3xl p-6 shadow-xl border border-gray-200/50 backdrop-blur-sm"
+        className={`rounded-3xl p-6 shadow-xl border backdrop-blur-sm ${
+          theme === 'dark'
+            ? 'bg-gradient-to-br from-gray-800 via-gray-800 to-gray-900/50 border-gray-700/50'
+            : 'bg-white border-gray-200/50'
+        }`}
       >
         <div className="flex items-center gap-3 mb-4">
           <div className="p-3 bg-gradient-to-r from-[#f57c00] to-[#ff9800] rounded-xl">
             <ChartBarIcon className="w-6 h-6 text-white" />
           </div>
           <div>
-            <h2 className="text-2xl font-bold text-[#2b4a6a]">Métriques d'Usage</h2>
-            <p className="text-gray-600">Analyse de l'utilisation par tenant et fonctionnalités</p>
+            <h2 className={`text-2xl font-bold ${
+              theme === 'dark' ? 'text-white' : 'text-[#2b4a6a]'
+            }`}>Métriques d'Utilisation</h2>
+            <p className={`${
+              theme === 'dark' ? 'text-gray-300' : 'text-gray-600'
+            }`}>Analyse de l'utilisation par tenant et par fonctionnalité</p>
           </div>
         </div>
       </motion.div>
 
-      {/* Feature Usage Overview */}
+      {/* Tenant Usage Grid */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {tenantUsage.map((tenant, index) => {
+          const statusColors = getStatusColor(tenant.status);
+          
+          return (
+            <motion.div
+              key={tenant.id}
+              custom={index}
+              variants={cardVariants}
+              initial="hidden"
+              animate="visible"
+              className={`group relative rounded-2xl shadow-lg border overflow-hidden transition-all duration-300 ${
+                theme === 'dark'
+                  ? 'bg-gradient-to-br from-gray-800 via-gray-800 to-gray-900/50 border-gray-700/50'
+                  : 'bg-white border-gray-100'
+              }`}
+            >
+              {/* Header */}
+              <div className="relative p-6 pb-4">
+                <div className="flex items-start justify-between mb-4">
+                  <div className="flex items-center gap-3">
+                    <motion.div
+                      className="w-12 h-12 bg-gradient-to-br from-[#f57c00] to-[#ff9800] rounded-xl flex items-center justify-center text-white font-bold text-lg overflow-hidden shadow-lg relative flex-shrink-0"
+                      whileHover={{ scale: 1.1, rotate: 5 }}
+                      transition={{ duration: 0.3 }}
+                    >
+                      <UsersIcon className="w-6 h-6" />
+                    </motion.div>
+                    <div>
+                      <h3 className={`font-bold text-lg leading-tight mb-1 ${
+                        theme === 'dark' ? 'text-white' : 'text-[#2b4a6a]'
+                      }`}>{tenant.name}</h3>
+                      <p className={`text-sm ${
+                        theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
+                      }`}>{tenant.activeUsers} utilisateurs actifs</p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Status Badge */}
+                <div className="flex items-center justify-between mb-4">
+                  <motion.span
+                    whileHover={{ scale: 1.05 }}
+                    className={`inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-semibold ${statusColors.bg} ${statusColors.text} ${statusColors.border} shadow-sm`}
+                  >
+                    <span className="truncate">
+                      {tenant.status === 'active' ? 'Actif' : tenant.status === 'inactive' ? 'Inactif' : 'Suspendu'}
+                    </span>
+                  </motion.span>
+                  
+                  <div className="text-right">
+                    <div className="flex items-center gap-1">
+                      <span className={`text-2xl font-bold ${
+                        theme === 'dark' ? 'text-white' : 'text-gray-900'
+                      }`}>
+                        {tenant.growth > 0 ? '+' : ''}{tenant.growth.toFixed(1)}%
+                      </span>
+                    </div>
+                    <div className={`text-xs flex items-center gap-1 ${
+                      tenant.growth > 0 
+                        ? theme === 'dark' ? 'text-green-400' : 'text-green-600'
+                        : theme === 'dark' ? 'text-red-400' : 'text-red-600'
+                    }`}>
+                      {tenant.growth > 0 ? <ArrowTrendingUpIcon className="w-3 h-3" /> : <ArrowTrendingDownIcon className="w-3 h-3" />}
+                      <span>
+                        {tenant.growth > 0 ? 'En hausse' : 'En baisse'}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Metrics */}
+              <div className="px-6 pb-6">
+                <div className="grid grid-cols-2 gap-4 mb-4">
+                  <div>
+                    <p className={`text-xs ${
+                      theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
+                    }`}>Stockage utilisé</p>
+                    <p className={`font-semibold ${
+                      theme === 'dark' ? 'text-white' : 'text-gray-900'
+                    }`}>{tenant.storageUsed.toFixed(1)} GB</p>
+                  </div>
+                  <div>
+                    <p className={`text-xs ${
+                      theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
+                    }`}>Appels API</p>
+                    <p className={`font-semibold ${
+                      theme === 'dark' ? 'text-white' : 'text-gray-900'
+                    }`}>{tenant.apiCalls.toLocaleString()}</p>
+                  </div>
+                </div>
+
+                {/* Features */}
+                <div>
+                  <p className={`text-xs mb-2 ${
+                    theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
+                  }`}>Fonctionnalités utilisées :</p>
+                  <div className="flex flex-wrap gap-1">
+                    {tenant.features.slice(0, 3).map((feature, idx) => (
+                      <span key={idx} className={`px-2 py-1 text-xs rounded-md ${
+                        theme === 'dark' 
+                          ? 'bg-gray-700/50 text-gray-300 border border-gray-600/50' 
+                          : 'bg-gray-100 text-gray-600'
+                      }`}>
+                        {feature}
+                      </span>
+                    ))}
+                    {tenant.features.length > 3 && (
+                      <span className={`px-2 py-1 text-xs rounded-md ${
+                        theme === 'dark' 
+                          ? 'bg-gray-700/50 text-gray-300 border border-gray-600/50' 
+                          : 'bg-gray-100 text-gray-600'
+                      }`}>
+                        +{tenant.features.length - 3}
+                      </span>
+                    )}
+                  </div>
+                </div>
+
+                {/* Last Activity */}
+                <div className="mt-4 pt-4 border-t border-gray-200/50">
+                  <p className={`text-xs ${
+                    theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
+                  }`}>
+                    Dernière activité : {formatLastActivity(tenant.lastActivity)}
+                  </p>
+                </div>
+              </div>
+            </motion.div>
+          );
+        })}
+      </div>
+
+      {/* Feature Usage */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, delay: 0.3 }}
-        className="bg-white rounded-3xl p-6 shadow-xl border border-gray-200/50 backdrop-blur-sm"
+        transition={{ duration: 0.6, delay: 0.4 }}
+        className={`rounded-3xl p-6 shadow-xl border backdrop-blur-sm ${
+          theme === 'dark'
+            ? 'bg-gradient-to-br from-gray-800 via-gray-800 to-gray-900/50 border-gray-700/50'
+            : 'bg-white border-gray-200/50'
+        }`}
       >
         <div className="flex items-center gap-3 mb-6">
           <div className="p-3 bg-gradient-to-r from-[#f57c00] to-[#ff9800] rounded-xl">
             <FireIcon className="w-6 h-6 text-white" />
           </div>
           <div>
-            <h3 className="text-xl font-bold text-[#2b4a6a]">Features les Plus Utilisées</h3>
-            <p className="text-gray-600">Taux d'adoption des fonctionnalités</p>
+            <h3 className={`text-xl font-bold ${
+              theme === 'dark' ? 'text-white' : 'text-[#2b4a6a]'
+            }`}>Utilisation par Fonctionnalité</h3>
+            <p className={`${
+              theme === 'dark' ? 'text-gray-300' : 'text-gray-600'
+            }`}>Taux d'adoption des différentes fonctionnalités</p>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {featureUsage.map((feature, index) => {
-            const FeatureIcon = feature.icon;
-            
-            return (
-              <motion.div
-                key={feature.name}
-                custom={index}
-                variants={cardVariants}
-                initial="hidden"
-                animate="visible"
-                className="group relative bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden transition-all duration-300"
-              >
-                <div className="relative p-6">
-                  <div className="flex items-center gap-3 mb-4">
-                    <motion.div
-                      className={`w-12 h-12 bg-gradient-to-br ${feature.color} rounded-xl flex items-center justify-center text-white font-bold text-lg overflow-hidden shadow-lg relative flex-shrink-0`}
-                      whileHover={{ scale: 1.1, rotate: 5 }}
-                      transition={{ duration: 0.3 }}
-                    >
-                      <FeatureIcon className="w-6 h-6" />
-                    </motion.div>
-                    <div>
-                      <h4 className="font-bold text-[#2b4a6a] text-lg leading-tight mb-1">{feature.name}</h4>
-                      <p className="text-sm text-gray-500">{feature.description}</p>
-                    </div>
-                  </div>
-
-                  <div className="mb-4">
-                    <div className="flex justify-between text-sm text-gray-600 mb-2">
-                      <span>Utilisation</span>
-                      <span className="font-semibold">{feature.usage}%</span>
-                    </div>
-                    <div className="w-full bg-gray-200 rounded-full h-3">
-                      <motion.div
-                        initial={{ width: 0 }}
-                        animate={{ width: `${feature.usage}%` }}
-                        transition={{ duration: 1, delay: index * 0.1 }}
-                        className={`h-full rounded-full bg-gradient-to-r ${feature.color}`}
-                      />
-                    </div>
-                  </div>
-
-                  <div className="flex items-center justify-between text-sm">
-                    <span className="text-gray-500">Adoption</span>
-                    <span className="font-semibold text-[#2b4a6a]">
-                      {feature.usage >= 80 ? 'Excellente' : 
-                       feature.usage >= 60 ? 'Bonne' : 'À améliorer'}
-                    </span>
-                  </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {featureUsage.map((feature, index) => (
+            <motion.div
+              key={feature.name}
+              custom={index}
+              variants={cardVariants}
+              initial="hidden"
+              animate="visible"
+              className={`p-4 rounded-xl border ${
+                theme === 'dark'
+                  ? 'bg-gray-800/50 border-gray-700/50'
+                  : 'bg-gray-50 border-gray-200'
+              }`}
+            >
+              <div className="flex items-center gap-3 mb-3">
+                <div className={`p-2 rounded-lg bg-gradient-to-r ${feature.color}`}>
+                  <feature.icon className="w-4 h-4 text-white" />
                 </div>
-              </motion.div>
-            );
-          })}
-        </div>
-      </motion.div>
-
-      {/* Tenant Usage Details */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, delay: 0.4 }}
-        className="bg-white rounded-3xl p-6 shadow-xl border border-gray-200/50 backdrop-blur-sm"
-      >
-        <div className="flex items-center gap-3 mb-6">
-          <div className="p-3 bg-gradient-to-r from-[#f57c00] to-[#ff9800] rounded-xl">
-            <UsersIcon className="w-6 h-6 text-white" />
-          </div>
-          <div>
-            <h3 className="text-xl font-bold text-[#2b4a6a]">Usage par Tenant</h3>
-            <p className="text-gray-600">Détails de l'utilisation par établissement</p>
-          </div>
-        </div>
-
-        <div className="space-y-4">
-          {tenantUsage.map((tenant, index) => {
-            const statusColors = getStatusColor(tenant.status);
-            
-            return (
-              <motion.div
-                key={tenant.id}
-                custom={index}
-                variants={cardVariants}
-                initial="hidden"
-                animate="visible"
-                className="group relative bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden transition-all duration-300 p-6"
-              >
-                <div className="relative">
-                  <div className="flex items-center justify-between mb-4">
-                    <div className="flex items-center gap-4">
-                      <div className="w-12 h-12 bg-gradient-to-br from-[#f57c00] to-[#ff9800] rounded-xl flex items-center justify-center text-white font-bold text-lg">
-                        {tenant.name.charAt(0)}
-                      </div>
-                      <div>
-                        <h4 className="font-bold text-gray-900 text-lg">{tenant.name}</h4>
-                        <div className="flex items-center gap-2">
-                          <span className={`inline-flex items-center px-2 py-1 rounded-lg text-xs font-semibold ${statusColors.bg} ${statusColors.text} ${statusColors.border}`}>
-                            {tenant.status === 'active' ? 'Actif' : tenant.status === 'inactive' ? 'Inactif' : 'Suspendu'}
-                          </span>
-                          <div className="flex items-center gap-1 text-sm">
-                            {tenant.growth > 0 ? (
-                              <ArrowTrendingUpIcon className="w-4 h-4 text-[#2b4a6a]" />
-                            ) : (
-                              <ArrowTrendingDownIcon className="w-4 h-4 text-[#2b4a6a]" />
-                            )}
-                            <span className="text-[#2b4a6a]">
-                              {Math.abs(tenant.growth)}%
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    
-                    <div className="text-right">
-                      <p className="text-sm text-gray-500">Dernière activité</p>
-                      <p className="text-sm font-semibold text-gray-900">{formatLastActivity(tenant.lastActivity)}</p>
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <div className="text-center p-4 bg-[#f57c00]/10 rounded-xl border border-[#f57c00]/20">
-                      <div className="flex items-center justify-center gap-2 mb-2">
-                        <UsersIcon className="w-5 h-5 text-[#f57c00]" />
-                        <span className="text-sm text-[#f57c00] font-semibold">Utilisateurs actifs</span>
-                      </div>
-                      <div className="text-2xl font-bold text-[#2b4a6a]">{tenant.activeUsers.toLocaleString()}</div>
-                    </div>
-                    
-                    <div className="text-center p-4 bg-[#f57c00]/10 rounded-xl border border-[#f57c00]/20">
-                      <div className="flex items-center justify-center gap-2 mb-2">
-                        <CloudIcon className="w-5 h-5 text-[#f57c00]" />
-                        <span className="text-sm text-[#f57c00] font-semibold">Stockage utilisé</span>
-                      </div>
-                      <div className="text-2xl font-bold text-[#2b4a6a]">{tenant.storageUsed} GB</div>
-                    </div>
-                    
-                    <div className="text-center p-4 bg-[#f57c00]/10 rounded-xl border border-[#f57c00]/20">
-                      <div className="flex items-center justify-center gap-2 mb-2">
-                        <CpuChipIcon className="w-5 h-5 text-[#f57c00]" />
-                        <span className="text-sm text-[#f57c00] font-semibold">Appels API</span>
-                      </div>
-                      <div className="text-2xl font-bold text-[#2b4a6a]">{tenant.apiCalls.toLocaleString()}</div>
-                    </div>
-                  </div>
-
-                  <div className="mt-4">
-                    <p className="text-sm text-gray-600 mb-2">Features utilisées :</p>
-                    <div className="flex flex-wrap gap-2">
-                      {tenant.features.map((feature, idx) => (
-                        <span key={idx} className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm">
-                          {feature}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
+                <div>
+                  <h4 className={`font-semibold ${
+                    theme === 'dark' ? 'text-white' : 'text-gray-900'
+                  }`}>{feature.name}</h4>
+                  <p className={`text-xs ${
+                    theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
+                  }`}>{feature.description}</p>
                 </div>
-              </motion.div>
-            );
-          })}
-        </div>
-      </motion.div>
-
-      {/* Platform Usage Summary */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, delay: 0.5 }}
-        className="bg-gradient-to-br from-white via-white to-gray-50/50 rounded-3xl p-6 shadow-xl border border-gray-200/50 backdrop-blur-sm"
-      >
-        <div className="flex items-center gap-3 mb-6">
-          <div className="p-3 bg-gradient-to-r from-[#f57c00] to-[#ff9800] rounded-xl">
-            <GlobeAltIcon className="w-6 h-6 text-white" />
-          </div>
-          <div>
-            <h3 className="text-xl font-bold text-[#2b4a6a]">Résumé Plateforme</h3>
-            <p className="text-gray-600">Vue d'ensemble de l'utilisation globale</p>
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-          <div className="text-center p-4 bg-[#f57c00]/10 rounded-2xl border border-[#f57c00]/20">
-            <div className="text-3xl font-bold text-[#f57c00] mb-2">
-              {tenantUsage.reduce((sum, tenant) => sum + tenant.activeUsers, 0).toLocaleString()}
-            </div>
-            <p className="text-[#2b4a6a] font-semibold">Utilisateurs totaux</p>
-          </div>
-          <div className="text-center p-4 bg-[#f57c00]/10 rounded-2xl border border-[#f57c00]/20">
-            <div className="text-3xl font-bold text-[#f57c00] mb-2">
-              {tenantUsage.reduce((sum, tenant) => sum + tenant.storageUsed, 0).toFixed(1)} GB
-            </div>
-            <p className="text-[#2b4a6a] font-semibold">Stockage total</p>
-          </div>
-          <div className="text-center p-4 bg-[#f57c00]/10 rounded-2xl border border-[#f57c00]/20">
-            <div className="text-3xl font-bold text-[#f57c00] mb-2">
-              {tenantUsage.reduce((sum, tenant) => sum + tenant.apiCalls, 0).toLocaleString()}
-            </div>
-            <p className="text-[#2b4a6a] font-semibold">Appels API/jour</p>
-          </div>
-          <div className="text-center p-4 bg-[#f57c00]/10 rounded-2xl border border-[#f57c00]/20">
-            <div className="text-3xl font-bold text-[#f57c00] mb-2">
-              {tenantUsage.filter(tenant => tenant.status === 'active').length}
-            </div>
-            <p className="text-[#2b4a6a] font-semibold">Tenants actifs</p>
-          </div>
+              </div>
+              
+              <div className="mb-2">
+                <div className="flex justify-between text-xs mb-1">
+                  <span className={theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}>Utilisation</span>
+                  <span className={theme === 'dark' ? 'text-white' : 'text-gray-900'}>{feature.usage}%</span>
+                </div>
+                <div className={`w-full rounded-full h-2 ${
+                  theme === 'dark' ? 'bg-gray-700' : 'bg-gray-200'
+                }`}>
+                  <motion.div
+                    initial={{ width: 0 }}
+                    animate={{ width: `${feature.usage}%` }}
+                    transition={{ duration: 1, delay: index * 0.1 }}
+                    className={`h-full rounded-full bg-gradient-to-r ${feature.color}`}
+                  />
+                </div>
+              </div>
+            </motion.div>
+          ))}
         </div>
       </motion.div>
     </div>

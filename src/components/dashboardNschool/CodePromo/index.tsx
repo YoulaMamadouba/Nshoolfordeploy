@@ -153,9 +153,7 @@ const CodePromo = () => {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ type: 'spring', stiffness: 100, damping: 15, duration: 0.6 }}
-      className={`pt-2 px-2 min-h-full ${
-        theme === 'dark' ? 'bg-gray-900' : 'bg-gray-50'
-      }`}
+      className="pt-2 px-2 min-h-full"
     >
       <AnimatePresence mode="wait">
         {currentView === 'list' && (

@@ -10,6 +10,7 @@ import {
   CalendarIcon,
   SparklesIcon,
 } from '@heroicons/react/24/outline';
+import { useTheme } from '@/contexts/ThemeContext';
 
 interface PromoCode {
   id: number;
@@ -34,6 +35,8 @@ interface PromoStatsProps {
 }
 
 const PromoStats: React.FC<PromoStatsProps> = ({ promoCodes }) => {
+  const { theme } = useTheme();
+  
   // Calculs des métriques
   const totalRevenueGenerated = promoCodes.reduce((sum, promo) => sum + promo.revenueGenerated, 0);
   const totalRevenueLost = promoCodes.reduce((sum, promo) => sum + promo.revenueLost, 0);
@@ -102,7 +105,11 @@ const PromoStats: React.FC<PromoStatsProps> = ({ promoCodes }) => {
       variants={cardVariants}
       initial="hidden"
       animate="visible"
-      className="bg-white rounded-2xl p-6 shadow-lg border border-gray-200/50 backdrop-blur-sm"
+      className={`rounded-2xl p-6 shadow-lg border backdrop-blur-sm ${
+        theme === 'dark'
+          ? 'bg-gradient-to-br from-gray-800 via-gray-800 to-gray-900/50 border-gray-700/50'
+          : 'bg-white border-gray-200/50'
+      }`}
     >
       <div className="flex items-center justify-between mb-4">
         <div className={`p-3 rounded-xl ${color}`}>
@@ -117,8 +124,12 @@ const PromoStats: React.FC<PromoStatsProps> = ({ promoCodes }) => {
           </div>
         )}
       </div>
-      <h3 className="text-2xl font-bold text-gray-900 mb-1">{value}</h3>
-      <p className="text-gray-600 text-sm">{title}</p>
+      <h3 className={`text-2xl font-bold mb-1 ${
+        theme === 'dark' ? 'text-white' : 'text-gray-900'
+      }`}>{value}</h3>
+      <p className={`text-sm ${
+        theme === 'dark' ? 'text-gray-300' : 'text-gray-600'
+      }`}>{title}</p>
     </motion.div>
   );
 
@@ -127,15 +138,23 @@ const PromoStats: React.FC<PromoStatsProps> = ({ promoCodes }) => {
       variants={containerVariants}
       initial="hidden"
       animate="visible"
-      className="bg-gradient-to-br from-white via-white to-gray-50/50 rounded-3xl p-6 shadow-xl border border-gray-200/50 backdrop-blur-sm"
+      className={`rounded-3xl p-6 shadow-xl border backdrop-blur-sm ${
+        theme === 'dark'
+          ? 'bg-gradient-to-br from-gray-800 via-gray-800 to-gray-900/50 border-gray-700/50'
+          : 'bg-gradient-to-br from-white via-white to-gray-50/50 border-gray-200/50'
+      }`}
     >
       <div className="flex items-center gap-3 mb-6">
         <div className="p-2 bg-gradient-to-r from-[#f57c00] to-[#ff9800] rounded-xl">
           <ChartBarIcon className="w-6 h-6 text-white" />
         </div>
         <div>
-          <h2 className="text-2xl font-bold text-[#2b4a6a]">Statistiques Marketing</h2>
-          <p className="text-gray-600">Performance de vos codes promotionnels</p>
+          <h2 className={`text-2xl font-bold ${
+            theme === 'dark' ? 'text-white' : 'text-[#2b4a6a]'
+          }`}>Statistiques Marketing</h2>
+          <p className={`${
+            theme === 'dark' ? 'text-gray-300' : 'text-gray-600'
+          }`}>Performance de vos codes promotionnels</p>
         </div>
       </div>
 
@@ -182,14 +201,24 @@ const PromoStats: React.FC<PromoStatsProps> = ({ promoCodes }) => {
           variants={cardVariants}
           initial="hidden"
           animate="visible"
-          className="bg-white rounded-2xl p-6 shadow-lg border border-gray-200/50"
+          className={`rounded-2xl p-6 shadow-lg border ${
+            theme === 'dark'
+              ? 'bg-gradient-to-br from-gray-800 via-gray-800 to-gray-900/50 border-gray-700/50'
+              : 'bg-white border-gray-200/50'
+          }`}
         >
-          <h3 className="text-lg font-semibold text-[#2b4a6a] mb-4">Évolution mensuelle</h3>
+          <h3 className={`text-lg font-semibold mb-4 ${
+            theme === 'dark' ? 'text-white' : 'text-[#2b4a6a]'
+          }`}>Évolution mensuelle</h3>
           <div className="space-y-4">
             {monthlyData.map((data, index) => (
               <div key={data.month} className="flex items-center gap-4">
-                <span className="text-sm font-medium text-gray-600 w-8">{data.month}</span>
-                <div className="flex-1 bg-gray-200 rounded-full h-3">
+                <span className={`text-sm font-medium w-8 ${
+                  theme === 'dark' ? 'text-gray-300' : 'text-gray-600'
+                }`}>{data.month}</span>
+                <div className={`flex-1 rounded-full h-3 ${
+                  theme === 'dark' ? 'bg-gray-700' : 'bg-gray-200'
+                }`}>
                   <motion.div
                     initial={{ width: 0 }}
                     animate={{ width: `${(data.revenue / 30000) * 100}%` }}
@@ -197,7 +226,9 @@ const PromoStats: React.FC<PromoStatsProps> = ({ promoCodes }) => {
                     className="h-full bg-gradient-to-r from-[#f57c00] to-[#ff9800] rounded-full"
                   />
                 </div>
-                <span className="text-sm font-semibold text-gray-900 w-16 text-right">
+                <span className={`text-sm font-semibold w-16 text-right ${
+                  theme === 'dark' ? 'text-white' : 'text-gray-900'
+                }`}>
                   {data.revenue.toLocaleString()}€
                 </span>
               </div>
@@ -211,14 +242,24 @@ const PromoStats: React.FC<PromoStatsProps> = ({ promoCodes }) => {
           variants={cardVariants}
           initial="hidden"
           animate="visible"
-          className="bg-white rounded-2xl p-6 shadow-lg border border-gray-200/50"
+          className={`rounded-2xl p-6 shadow-lg border ${
+            theme === 'dark'
+              ? 'bg-gradient-to-br from-gray-800 via-gray-800 to-gray-900/50 border-gray-700/50'
+              : 'bg-white border-gray-200/50'
+          }`}
         >
-          <h3 className="text-lg font-semibold text-[#2b4a6a] mb-4">Utilisation par plan</h3>
+          <h3 className={`text-lg font-semibold mb-4 ${
+            theme === 'dark' ? 'text-white' : 'text-[#2b4a6a]'
+          }`}>Utilisation par plan</h3>
           <div className="space-y-4">
             {Object.entries(planData).map(([plan, uses], index) => (
               <div key={plan} className="flex items-center gap-4">
-                <span className="text-sm font-medium text-gray-600 flex-1">{plan}</span>
-                <div className="flex-1 bg-gray-200 rounded-full h-3">
+                <span className={`text-sm font-medium flex-1 ${
+                  theme === 'dark' ? 'text-gray-300' : 'text-gray-600'
+                }`}>{plan}</span>
+                <div className={`flex-1 rounded-full h-3 ${
+                  theme === 'dark' ? 'bg-gray-700' : 'bg-gray-200'
+                }`}>
                   <motion.div
                     initial={{ width: 0 }}
                     animate={{ width: `${(uses / Math.max(...Object.values(planData))) * 100}%` }}
@@ -226,7 +267,9 @@ const PromoStats: React.FC<PromoStatsProps> = ({ promoCodes }) => {
                     className="h-full bg-gradient-to-r from-[#f57c00] to-[#ff9800] rounded-full"
                   />
                 </div>
-                <span className="text-sm font-semibold text-gray-900 w-12 text-right">
+                <span className={`text-sm font-semibold w-12 text-right ${
+                  theme === 'dark' ? 'text-white' : 'text-gray-900'
+                }`}>
                   {uses}
                 </span>
               </div>
@@ -242,15 +285,23 @@ const PromoStats: React.FC<PromoStatsProps> = ({ promoCodes }) => {
           variants={cardVariants}
           initial="hidden"
           animate="visible"
-          className="bg-gradient-to-r from-green-50 to-emerald-50 p-4 rounded-xl border border-green-200"
+          className={`p-4 rounded-xl border ${
+            theme === 'dark'
+              ? 'bg-gradient-to-r from-green-900/30 to-emerald-900/30 border-green-700/50'
+              : 'bg-gradient-to-r from-green-50 to-emerald-50 border-green-200'
+          }`}
         >
           <div className="flex items-center gap-3">
             <div className="p-2 bg-green-500 rounded-lg">
               <ArrowTrendingUpIcon className="w-5 h-5 text-white" />
             </div>
             <div>
-              <p className="text-sm text-gray-600">Taux de conversion moyen</p>
-              <p className="text-xl font-bold text-green-700">{avgConversionRate.toFixed(1)}%</p>
+              <p className={`text-sm ${
+                theme === 'dark' ? 'text-gray-300' : 'text-gray-600'
+              }`}>Taux de conversion moyen</p>
+              <p className={`text-xl font-bold ${
+                theme === 'dark' ? 'text-green-400' : 'text-green-700'
+              }`}>{avgConversionRate.toFixed(1)}%</p>
             </div>
           </div>
         </motion.div>
@@ -260,15 +311,23 @@ const PromoStats: React.FC<PromoStatsProps> = ({ promoCodes }) => {
           variants={cardVariants}
           initial="hidden"
           animate="visible"
-          className="bg-gradient-to-r from-blue-50 to-indigo-50 p-4 rounded-xl border border-blue-200"
+          className={`p-4 rounded-xl border ${
+            theme === 'dark'
+              ? 'bg-gradient-to-r from-blue-900/30 to-indigo-900/30 border-blue-700/50'
+              : 'bg-gradient-to-r from-blue-50 to-indigo-50 border-blue-200'
+          }`}
         >
           <div className="flex items-center gap-3">
             <div className="p-2 bg-blue-500 rounded-lg">
               <CalendarIcon className="w-5 h-5 text-white" />
             </div>
             <div>
-              <p className="text-sm text-gray-600">Codes expirés ce mois</p>
-              <p className="text-xl font-bold text-blue-700">
+              <p className={`text-sm ${
+                theme === 'dark' ? 'text-gray-300' : 'text-gray-600'
+              }`}>Codes expirés ce mois</p>
+              <p className={`text-xl font-bold ${
+                theme === 'dark' ? 'text-blue-400' : 'text-blue-700'
+              }`}>
                 {promoCodes.filter(p => new Date(p.endDate) < new Date() && new Date(p.endDate) > new Date(Date.now() - 30 * 24 * 60 * 60 * 1000)).length}
               </p>
             </div>
@@ -280,15 +339,23 @@ const PromoStats: React.FC<PromoStatsProps> = ({ promoCodes }) => {
           variants={cardVariants}
           initial="hidden"
           animate="visible"
-          className="bg-gradient-to-r from-orange-50 to-amber-50 p-4 rounded-xl border border-orange-200"
+          className={`p-4 rounded-xl border ${
+            theme === 'dark'
+              ? 'bg-gradient-to-r from-orange-900/30 to-amber-900/30 border-orange-700/50'
+              : 'bg-gradient-to-r from-orange-50 to-amber-50 border-orange-200'
+          }`}
         >
           <div className="flex items-center gap-3">
             <div className="p-2 bg-[#f57c00] rounded-lg">
               <SparklesIcon className="w-5 h-5 text-white" />
             </div>
             <div>
-              <p className="text-sm text-gray-600">ROI moyen</p>
-              <p className="text-xl font-bold text-orange-700">
+              <p className={`text-sm ${
+                theme === 'dark' ? 'text-gray-300' : 'text-gray-600'
+              }`}>ROI moyen</p>
+              <p className={`text-xl font-bold ${
+                theme === 'dark' ? 'text-orange-400' : 'text-orange-700'
+              }`}>
                 {totalRevenueGenerated > 0 ? ((totalRevenueGenerated / (totalRevenueGenerated + totalRevenueLost)) * 100).toFixed(1) : 0}%
               </p>
             </div>

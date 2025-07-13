@@ -15,6 +15,7 @@ import {
   CreditCardIcon,
   BuildingOfficeIcon,
 } from '@heroicons/react/24/outline';
+import { useTheme } from '@/contexts/ThemeContext';
 
 interface PromoCode {
   id?: number;
@@ -42,6 +43,7 @@ interface PromoFormProps {
 }
 
 const PromoForm: React.FC<PromoFormProps> = ({ promoCode, onBack, onSave, mode }) => {
+  const { theme } = useTheme();
   const [formData, setFormData] = useState<PromoCode>({
     code: '',
     description: '',
@@ -214,7 +216,11 @@ const PromoForm: React.FC<PromoFormProps> = ({ promoCode, onBack, onSave, mode }
       {/* Header */}
       <motion.div
         variants={cardVariants}
-        className="bg-gradient-to-br from-white via-white to-gray-50/50 rounded-3xl p-6 shadow-xl border border-gray-200/50 backdrop-blur-sm"
+        className={`rounded-3xl p-6 shadow-xl border backdrop-blur-sm ${
+          theme === 'dark'
+            ? 'bg-gradient-to-br from-gray-800 via-gray-800 to-gray-900/50 border-gray-700/50'
+            : 'bg-gradient-to-br from-white via-white to-gray-50/50 border-gray-200/50'
+        }`}
       >
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-4">
@@ -227,10 +233,18 @@ const PromoForm: React.FC<PromoFormProps> = ({ promoCode, onBack, onSave, mode }
               <ArrowLeftIcon className="w-5 h-5" />
             </motion.button>
             <div>
-              <h1 className="text-3xl font-bold text-[#2b4a6a] tracking-tight" style={{ textShadow: '0 2px 4px rgba(0,0,0,0.1)' }}>
+              <h1 className={`text-3xl font-bold tracking-tight ${
+                theme === 'dark' ? 'text-white' : 'text-[#2b4a6a]'
+              }`} style={{ 
+                textShadow: theme === 'dark' 
+                  ? '0 2px 4px rgba(0,0,0,0.3)' 
+                  : '0 2px 4px rgba(0,0,0,0.1)' 
+              }}>
                 {mode === 'create' ? 'Créer un Code Promotionnel' : 'Modifier le Code'}
               </h1>
-              <p className="text-lg text-gray-600 font-medium">
+              <p className={`text-lg font-medium ${
+                theme === 'dark' ? 'text-gray-300' : 'text-gray-600'
+              }`}>
                 {mode === 'create' ? 'Configurez votre nouvelle campagne marketing' : 'Modifiez les paramètres du code'}
               </p>
             </div>
@@ -242,7 +256,11 @@ const PromoForm: React.FC<PromoFormProps> = ({ promoCode, onBack, onSave, mode }
       <motion.form
         variants={cardVariants}
         onSubmit={handleSubmit}
-        className="bg-white rounded-3xl shadow-xl border border-gray-200/50 overflow-hidden backdrop-blur-sm"
+        className={`rounded-3xl shadow-xl border overflow-hidden backdrop-blur-sm ${
+          theme === 'dark'
+            ? 'bg-gradient-to-br from-gray-800 via-gray-800 to-gray-900/50 border-gray-700/50'
+            : 'bg-white border-gray-200/50'
+        }`}
       >
         <div className="p-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -250,13 +268,17 @@ const PromoForm: React.FC<PromoFormProps> = ({ promoCode, onBack, onSave, mode }
             <div className="space-y-6">
               {/* Code et Description */}
               <div className="space-y-4">
-                <h3 className="text-xl font-semibold text-[#2b4a6a] flex items-center gap-2">
+                <h3 className={`text-xl font-semibold flex items-center gap-2 ${
+                  theme === 'dark' ? 'text-white' : 'text-[#2b4a6a]'
+                }`}>
                   <SparklesIcon className="w-5 h-5 text-[#f57c00]" />
                   Informations de base
                 </h3>
                 
                 <motion.div whileHover={{ scale: 1.02 }} className="space-y-2">
-                  <label className="block text-sm font-semibold text-gray-700">
+                  <label className={`block text-sm font-semibold ${
+                    theme === 'dark' ? 'text-gray-300' : 'text-gray-700'
+                  }`}>
                     Code promotionnel *
                   </label>
                   <div className="flex gap-2">
@@ -264,8 +286,8 @@ const PromoForm: React.FC<PromoFormProps> = ({ promoCode, onBack, onSave, mode }
                       type="text"
                       value={formData.code}
                       onChange={(e) => handleInputChange('code', e.target.value.toUpperCase())}
-                      className={`flex-1 px-4 py-3 border rounded-xl focus:ring-2 focus:ring-[#f57c00]/50 focus:border-[#f57c00] transition-all duration-300 bg-white/80 backdrop-blur-sm font-mono ${
-                        errors.code ? 'border-red-300' : 'border-gray-300'
+                      className={`flex-1 px-4 py-3 border rounded-xl focus:ring-2 focus:ring-[#f57c00]/50 focus:border-[#f57c00] transition-all duration-300 backdrop-blur-sm font-mono ${
+                        errors.code ? 'border-red-300' : theme === 'dark' ? 'border-gray-600 bg-gray-800/50 text-white' : 'border-gray-300 bg-white/80'
                       }`}
                       placeholder="Ex: WELCOME2024"
                     />
@@ -292,15 +314,17 @@ const PromoForm: React.FC<PromoFormProps> = ({ promoCode, onBack, onSave, mode }
                 </motion.div>
 
                 <motion.div whileHover={{ scale: 1.02 }} className="space-y-2">
-                  <label className="block text-sm font-semibold text-gray-700">
+                  <label className={`block text-sm font-semibold ${
+                    theme === 'dark' ? 'text-gray-300' : 'text-gray-700'
+                  }`}>
                     Description interne *
                   </label>
                   <textarea
                     value={formData.description}
                     onChange={(e) => handleInputChange('description', e.target.value)}
                     rows={3}
-                    className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-[#f57c00]/50 focus:border-[#f57c00] transition-all duration-300 bg-white/80 backdrop-blur-sm resize-none ${
-                      errors.description ? 'border-red-300' : 'border-gray-300'
+                    className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-[#f57c00]/50 focus:border-[#f57c00] transition-all duration-300 backdrop-blur-sm resize-none ${
+                      errors.description ? 'border-red-300' : theme === 'dark' ? 'border-gray-600 bg-gray-800/50 text-white' : 'border-gray-300 bg-white/80'
                     }`}
                     placeholder="Description détaillée du code promotionnel..."
                   />
@@ -319,20 +343,28 @@ const PromoForm: React.FC<PromoFormProps> = ({ promoCode, onBack, onSave, mode }
 
               {/* Type et Valeur */}
               <div className="space-y-4">
-                <h3 className="text-xl font-semibold text-[#2b4a6a] flex items-center gap-2">
+                <h3 className={`text-xl font-semibold flex items-center gap-2 ${
+                  theme === 'dark' ? 'text-white' : 'text-[#2b4a6a]'
+                }`}>
                   <CreditCardIcon className="w-5 h-5 text-[#f57c00]" />
                   Réduction
                 </h3>
                 
                 <div className="grid grid-cols-2 gap-4">
                   <motion.div whileHover={{ scale: 1.02 }} className="space-y-2">
-                    <label className="block text-sm font-semibold text-gray-700">
+                    <label className={`block text-sm font-semibold ${
+                      theme === 'dark' ? 'text-gray-300' : 'text-gray-700'
+                    }`}>
                       Type de réduction *
                     </label>
                     <select
                       value={formData.type}
                       onChange={(e) => handleInputChange('type', e.target.value as 'percentage' | 'fixed')}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#f57c00]/50 focus:border-[#f57c00] transition-all duration-300 bg-[#2b4a6a]/5 backdrop-blur-sm"
+                      className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-[#f57c00]/50 focus:border-[#f57c00] transition-all duration-300 backdrop-blur-sm ${
+                        theme === 'dark' 
+                          ? 'border-gray-600 bg-gray-800/50 text-white' 
+                          : 'border-gray-300 bg-[#2b4a6a]/5'
+                      }`}
                     >
                       <option value="percentage">Pourcentage (%)</option>
                       <option value="fixed">Montant fixe (€)</option>
@@ -340,7 +372,9 @@ const PromoForm: React.FC<PromoFormProps> = ({ promoCode, onBack, onSave, mode }
                   </motion.div>
 
                   <motion.div whileHover={{ scale: 1.02 }} className="space-y-2">
-                    <label className="block text-sm font-semibold text-gray-700">
+                    <label className={`block text-sm font-semibold ${
+                      theme === 'dark' ? 'text-gray-300' : 'text-gray-700'
+                    }`}>
                       Valeur *
                     </label>
                     <div className="relative">
@@ -348,15 +382,17 @@ const PromoForm: React.FC<PromoFormProps> = ({ promoCode, onBack, onSave, mode }
                         type="number"
                         value={formData.value}
                         onChange={(e) => handleInputChange('value', parseFloat(e.target.value) || 0)}
-                        className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-[#f57c00]/50 focus:border-[#f57c00] transition-all duration-300 bg-white/80 backdrop-blur-sm ${
-                          errors.value ? 'border-red-300' : 'border-gray-300'
+                        className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-[#f57c00]/50 focus:border-[#f57c00] transition-all duration-300 backdrop-blur-sm ${
+                          errors.value ? 'border-red-300' : theme === 'dark' ? 'border-gray-600 bg-gray-800/50 text-white' : 'border-gray-300 bg-white/80'
                         }`}
                         placeholder={formData.type === 'percentage' ? '20' : '50'}
                         min="0"
                         max={formData.type === 'percentage' ? '100' : undefined}
                         step={formData.type === 'percentage' ? '1' : '0.01'}
                       />
-                      <div className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500">
+                      <div className={`absolute right-3 top-1/2 transform -translate-y-1/2 ${
+                        theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
+                      }`}>
                         {formData.type === 'percentage' ? '%' : '€'}
                       </div>
                     </div>
@@ -376,22 +412,26 @@ const PromoForm: React.FC<PromoFormProps> = ({ promoCode, onBack, onSave, mode }
 
               {/* Dates */}
               <div className="space-y-4">
-                <h3 className="text-xl font-semibold text-[#2b4a6a] flex items-center gap-2">
+                <h3 className={`text-xl font-semibold flex items-center gap-2 ${
+                  theme === 'dark' ? 'text-white' : 'text-[#2b4a6a]'
+                }`}>
                   <CalendarIcon className="w-5 h-5 text-[#f57c00]" />
                   Période de validité
                 </h3>
                 
                 <div className="grid grid-cols-2 gap-4">
                   <motion.div whileHover={{ scale: 1.02 }} className="space-y-2">
-                    <label className="block text-sm font-semibold text-gray-700">
+                    <label className={`block text-sm font-semibold ${
+                      theme === 'dark' ? 'text-gray-300' : 'text-gray-700'
+                    }`}>
                       Date de début *
                     </label>
                     <input
                       type="date"
                       value={formData.startDate}
                       onChange={(e) => handleInputChange('startDate', e.target.value)}
-                      className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-[#f57c00]/50 focus:border-[#f57c00] transition-all duration-300 bg-white/80 backdrop-blur-sm ${
-                        errors.startDate ? 'border-red-300' : 'border-gray-300'
+                      className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-[#f57c00]/50 focus:border-[#f57c00] transition-all duration-300 backdrop-blur-sm ${
+                        errors.startDate ? 'border-red-300' : theme === 'dark' ? 'border-gray-600 bg-gray-800/50 text-white' : 'border-gray-300 bg-white/80'
                       }`}
                     />
                     {errors.startDate && (
@@ -407,15 +447,17 @@ const PromoForm: React.FC<PromoFormProps> = ({ promoCode, onBack, onSave, mode }
                   </motion.div>
 
                   <motion.div whileHover={{ scale: 1.02 }} className="space-y-2">
-                    <label className="block text-sm font-semibold text-gray-700">
+                    <label className={`block text-sm font-semibold ${
+                      theme === 'dark' ? 'text-gray-300' : 'text-gray-700'
+                    }`}>
                       Date de fin *
                     </label>
                     <input
                       type="date"
                       value={formData.endDate}
                       onChange={(e) => handleInputChange('endDate', e.target.value)}
-                      className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-[#f57c00]/50 focus:border-[#f57c00] transition-all duration-300 bg-white/80 backdrop-blur-sm ${
-                        errors.endDate ? 'border-red-300' : 'border-gray-300'
+                      className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-[#f57c00]/50 focus:border-[#f57c00] transition-all duration-300 backdrop-blur-sm ${
+                        errors.endDate ? 'border-red-300' : theme === 'dark' ? 'border-gray-600 bg-gray-800/50 text-white' : 'border-gray-300 bg-white/80'
                       }`}
                     />
                     {errors.endDate && (
@@ -435,72 +477,27 @@ const PromoForm: React.FC<PromoFormProps> = ({ promoCode, onBack, onSave, mode }
 
             {/* Colonne droite */}
             <div className="space-y-6">
-              {/* Plans applicables */}
+              {/* Utilisations */}
               <div className="space-y-4">
-                <h3 className="text-xl font-semibold text-[#2b4a6a] flex items-center gap-2">
-                  <BuildingOfficeIcon className="w-5 h-5 text-[#f57c00]" />
-                  Plans applicables *
-                </h3>
-                
-                <div className="grid grid-cols-1 gap-3">
-                  {plans.map((plan) => (
-                    <motion.div
-                      key={plan.id}
-                      whileHover={{ scale: 1.02 }}
-                      onClick={() => handlePlanToggle(plan.id)}
-                      className={`p-4 rounded-xl border-2 cursor-pointer transition-all duration-300 ${
-                        formData.applicablePlans.includes(plan.id)
-                          ? 'border-[#f57c00] bg-gradient-to-br from-orange-50 to-orange-100/50 shadow-lg'
-                          : 'border-gray-200 bg-white hover:border-[#f57c00]/50 hover:bg-orange-50/30'
-                      }`}
-                    >
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <h4 className="font-semibold text-gray-900">{plan.name}</h4>
-                          <p className="text-sm text-gray-600">{plan.price}</p>
-                        </div>
-                        <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
-                          formData.applicablePlans.includes(plan.id)
-                            ? 'border-[#f57c00] bg-[#f57c00]'
-                            : 'border-gray-300'
-                        }`}>
-                          {formData.applicablePlans.includes(plan.id) && (
-                            <CheckIcon className="w-3 h-3 text-white" />
-                          )}
-                        </div>
-                      </div>
-                    </motion.div>
-                  ))}
-                </div>
-                {errors.applicablePlans && (
-                  <motion.p
-                    initial={{ opacity: 0, y: -10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="text-red-500 text-sm flex items-center gap-1"
-                  >
-                    <XMarkIcon className="w-4 h-4" />
-                    {errors.applicablePlans}
-                  </motion.p>
-                )}
-              </div>
-
-              {/* Limites d'utilisation */}
-              <div className="space-y-4">
-                <h3 className="text-xl font-semibold text-[#2b4a6a] flex items-center gap-2">
+                <h3 className={`text-xl font-semibold flex items-center gap-2 ${
+                  theme === 'dark' ? 'text-white' : 'text-[#2b4a6a]'
+                }`}>
                   <UsersIcon className="w-5 h-5 text-[#f57c00]" />
                   Limites d'utilisation
                 </h3>
                 
                 <motion.div whileHover={{ scale: 1.02 }} className="space-y-2">
-                  <label className="block text-sm font-semibold text-gray-700">
-                    Nombre maximum d'utilisations (optionnel)
+                  <label className={`block text-sm font-semibold ${
+                    theme === 'dark' ? 'text-gray-300' : 'text-gray-700'
+                  }`}>
+                    Nombre maximum d'utilisations
                   </label>
                   <input
                     type="number"
                     value={formData.maxUses || ''}
                     onChange={(e) => handleInputChange('maxUses', e.target.value ? parseInt(e.target.value) : null)}
-                    className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-[#f57c00]/50 focus:border-[#f57c00] transition-all duration-300 bg-white/80 backdrop-blur-sm ${
-                      errors.maxUses ? 'border-red-300' : 'border-gray-300'
+                    className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-[#f57c00]/50 focus:border-[#f57c00] transition-all duration-300 backdrop-blur-sm ${
+                      errors.maxUses ? 'border-red-300' : theme === 'dark' ? 'border-gray-600 bg-gray-800/50 text-white' : 'border-gray-300 bg-white/80'
                     }`}
                     placeholder="Illimité (laisser vide)"
                     min="1"
@@ -518,23 +515,81 @@ const PromoForm: React.FC<PromoFormProps> = ({ promoCode, onBack, onSave, mode }
                 </motion.div>
               </div>
 
-              {/* Conditions d'utilisation */}
+              {/* Plans applicables */}
               <div className="space-y-4">
-                <h3 className="text-xl font-semibold text-[#2b4a6a] flex items-center gap-2">
+                <h3 className={`text-xl font-semibold flex items-center gap-2 ${
+                  theme === 'dark' ? 'text-white' : 'text-[#2b4a6a]'
+                }`}>
+                  <BuildingOfficeIcon className="w-5 h-5 text-[#f57c00]" />
+                  Plans applicables *
+                </h3>
+                
+                <div className="grid grid-cols-2 gap-3">
+                  {plans.map((plan) => (
+                    <motion.div
+                      key={plan.id}
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      onClick={() => handlePlanToggle(plan.id)}
+                      className={`p-4 rounded-xl border-2 cursor-pointer transition-all duration-300 ${
+                        formData.applicablePlans.includes(plan.id)
+                          ? theme === 'dark'
+                            ? 'bg-[#f57c00]/20 border-[#f57c00] text-white'
+                            : 'bg-[#f57c00]/10 border-[#f57c00] text-[#2b4a6a]'
+                          : theme === 'dark'
+                            ? 'bg-gray-800/50 border-gray-600 text-gray-300 hover:border-gray-500'
+                            : 'bg-white border-gray-200 text-gray-700 hover:border-gray-300'
+                      }`}
+                    >
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <h4 className="font-semibold">{plan.name}</h4>
+                          <p className={`text-sm ${
+                            theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
+                          }`}>{plan.price}</p>
+                        </div>
+                        {formData.applicablePlans.includes(plan.id) && (
+                          <CheckIcon className="w-5 h-5 text-[#f57c00]" />
+                        )}
+                      </div>
+                    </motion.div>
+                  ))}
+                </div>
+                {errors.applicablePlans && (
+                  <motion.p
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="text-red-500 text-sm flex items-center gap-1"
+                  >
+                    <XMarkIcon className="w-4 h-4" />
+                    {errors.applicablePlans}
+                  </motion.p>
+                )}
+              </div>
+
+              {/* Conditions */}
+              <div className="space-y-4">
+                <h3 className={`text-xl font-semibold flex items-center gap-2 ${
+                  theme === 'dark' ? 'text-white' : 'text-[#2b4a6a]'
+                }`}>
                   <DocumentTextIcon className="w-5 h-5 text-[#f57c00]" />
                   Conditions d'utilisation
                 </h3>
                 
                 <motion.div whileHover={{ scale: 1.02 }} className="space-y-2">
-                  <label className="block text-sm font-semibold text-gray-700">
-                    Conditions spéciales (optionnel)
+                  <label className={`block text-sm font-semibold ${
+                    theme === 'dark' ? 'text-gray-300' : 'text-gray-700'
+                  }`}>
+                    Conditions spéciales
                   </label>
                   <textarea
                     value={formData.conditions}
                     onChange={(e) => handleInputChange('conditions', e.target.value)}
-                    rows={4}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#f57c00]/50 focus:border-[#f57c00] transition-all duration-300 bg-white/80 backdrop-blur-sm resize-none"
-                    placeholder="Conditions spéciales, restrictions, notes internes..."
+                    rows={3}
+                    className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-[#f57c00]/50 focus:border-[#f57c00] transition-all duration-300 backdrop-blur-sm resize-none ${
+                      theme === 'dark' ? 'border-gray-600 bg-gray-800/50 text-white' : 'border-gray-300 bg-white/80'
+                    }`}
+                    placeholder="Ex: Nouveaux clients uniquement, minimum 6 mois d'engagement..."
                   />
                 </motion.div>
               </div>
@@ -542,39 +597,41 @@ const PromoForm: React.FC<PromoFormProps> = ({ promoCode, onBack, onSave, mode }
           </div>
         </div>
 
-        {/* Navigation Buttons */}
-        <div className="px-8 py-6 bg-gray-50 border-t border-gray-200">
-          <div className="flex justify-between items-center">
+        {/* Actions */}
+        <div className={`px-8 py-6 border-t ${
+          theme === 'dark' ? 'border-gray-700/50' : 'border-gray-200'
+        }`}>
+          <div className="flex justify-end gap-4">
             <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
               type="button"
               onClick={onBack}
-              className="px-6 py-3 bg-gray-500 text-white rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className={`px-6 py-3 rounded-xl border-2 transition-all duration-300 ${
+                theme === 'dark'
+                  ? 'border-gray-600 text-gray-300 hover:border-gray-500 hover:text-white'
+                  : 'border-gray-300 text-gray-700 hover:border-gray-400 hover:text-gray-900'
+              }`}
             >
               Annuler
             </motion.button>
-
+            
             <motion.button
-              whileHover={{ 
-                scale: 1.05, 
-                boxShadow: "0px 8px 25px rgba(245, 158, 11, 0.4)"
-              }}
-              whileTap={{ scale: 0.95 }}
               type="submit"
               disabled={isSubmitting}
-              className="px-8 py-3 bg-gradient-to-r from-amber-500 to-orange-600 text-white rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+              whileHover={{ scale: isSubmitting ? 1 : 1.05 }}
+              whileTap={{ scale: isSubmitting ? 1 : 0.95 }}
+              className={`px-8 py-3 bg-gradient-to-r from-[#f57c00] to-[#ff9800] text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 ${
+                isSubmitting ? 'opacity-50 cursor-not-allowed' : ''
+              }`}
             >
               {isSubmitting ? (
-                <>
+                <div className="flex items-center gap-2">
                   <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
                   Sauvegarde...
-                </>
+                </div>
               ) : (
-                <>
-                  <CheckIcon className="w-5 h-5" />
-                  {mode === 'create' ? 'Créer le Code' : 'Sauvegarder'}
-                </>
+                mode === 'create' ? 'Créer le Code' : 'Modifier le Code'
               )}
             </motion.button>
           </div>

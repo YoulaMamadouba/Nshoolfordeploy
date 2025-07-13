@@ -9,7 +9,8 @@ import {
   Cog6ToothIcon,
   ArrowRightOnRectangleIcon,
   SunIcon,
-  MoonIcon
+  MoonIcon,
+  XMarkIcon
 } from '@heroicons/react/24/outline';
 import { useTheme } from '@/contexts/ThemeContext';
 
@@ -313,12 +314,26 @@ const DashboardHeader = ({ isSidebarCollapsed = false }: DashboardHeaderProps) =
                       : 'bg-white border border-gray-200'
                   }`}
                 >
-                  <div className={`p-3 border-b ${
+                  {/* Header avec bouton de fermeture */}
+                  <div className={`p-3 border-b flex items-center justify-between ${
                     theme === 'dark' ? 'border-[#f57c00]/20' : 'border-gray-200'
                   }`}>
                     <h3 className={`font-semibold text-sm ${
                       theme === 'dark' ? 'text-white' : 'text-gray-900'
                     }`}>Notifications</h3>
+                    <motion.button
+                      whileHover={{ scale: 1.1, rotate: 90 }}
+                      whileTap={{ scale: 0.9 }}
+                      onClick={() => setNotificationOpen(false)}
+                      className={`p-1 rounded-full transition-all duration-200 ${
+                        theme === 'dark'
+                          ? 'text-gray-400 hover:text-orange-400 hover:bg-[#2a3744]'
+                          : 'text-gray-500 hover:text-orange-600 hover:bg-gray-100'
+                      }`}
+                      title="Fermer les notifications"
+                    >
+                      <XMarkIcon className="h-4 w-4" />
+                    </motion.button>
                   </div>
                   <div className="max-h-56 overflow-auto">
                     {notifications.map((notif, index) => (
@@ -398,6 +413,27 @@ const DashboardHeader = ({ isSidebarCollapsed = false }: DashboardHeaderProps) =
                       : 'bg-white border border-gray-200'
                   }`}
                 >
+                  {/* Header avec bouton de fermeture */}
+                  <div className={`p-2 border-b flex items-center justify-between ${
+                    theme === 'dark' ? 'border-[#f57c00]/20' : 'border-gray-200'
+                  }`}>
+                    <span className={`text-xs font-medium ${
+                      theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
+                    }`}>Menu utilisateur</span>
+                    <motion.button
+                      whileHover={{ scale: 1.1, rotate: 90 }}
+                      whileTap={{ scale: 0.9 }}
+                      onClick={() => setUserMenuOpen(false)}
+                      className={`p-1 rounded-full transition-all duration-200 ${
+                        theme === 'dark'
+                          ? 'text-gray-400 hover:text-orange-400 hover:bg-[#2a3744]'
+                          : 'text-gray-500 hover:text-orange-600 hover:bg-gray-100'
+                      }`}
+                      title="Fermer le menu"
+                    >
+                      <XMarkIcon className="h-3 w-3" />
+                    </motion.button>
+                  </div>
                   <div className="py-1.5">
                     <button className={`flex items-center space-x-2 w-full px-3 py-1.5 text-sm transition-colors ${
                       theme === 'dark'

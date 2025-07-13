@@ -229,20 +229,30 @@ const PromoListView: React.FC<PromoListViewProps> = ({
           className="flex flex-col sm:flex-row gap-4 mb-6 items-center"
         >
           <div className="relative flex-1">
-            <MagnifyingGlassIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+            <MagnifyingGlassIcon className={`absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 ${
+              theme === 'dark' ? 'text-gray-400' : 'text-gray-400'
+            }`} />
             <input
               type="text"
               placeholder="Rechercher par code ou description..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-2.5 text-sm bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#f57c00]/50 focus:border-[#f57c00] transition-all duration-300"
+              className={`w-full pl-10 pr-4 py-2.5 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#f57c00]/50 focus:border-[#f57c00] transition-all duration-300 ${
+                theme === 'dark' 
+                  ? 'bg-gray-800/50 border-gray-600 text-white placeholder-gray-400' 
+                  : 'bg-gray-50 border-gray-200'
+              }`}
             />
           </div>
           
           {(['status', 'type', 'plan'] as const).map((filterName) => (
             <div className="relative" key={filterName}>
               <motion.button
-                className="w-full text-sm text-[#2b4a6a] bg-gradient-to-r from-white/70 to-[#f57c00]/10 border border-[#f57c00]/50 rounded-lg p-2.5 pl-3 pr-8 focus:outline-none focus:ring-2 focus:ring-[#f57c00]/50 transition-all appearance-none cursor-pointer flex justify-between items-center"
+                className={`w-full text-sm border border-[#f57c00]/50 rounded-lg p-2.5 pl-3 pr-8 focus:outline-none focus:ring-2 focus:ring-[#f57c00]/50 transition-all appearance-none cursor-pointer flex justify-between items-center ${
+                  theme === 'dark'
+                    ? 'text-white bg-gradient-to-r from-gray-800/70 to-[#f57c00]/10'
+                    : 'text-[#2b4a6a] bg-gradient-to-r from-white/70 to-[#f57c00]/10'
+                }`}
                 onClick={() => setIsDropdownOpen((prev) => ({ ...prev, [filterName]: !prev[filterName] }))}
               >
                 <span>{filterOptions[filterName].find((opt) => opt.value === filters[filterName])?.label}</span>
@@ -258,7 +268,11 @@ const PromoListView: React.FC<PromoListViewProps> = ({
                   variants={dropdownVariants}
                   initial="hidden"
                   animate="visible"
-                  className="absolute top-full left-0 w-full mt-2 bg-gradient-to-br from-white to-[#f5f7fa] border border-[#f57c00]/30 rounded-xl shadow-lg z-50 overflow-hidden"
+                  className={`absolute top-full left-0 w-full mt-2 border border-[#f57c00]/30 rounded-xl shadow-lg z-50 overflow-hidden ${
+                    theme === 'dark'
+                      ? 'bg-gradient-to-br from-gray-800 to-gray-900'
+                      : 'bg-gradient-to-br from-white to-[#f5f7fa]'
+                  }`}
                 >
                   {filterOptions[filterName].map((option, index) => (
                     <motion.div
@@ -266,9 +280,11 @@ const PromoListView: React.FC<PromoListViewProps> = ({
                       initial={{ opacity: 0, x: -10 }}
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: index * 0.05 }}
-                      className={`px-4 py-2.5 text-sm text-[#2b4a6a] hover:bg-[#f57c00]/10 cursor-pointer transition-all duration-300 font-medium ${
+                      className={`px-4 py-2.5 text-sm hover:bg-[#f57c00]/10 cursor-pointer transition-all duration-300 font-medium ${
                         filters[filterName] === option.value ? 'bg-[#f57c00]/20 text-[#f57c00]' : ''
-                      } border-b border-[#f57c00]/10 last:border-b-0 flex items-center gap-2`}
+                      } border-b border-[#f57c00]/10 last:border-b-0 flex items-center gap-2 ${
+                        theme === 'dark' ? 'text-gray-300' : 'text-[#2b4a6a]'
+                      }`}
                       onClick={() => handleFilterChange(filterName, option.value)}
                     >
                       <span className="w-2 h-2 rounded-full bg-[#f57c00]/50" />
@@ -343,13 +359,19 @@ const PromoListView: React.FC<PromoListViewProps> = ({
       </AnimatePresence>
 
       {/* Content View */}
-      <motion.div variants={cardVariants} className="bg-white rounded-3xl shadow-xl border border-gray-200/50 overflow-hidden backdrop-blur-sm">
+      <motion.div variants={cardVariants} className={`rounded-3xl shadow-xl border overflow-hidden backdrop-blur-sm ${
+        theme === 'dark'
+          ? 'bg-gradient-to-br from-gray-800 via-gray-800 to-gray-900/50 border-gray-700/50'
+          : 'bg-white border-gray-200/50'
+      }`}>
         <div className="p-6">
           <AnimatePresence mode="wait">
             {viewMode === 'cards' ? (
               <div>
                 {paginatedPromoCodes.length === 0 ? (
-                  <div className="py-12 text-center text-gray-500 text-sm">
+                  <div className={`py-12 text-center text-sm ${
+                    theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
+                  }`}>
                     Aucun code promotionnel trouvé
                   </div>
                 ) : (
@@ -382,7 +404,11 @@ const PromoListView: React.FC<PromoListViewProps> = ({
 
         {/* Pagination */}
         {totalPages > 1 && (
-          <div className="px-6 py-4 bg-gray-50 border-t border-gray-200">
+          <div className={`px-6 py-4 border-t ${
+            theme === 'dark' 
+              ? 'bg-gray-800/50 border-gray-700/50' 
+              : 'bg-gray-50 border-gray-200'
+          }`}>
             <div className="flex justify-center gap-2">
               <motion.button
                 variants={buttonVariants}

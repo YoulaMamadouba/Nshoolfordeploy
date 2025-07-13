@@ -20,9 +20,10 @@ type CurrentView = 'overview' | 'tenants' | 'plans' | 'payments' | 'domains' | '
 interface SidebarProps {
   onNavigation: (view: CurrentView) => void;
   onCollapseChange?: (isCollapsed: boolean) => void;
+  currentView?: CurrentView;
 }
 
-const Sidebar = ({ onNavigation, onCollapseChange }: SidebarProps) => {
+const Sidebar = ({ onNavigation, onCollapseChange, currentView = 'overview' }: SidebarProps) => {
   const [expandedSection, setExpandedSection] = useState<string | null>(null);
   const [isCollapsed, setIsCollapsed] = useState(false);
   const { theme } = useTheme();
@@ -33,22 +34,22 @@ const Sidebar = ({ onNavigation, onCollapseChange }: SidebarProps) => {
   }, [isCollapsed, onCollapseChange]);
 
   const navItems = [
-    { name: 'Dashboard', icon: HomeIcon, onClick: () => onNavigation('overview') },
-    { name: 'Gestion Tenants', icon: BuildingOffice2Icon, onClick: () => onNavigation('tenants') },
-    { name: 'Gestion Domaines', icon: GlobeAltIcon, onClick: () => onNavigation('domains') },
+    { name: 'Dashboard', icon: HomeIcon, onClick: () => onNavigation('overview'), view: 'overview' as CurrentView },
+    { name: 'Gestion Tenants', icon: BuildingOffice2Icon, onClick: () => onNavigation('tenants'), view: 'tenants' as CurrentView },
+    { name: 'Gestion Domaines', icon: GlobeAltIcon, onClick: () => onNavigation('domains'), view: 'domains' as CurrentView },
     { 
       name: 'Abonnements', 
       icon: CreditCardIcon, 
       hasSubmenu: true,
       subItems: [
-        { name: 'Plans', onClick: () => onNavigation('plans') },
-        { name: 'Paiement', onClick: () => onNavigation('payments') },
+        { name: 'Plans', onClick: () => onNavigation('plans'), view: 'plans' as CurrentView },
+        { name: 'Paiement', onClick: () => onNavigation('payments'), view: 'payments' as CurrentView },
       ]
     },
-    { name: 'Utilisateurs Globaux', icon: UserGroupIcon, onClick: () => onNavigation('globalUsers') },
-    { name: 'Codes Promotionnels', icon: TicketIcon, onClick: () => onNavigation('codePromo') },
-    { name: 'Monitoring', icon: ChartBarIcon, onClick: () => onNavigation('monitoring') },
-    { name: 'Paramètres', icon: Cog6ToothIcon, onClick: () => onNavigation('settings') },
+    { name: 'Utilisateurs Globaux', icon: UserGroupIcon, onClick: () => onNavigation('globalUsers'), view: 'globalUsers' as CurrentView },
+    { name: 'Codes Promotionnels', icon: TicketIcon, onClick: () => onNavigation('codePromo'), view: 'codePromo' as CurrentView },
+    { name: 'Monitoring', icon: ChartBarIcon, onClick: () => onNavigation('monitoring'), view: 'monitoring' as CurrentView },
+    { name: 'Paramètres', icon: Cog6ToothIcon, onClick: () => onNavigation('settings'), view: 'settings' as CurrentView },
   ];
 
   const handleItemClick = (item: any) => {
@@ -57,6 +58,20 @@ const Sidebar = ({ onNavigation, onCollapseChange }: SidebarProps) => {
     } else {
       item.onClick();
     }
+  };
+
+  const isItemActive = (item: any) => {
+    if (item.view) {
+      return currentView === item.view;
+    }
+    if (item.hasSubmenu && item.subItems) {
+      return item.subItems.some((subItem: any) => subItem.view === currentView);
+    }
+    return false;
+  };
+
+  const isSubItemActive = (subItem: any) => {
+    return currentView === subItem.view;
   };
 
   return (
@@ -124,112 +139,170 @@ const Sidebar = ({ onNavigation, onCollapseChange }: SidebarProps) => {
         <nav className={`flex-1 p-4 space-y-2 ${
           theme === 'dark' ? 'bg-[#151f28]/30' : ''
         }`}>
-          {navItems.map((item, index) => (
-            <div key={item.name}>
-              <motion.button
-                onClick={() => handleItemClick(item)}
-                initial={{ x: -20, opacity: 0 }}
-                animate={{ x: 0, opacity: 1 }}
-                transition={{ duration: 0.5, delay: index * 0.1, ease: 'easeOut' }}
-                className={`relative flex items-center justify-between p-2.5 rounded-md text-white group transition-all duration-300 w-full text-left ${
-                  theme === 'dark' 
-                    ? 'hover:bg-[#f57c00]/20 hover:shadow-lg hover:shadow-orange-500/30 bg-[#1a2332]/50' 
-                    : 'hover:bg-[#f57c00]/10 hover:shadow-md'
-                }`}
-                title={isCollapsed ? item.name : undefined}
-              >
-                <div className="flex items-center space-x-3">
-                  <motion.div
-                    whileHover={{ scale: 1.1 }}
-                    className="relative"
-                  >
-                    <item.icon className={`h-6 w-6 ${
-                      theme === 'dark' ? 'text-orange-400' : 'text-[#f57c00]'
-                    }`} />
-                    <motion.div
-                      animate={{ opacity: [0.2, 0.3, 0.2] }}
-                      transition={{ duration: 1.5, repeat: Infinity }}
-                      className={`absolute inset-0 rounded-full blur-sm ${
-                        theme === 'dark' ? 'bg-orange-400/30' : 'bg-[#f57c00]/20'
-                      }`}
-                    />
-                  </motion.div>
-                  <motion.span 
-                    className={`text-sm font-semibold ${
-                      theme === 'dark' ? 'text-white' : 'text-white'
-                    }`}
-                    animate={{ opacity: isCollapsed ? 0 : 1, width: isCollapsed ? 0 : 'auto' }}
-                    transition={{ duration: 0.3 }}
-                  >
-                    {item.name}
-                  </motion.span>
-                </div>
-                {item.hasSubmenu && !isCollapsed && (
-                  <motion.div
-                    animate={{ rotate: expandedSection === item.name ? 90 : 0 }}
-                    transition={{ duration: 0.3 }}
-                  >
-                    <ChevronRightIcon className={`h-4 w-4 ${
-                      theme === 'dark' ? 'text-orange-400' : 'text-[#f57c00]'
-                    }`} />
-                  </motion.div>
-                )}
-                <motion.div
-                  className={`absolute bottom-0 left-0 right-0 h-0.5 opacity-0 group-hover:opacity-100 ${
-                    theme === 'dark' ? 'bg-orange-400' : 'bg-white'
+          {navItems.map((item, index) => {
+            const isActive = isItemActive(item);
+            return (
+              <div key={item.name}>
+                <motion.button
+                  onClick={() => handleItemClick(item)}
+                  initial={{ x: -20, opacity: 0 }}
+                  animate={{ x: 0, opacity: 1 }}
+                  transition={{ duration: 0.5, delay: index * 0.1, ease: 'easeOut' }}
+                  className={`relative flex items-center justify-between p-2.5 rounded-md text-white group transition-all duration-300 w-full text-left ${
+                    isActive
+                      ? theme === 'dark'
+                        ? 'bg-gradient-to-r from-[#f57c00]/30 to-[#f57c00]/20 shadow-lg shadow-orange-500/30 border border-[#f57c00]/40'
+                        : 'bg-gradient-to-r from-[#f57c00]/20 to-[#f57c00]/10 shadow-md border border-[#f57c00]/30'
+                      : theme === 'dark' 
+                        ? 'hover:bg-[#f57c00]/20 hover:shadow-lg hover:shadow-orange-500/30 bg-[#1a2332]/50' 
+                        : 'hover:bg-[#f57c00]/10 hover:shadow-md'
                   }`}
-                  initial={{ scaleX: 0 }}
-                  animate={{ scaleX: 1 }}
-                  transition={{ duration: 0.3, ease: 'easeInOut' }}
-                />
-              </motion.button>
-
-              {/* Submenu */}
-              {item.hasSubmenu && !isCollapsed && (
-                <AnimatePresence>
-                  {expandedSection === item.name && (
+                  title={isCollapsed ? item.name : undefined}
+                >
+                  <div className="flex items-center space-x-3">
                     <motion.div
-                      initial={{ opacity: 0, height: 0 }}
-                      animate={{ opacity: 1, height: 'auto' }}
-                      exit={{ opacity: 0, height: 0 }}
-                      transition={{ type: 'spring', stiffness: 100, damping: 15 }}
-                      className={`ml-8 mt-2 space-y-1 ${
-                        theme === 'dark' ? 'bg-[#151f28]/50' : ''
-                      }`}
+                      whileHover={{ scale: 1.1 }}
+                      className="relative"
                     >
-                      {item.subItems?.map((subItem, subIndex) => (
-                        <motion.button
-                          key={subItem.name}
-                          onClick={subItem.onClick}
-                          initial={{ opacity: 0, x: -10 }}
-                          animate={{ opacity: 1, x: 0 }}
-                          transition={{ delay: subIndex * 0.1 }}
-                          className={`relative flex items-center space-x-3 p-2 rounded-md group transition-all duration-300 w-full text-left ${
-                            theme === 'dark' 
-                              ? 'text-white/80 hover:text-white hover:bg-[#f57c00]/15 hover:shadow-md hover:shadow-orange-500/20' 
-                              : 'text-white/70 hover:text-white hover:bg-[#f57c00]/5'
+                      <item.icon className={`h-6 w-6 ${
+                        isActive
+                          ? 'text-white'
+                          : theme === 'dark' ? 'text-orange-400' : 'text-[#f57c00]'
+                      }`} />
+                      {isActive && (
+                        <motion.div
+                          initial={{ scale: 0 }}
+                          animate={{ scale: 1 }}
+                          transition={{ duration: 0.3 }}
+                          className={`absolute inset-0 rounded-full blur-sm ${
+                            theme === 'dark' ? 'bg-white/30' : 'bg-white/20'
                           }`}
-                        >
-                          <div className={`w-2 h-2 rounded-full ${
-                            theme === 'dark' ? 'bg-orange-400' : 'bg-[#f57c00]'
-                          }`} />
-                          <span className="text-sm font-medium">{subItem.name}</span>
-                          <motion.div
-                            className={`absolute bottom-0 left-0 right-0 h-0.5 opacity-0 group-hover:opacity-100 ${
-                              theme === 'dark' ? 'bg-orange-400' : 'bg-[#f57c00]'
-                            }`}
-                            initial={{ scaleX: 0 }}
-                            animate={{ scaleX: 1 }}
-                            transition={{ duration: 0.3, ease: 'easeInOut' }}
-                          />
-                        </motion.button>
-                      ))}
+                        />
+                      )}
+                      <motion.div
+                        animate={{ opacity: [0.2, 0.3, 0.2] }}
+                        transition={{ duration: 1.5, repeat: Infinity }}
+                        className={`absolute inset-0 rounded-full blur-sm ${
+                          theme === 'dark' ? 'bg-orange-400/30' : 'bg-[#f57c00]/20'
+                        }`}
+                      />
+                    </motion.div>
+                    <motion.span 
+                      className={`text-sm font-semibold ${
+                        isActive ? 'text-white' : theme === 'dark' ? 'text-white' : 'text-white'
+                      }`}
+                      animate={{ opacity: isCollapsed ? 0 : 1, width: isCollapsed ? 0 : 'auto' }}
+                      transition={{ duration: 0.3 }}
+                    >
+                      {item.name}
+                    </motion.span>
+                  </div>
+                  {item.hasSubmenu && !isCollapsed && (
+                    <motion.div
+                      animate={{ rotate: expandedSection === item.name ? 90 : 0 }}
+                      transition={{ duration: 0.3 }}
+                    >
+                      <ChevronRightIcon className={`h-4 w-4 ${
+                        isActive
+                          ? 'text-white'
+                          : theme === 'dark' ? 'text-orange-400' : 'text-[#f57c00]'
+                      }`} />
                     </motion.div>
                   )}
-                </AnimatePresence>
-              )}
-            </div>
-          ))}
+                  <motion.div
+                    className={`absolute bottom-0 left-0 right-0 h-0.5 ${
+                      isActive
+                        ? 'opacity-100 bg-white'
+                        : 'opacity-0 group-hover:opacity-100'
+                    } ${
+                      theme === 'dark' ? 'bg-white' : 'bg-white'
+                    }`}
+                    initial={{ scaleX: 0 }}
+                    animate={{ scaleX: isActive ? 1 : 0 }}
+                    transition={{ duration: 0.3, ease: 'easeInOut' }}
+                  />
+                  {isActive && (
+                    <motion.div
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      transition={{ duration: 0.3 }}
+                      className={`absolute left-0 top-1/2 transform -translate-y-1/2 w-1 h-6 rounded-r-full ${
+                        theme === 'dark' ? 'bg-white' : 'bg-white'
+                      }`}
+                    />
+                  )}
+                </motion.button>
+
+                {/* Submenu */}
+                {item.hasSubmenu && !isCollapsed && (
+                  <AnimatePresence>
+                    {expandedSection === item.name && (
+                      <motion.div
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: 'auto' }}
+                        exit={{ opacity: 0, height: 0 }}
+                        transition={{ type: 'spring', stiffness: 100, damping: 15 }}
+                        className={`ml-8 mt-2 space-y-1 ${
+                          theme === 'dark' ? 'bg-[#151f28]/50' : ''
+                        }`}
+                      >
+                        {item.subItems?.map((subItem, subIndex) => {
+                          const isSubActive = isSubItemActive(subItem);
+                          return (
+                            <motion.button
+                              key={subItem.name}
+                              onClick={subItem.onClick}
+                              initial={{ opacity: 0, x: -10 }}
+                              animate={{ opacity: 1, x: 0 }}
+                              transition={{ delay: subIndex * 0.1 }}
+                              className={`relative flex items-center space-x-3 p-2 rounded-md group transition-all duration-300 w-full text-left ${
+                                isSubActive
+                                  ? theme === 'dark'
+                                    ? 'bg-gradient-to-r from-[#f57c00]/25 to-[#f57c00]/15 text-white shadow-md shadow-orange-500/20 border border-[#f57c00]/30'
+                                    : 'bg-gradient-to-r from-[#f57c00]/15 to-[#f57c00]/10 text-white shadow-sm border border-[#f57c00]/25'
+                                  : theme === 'dark' 
+                                    ? 'text-white/80 hover:text-white hover:bg-[#f57c00]/15 hover:shadow-md hover:shadow-orange-500/20' 
+                                    : 'text-white/70 hover:text-white hover:bg-[#f57c00]/5'
+                              }`}
+                            >
+                              <div className={`w-2 h-2 rounded-full ${
+                                isSubActive
+                                  ? 'bg-white'
+                                  : theme === 'dark' ? 'bg-orange-400' : 'bg-[#f57c00]'
+                              }`} />
+                              <span className="text-sm font-medium">{subItem.name}</span>
+                              <motion.div
+                                className={`absolute bottom-0 left-0 right-0 h-0.5 ${
+                                  isSubActive
+                                    ? 'opacity-100 bg-white'
+                                    : 'opacity-0 group-hover:opacity-100'
+                                } ${
+                                  theme === 'dark' ? 'bg-white' : 'bg-[#f57c00]'
+                                }`}
+                                initial={{ scaleX: 0 }}
+                                animate={{ scaleX: isSubActive ? 1 : 0 }}
+                                transition={{ duration: 0.3, ease: 'easeInOut' }}
+                              />
+                              {isSubActive && (
+                                <motion.div
+                                  initial={{ scale: 0 }}
+                                  animate={{ scale: 1 }}
+                                  transition={{ duration: 0.3 }}
+                                  className={`absolute left-0 top-1/2 transform -translate-y-1/2 w-1 h-4 rounded-r-full ${
+                                    theme === 'dark' ? 'bg-white' : 'bg-white'
+                                  }`}
+                                />
+                              )}
+                            </motion.button>
+                          );
+                        })}
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                )}
+              </div>
+            );
+          })}
         </nav>
 
         {/* Footer */}

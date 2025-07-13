@@ -12,6 +12,7 @@ import {
   SignalIcon,
   HeartIcon,
 } from '@heroicons/react/24/outline';
+import { useTheme } from '@/contexts/ThemeContext';
 
 interface SystemHealthSectionProps {
   isRefreshing: boolean;
@@ -29,6 +30,8 @@ interface MetricData {
 }
 
 const SystemHealthSection: React.FC<SystemHealthSectionProps> = ({ isRefreshing }) => {
+  const { theme } = useTheme();
+  
   const [metrics, setMetrics] = useState<MetricData[]>([
     {
       name: 'CPU',
@@ -116,11 +119,20 @@ const SystemHealthSection: React.FC<SystemHealthSectionProps> = ({ isRefreshing 
   };
 
   const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'healthy': return { bg: 'bg-[#f57c00]/10', text: 'text-[#2b4a6a]', icon: 'text-[#f57c00]' };
-      case 'warning': return { bg: 'bg-[#f57c00]/10', text: 'text-[#2b4a6a]', icon: 'text-[#f57c00]' };
-      case 'critical': return { bg: 'bg-[#f57c00]/10', text: 'text-[#2b4a6a]', icon: 'text-[#f57c00]' };
-      default: return { bg: 'bg-[#f57c00]/10', text: 'text-[#2b4a6a]', icon: 'text-[#f57c00]' };
+    if (theme === 'dark') {
+      switch (status) {
+        case 'healthy': return { bg: 'bg-green-900/30', text: 'text-green-400', icon: 'text-green-400' };
+        case 'warning': return { bg: 'bg-yellow-900/30', text: 'text-yellow-400', icon: 'text-yellow-400' };
+        case 'critical': return { bg: 'bg-red-900/30', text: 'text-red-400', icon: 'text-red-400' };
+        default: return { bg: 'bg-[#f57c00]/10', text: 'text-[#f57c00]', icon: 'text-[#f57c00]' };
+      }
+    } else {
+      switch (status) {
+        case 'healthy': return { bg: 'bg-[#f57c00]/10', text: 'text-[#2b4a6a]', icon: 'text-[#f57c00]' };
+        case 'warning': return { bg: 'bg-[#f57c00]/10', text: 'text-[#2b4a6a]', icon: 'text-[#f57c00]' };
+        case 'critical': return { bg: 'bg-[#f57c00]/10', text: 'text-[#2b4a6a]', icon: 'text-[#f57c00]' };
+        default: return { bg: 'bg-[#f57c00]/10', text: 'text-[#2b4a6a]', icon: 'text-[#f57c00]' };
+      }
     }
   };
 
@@ -134,11 +146,20 @@ const SystemHealthSection: React.FC<SystemHealthSectionProps> = ({ isRefreshing 
   };
 
   const getTrendColor = (trend: string) => {
-    switch (trend) {
-      case 'up': return 'text-[#2b4a6a]';
-      case 'down': return 'text-[#2b4a6a]';
-      case 'stable': return 'text-[#2b4a6a]';
-      default: return 'text-[#2b4a6a]';
+    if (theme === 'dark') {
+      switch (trend) {
+        case 'up': return 'text-green-400';
+        case 'down': return 'text-red-400';
+        case 'stable': return 'text-gray-300';
+        default: return 'text-gray-300';
+      }
+    } else {
+      switch (trend) {
+        case 'up': return 'text-[#2b4a6a]';
+        case 'down': return 'text-[#2b4a6a]';
+        case 'stable': return 'text-[#2b4a6a]';
+        default: return 'text-[#2b4a6a]';
+      }
     }
   };
 
@@ -169,15 +190,23 @@ const SystemHealthSection: React.FC<SystemHealthSectionProps> = ({ isRefreshing 
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, delay: 0.2 }}
-        className="bg-white rounded-3xl p-6 shadow-xl border border-gray-200/50 backdrop-blur-sm"
+        className={`rounded-3xl p-6 shadow-xl border backdrop-blur-sm ${
+          theme === 'dark'
+            ? 'bg-gradient-to-br from-gray-800 via-gray-800 to-gray-900/50 border-gray-700/50'
+            : 'bg-white border-gray-200/50'
+        }`}
       >
         <div className="flex items-center gap-3 mb-4">
           <div className="p-3 bg-gradient-to-r from-[#f57c00] to-[#ff9800] rounded-xl">
             <HeartIcon className="w-6 h-6 text-white" />
           </div>
           <div>
-            <h2 className="text-2xl font-bold text-[#2b4a6a]">Santé du Système</h2>
-            <p className="text-gray-600">Métriques en temps réel de votre infrastructure</p>
+            <h2 className={`text-2xl font-bold ${
+              theme === 'dark' ? 'text-white' : 'text-[#2b4a6a]'
+            }`}>Santé du Système</h2>
+            <p className={`${
+              theme === 'dark' ? 'text-gray-300' : 'text-gray-600'
+            }`}>Métriques en temps réel de votre infrastructure</p>
           </div>
         </div>
       </motion.div>
@@ -196,7 +225,11 @@ const SystemHealthSection: React.FC<SystemHealthSectionProps> = ({ isRefreshing 
               variants={cardVariants}
               initial="hidden"
               animate="visible"
-              className="group relative bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden transition-all duration-300"
+              className={`group relative rounded-2xl shadow-lg border overflow-hidden transition-all duration-300 ${
+                theme === 'dark'
+                  ? 'bg-gradient-to-br from-gray-800 via-gray-800 to-gray-900/50 border-gray-700/50'
+                  : 'bg-white border-gray-100'
+              }`}
             >
               {/* Header */}
               <div className="relative p-6 pb-4">
@@ -210,8 +243,12 @@ const SystemHealthSection: React.FC<SystemHealthSectionProps> = ({ isRefreshing 
                       <MetricIcon className="w-6 h-6" />
                     </motion.div>
                     <div>
-                      <h3 className="font-bold text-[#2b4a6a] text-lg leading-tight mb-1">{metric.name}</h3>
-                      <p className="text-sm text-gray-500">{metric.description}</p>
+                      <h3 className={`font-bold text-lg leading-tight mb-1 ${
+                        theme === 'dark' ? 'text-white' : 'text-[#2b4a6a]'
+                      }`}>{metric.name}</h3>
+                      <p className={`text-sm ${
+                        theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
+                      }`}>{metric.description}</p>
                     </div>
                   </div>
                 </div>
@@ -230,10 +267,14 @@ const SystemHealthSection: React.FC<SystemHealthSectionProps> = ({ isRefreshing 
                   
                   <div className="text-right">
                     <div className="flex items-center gap-1">
-                      <span className="text-2xl font-bold text-gray-900">
+                      <span className={`text-2xl font-bold ${
+                        theme === 'dark' ? 'text-white' : 'text-gray-900'
+                      }`}>
                         {metric.value.toFixed(metric.unit === '%' ? 0 : 1)}
                       </span>
-                      <span className="text-sm text-gray-500">{metric.unit}</span>
+                      <span className={`text-sm ${
+                        theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
+                      }`}>{metric.unit}</span>
                     </div>
                     <div className={`text-xs ${getTrendColor(metric.trend)} flex items-center gap-1`}>
                       <span>{getTrendIcon(metric.trend)}</span>
@@ -248,11 +289,15 @@ const SystemHealthSection: React.FC<SystemHealthSectionProps> = ({ isRefreshing 
               {/* Progress Bar */}
               <div className="px-6 pb-6">
                 <div className="mb-2">
-                  <div className="flex justify-between text-xs text-gray-500 mb-1">
+                  <div className={`flex justify-between text-xs mb-1 ${
+                    theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
+                  }`}>
                     <span>Utilisation</span>
                     <span>{metric.value.toFixed(metric.unit === '%' ? 0 : 1)}{metric.unit}</span>
                   </div>
-                  <div className="w-full bg-gray-200 rounded-full h-2">
+                  <div className={`w-full rounded-full h-2 ${
+                    theme === 'dark' ? 'bg-gray-700' : 'bg-gray-200'
+                  }`}>
                     <motion.div
                       initial={{ width: 0 }}
                       animate={{ width: `${Math.min(metric.value, 100)}%` }}
@@ -265,7 +310,9 @@ const SystemHealthSection: React.FC<SystemHealthSectionProps> = ({ isRefreshing 
                 </div>
 
                 {/* Threshold Indicators */}
-                <div className="flex justify-between text-xs text-gray-400">
+                <div className={`flex justify-between text-xs ${
+                  theme === 'dark' ? 'text-gray-500' : 'text-gray-400'
+                }`}>
                   <span>0%</span>
                   <span>50%</span>
                   <span>100%</span>
@@ -281,38 +328,70 @@ const SystemHealthSection: React.FC<SystemHealthSectionProps> = ({ isRefreshing 
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, delay: 0.4 }}
-        className="bg-gradient-to-br from-white via-white to-gray-50/50 rounded-3xl p-6 shadow-xl border border-gray-200/50 backdrop-blur-sm"
+        className={`rounded-3xl p-6 shadow-xl border backdrop-blur-sm ${
+          theme === 'dark'
+            ? 'bg-gradient-to-br from-gray-800 via-gray-800 to-gray-900/50 border-gray-700/50'
+            : 'bg-gradient-to-br from-white via-white to-gray-50/50 border-gray-200/50'
+        }`}
       >
         <div className="flex items-center gap-3 mb-6">
           <div className="p-3 bg-gradient-to-r from-[#f57c00] to-[#ff9800] rounded-xl">
             <SignalIcon className="w-6 h-6 text-white" />
           </div>
           <div>
-            <h3 className="text-xl font-bold text-[#2b4a6a]">État Global du Système</h3>
-            <p className="text-gray-600">Résumé de la santé de votre infrastructure</p>
+            <h3 className={`text-xl font-bold ${
+              theme === 'dark' ? 'text-white' : 'text-[#2b4a6a]'
+            }`}>État Global du Système</h3>
+            <p className={`${
+              theme === 'dark' ? 'text-gray-300' : 'text-gray-600'
+            }`}>Résumé de la santé de votre infrastructure</p>
           </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="text-center p-4 bg-[#f57c00]/10 rounded-2xl border border-[#f57c00]/20">
+          <div className={`text-center p-4 rounded-2xl border ${
+            theme === 'dark'
+              ? 'bg-[#f57c00]/20 border-[#f57c00]/30'
+              : 'bg-[#f57c00]/10 border-[#f57c00]/20'
+          }`}>
             <div className="text-3xl font-bold text-[#f57c00] mb-2">4</div>
-            <p className="text-[#2b4a6a] font-semibold">Services sains</p>
+            <p className={`font-semibold ${
+              theme === 'dark' ? 'text-white' : 'text-[#2b4a6a]'
+            }`}>Services sains</p>
           </div>
-          <div className="text-center p-4 bg-[#f57c00]/10 rounded-2xl border border-[#f57c00]/20">
+          <div className={`text-center p-4 rounded-2xl border ${
+            theme === 'dark'
+              ? 'bg-[#f57c00]/20 border-[#f57c00]/30'
+              : 'bg-[#f57c00]/10 border-[#f57c00]/20'
+          }`}>
             <div className="text-3xl font-bold text-[#f57c00] mb-2">1</div>
-            <p className="text-[#2b4a6a] font-semibold">Attention</p>
+            <p className={`font-semibold ${
+              theme === 'dark' ? 'text-white' : 'text-[#2b4a6a]'
+            }`}>Attention</p>
           </div>
-          <div className="text-center p-4 bg-[#f57c00]/10 rounded-2xl border border-[#f57c00]/20">
+          <div className={`text-center p-4 rounded-2xl border ${
+            theme === 'dark'
+              ? 'bg-[#f57c00]/20 border-[#f57c00]/30'
+              : 'bg-[#f57c00]/10 border-[#f57c00]/20'
+          }`}>
             <div className="text-3xl font-bold text-[#f57c00] mb-2">1</div>
-            <p className="text-[#2b4a6a] font-semibold">Critique</p>
+            <p className={`font-semibold ${
+              theme === 'dark' ? 'text-white' : 'text-[#2b4a6a]'
+            }`}>Critique</p>
           </div>
         </div>
 
-        <div className="mt-6 p-4 bg-[#f57c00]/10 rounded-2xl border border-[#f57c00]/20">
+        <div className={`mt-6 p-4 rounded-2xl border ${
+          theme === 'dark'
+            ? 'bg-[#f57c00]/20 border-[#f57c00]/30'
+            : 'bg-[#f57c00]/10 border-[#f57c00]/20'
+        }`}>
           <div className="flex items-center gap-3">
             <ClockIcon className="w-5 h-5 text-[#f57c00]" />
             <div>
-              <p className="text-[#2b4a6a] font-semibold">Dernière vérification</p>
+              <p className={`font-semibold ${
+                theme === 'dark' ? 'text-white' : 'text-[#2b4a6a]'
+              }`}>Dernière vérification</p>
               <p className="text-[#f57c00] text-sm">
                 {new Date().toLocaleString('fr-FR', {
                   day: '2-digit',

@@ -35,7 +35,11 @@ function DashboardContent() {
         : 'bg-gray-50'
     }`}>
       {/* Sidebar */}
-      <Sidebar onNavigation={handleNavigation} onCollapseChange={handleSidebarCollapse} />
+      <Sidebar 
+        onNavigation={handleNavigation} 
+        onCollapseChange={handleSidebarCollapse} 
+        currentView={currentView}
+      />
 
       {/* Main Container */}
       <div className="flex-1 flex flex-col min-w-0">

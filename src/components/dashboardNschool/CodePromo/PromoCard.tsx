@@ -14,6 +14,7 @@ import {
   PercentBadgeIcon,
   SparklesIcon,
 } from '@heroicons/react/24/outline';
+import { useTheme } from '@/contexts/ThemeContext';
 
 interface PromoCode {
   id: number;
@@ -77,20 +78,39 @@ const badgeVariants: Variants = {
 };
 
 const PromoCard: React.FC<PromoCardProps> = ({ promoCode, onViewStats, onEdit, onToggleStatus, onDelete, index }) => {
+  const { theme } = useTheme();
+  
   const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'active': return { bg: 'bg-green-100', text: 'text-green-800', border: 'border-green-200', icon: 'text-green-600' };
-      case 'paused': return { bg: 'bg-yellow-100', text: 'text-yellow-800', border: 'border-yellow-200', icon: 'text-yellow-600' };
-      case 'expired': return { bg: 'bg-red-100', text: 'text-red-800', border: 'border-red-200', icon: 'text-red-600' };
-      default: return { bg: 'bg-gray-100', text: 'text-gray-800', border: 'border-gray-200', icon: 'text-gray-600' };
+    if (theme === 'dark') {
+      switch (status) {
+        case 'active': return { bg: 'bg-green-900/30', text: 'text-green-400', border: 'border-green-700/50', icon: 'text-green-400' };
+        case 'paused': return { bg: 'bg-yellow-900/30', text: 'text-yellow-400', border: 'border-yellow-700/50', icon: 'text-yellow-400' };
+        case 'expired': return { bg: 'bg-red-900/30', text: 'text-red-400', border: 'border-red-700/50', icon: 'text-red-400' };
+        default: return { bg: 'bg-gray-800/50', text: 'text-gray-300', border: 'border-gray-600/50', icon: 'text-gray-400' };
+      }
+    } else {
+      switch (status) {
+        case 'active': return { bg: 'bg-green-100', text: 'text-green-800', border: 'border-green-200', icon: 'text-green-600' };
+        case 'paused': return { bg: 'bg-yellow-100', text: 'text-yellow-800', border: 'border-yellow-200', icon: 'text-yellow-600' };
+        case 'expired': return { bg: 'bg-red-100', text: 'text-red-800', border: 'border-red-200', icon: 'text-red-600' };
+        default: return { bg: 'bg-gray-100', text: 'text-gray-800', border: 'border-gray-200', icon: 'text-gray-600' };
+      }
     }
   };
 
   const getTypeColor = (type: string) => {
-    switch (type) {
-      case 'percentage': return { bg: 'bg-purple-100', text: 'text-purple-800', border: 'border-purple-200' };
-      case 'fixed': return { bg: 'bg-blue-100', text: 'text-blue-800', border: 'border-blue-200' };
-      default: return { bg: 'bg-gray-100', text: 'text-gray-800', border: 'border-gray-200' };
+    if (theme === 'dark') {
+      switch (type) {
+        case 'percentage': return { bg: 'bg-purple-900/30', text: 'text-purple-400', border: 'border-purple-700/50' };
+        case 'fixed': return { bg: 'bg-blue-900/30', text: 'text-blue-400', border: 'border-blue-700/50' };
+        default: return { bg: 'bg-gray-800/50', text: 'text-gray-300', border: 'border-gray-600/50' };
+      }
+    } else {
+      switch (type) {
+        case 'percentage': return { bg: 'bg-purple-100', text: 'text-purple-800', border: 'border-purple-200' };
+        case 'fixed': return { bg: 'bg-blue-100', text: 'text-blue-800', border: 'border-blue-200' };
+        default: return { bg: 'bg-gray-100', text: 'text-gray-800', border: 'border-gray-200' };
+      }
     }
   };
 
@@ -107,7 +127,11 @@ const PromoCard: React.FC<PromoCardProps> = ({ promoCode, onViewStats, onEdit, o
         scale: 1.02,
         transition: { duration: 0.3, ease: "easeOut" }
       }}
-      className="group relative bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden transition-all duration-300 min-h-[320px] hover:shadow-xl"
+      className={`group relative rounded-2xl shadow-lg border overflow-hidden transition-all duration-300 min-h-[320px] hover:shadow-xl ${
+        theme === 'dark'
+          ? 'bg-gradient-to-br from-gray-800 via-gray-800 to-gray-900/50 border-gray-700/50'
+          : 'bg-white border-gray-100'
+      }`}
     >
       {/* Header avec code et badges */}
       <div className="relative p-6 pb-4">
@@ -121,8 +145,12 @@ const PromoCard: React.FC<PromoCardProps> = ({ promoCode, onViewStats, onEdit, o
               <SparklesIcon className="w-7 h-7" />
             </motion.div>
             <div className="min-w-0 flex-1">
-              <h3 className="font-bold text-gray-900 text-lg leading-tight mb-1 truncate font-mono">{promoCode.code}</h3>
-              <p className="text-sm text-gray-500 truncate">{promoCode.description}</p>
+              <h3 className={`font-bold text-lg leading-tight mb-1 truncate font-mono ${
+                theme === 'dark' ? 'text-white' : 'text-gray-900'
+              }`}>{promoCode.code}</h3>
+              <p className={`text-sm truncate ${
+                theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
+              }`}>{promoCode.description}</p>
             </div>
           </div>
         </div>
@@ -159,21 +187,27 @@ const PromoCard: React.FC<PromoCardProps> = ({ promoCode, onViewStats, onEdit, o
       <div className="px-6 pb-6">
         {/* Informations détaillées */}
         <div className="space-y-3 mb-6">
-          <div className="flex items-center gap-3 text-sm text-gray-600">
+          <div className={`flex items-center gap-3 text-sm ${
+            theme === 'dark' ? 'text-gray-300' : 'text-gray-600'
+          }`}>
             <CalendarIcon className="w-4 h-4 text-[#f57c00] flex-shrink-0" />
             <span className="font-medium">
               {new Date(promoCode.startDate).toLocaleDateString('fr-FR')} - {new Date(promoCode.endDate).toLocaleDateString('fr-FR')}
             </span>
           </div>
           
-          <div className="flex items-center gap-3 text-sm text-gray-600">
+          <div className={`flex items-center gap-3 text-sm ${
+            theme === 'dark' ? 'text-gray-300' : 'text-gray-600'
+          }`}>
             <UsersIcon className="w-4 h-4 text-[#f57c00] flex-shrink-0" />
             <span className="font-medium">
               {promoCode.currentUses} / {promoCode.maxUses || '∞'} utilisations
             </span>
           </div>
           
-          <div className="flex items-center gap-3 text-sm text-gray-600">
+          <div className={`flex items-center gap-3 text-sm ${
+            theme === 'dark' ? 'text-gray-300' : 'text-gray-600'
+          }`}>
             <CurrencyEuroIcon className="w-4 h-4 text-[#f57c00] flex-shrink-0" />
             <span className="font-medium">
               {promoCode.revenueGenerated.toLocaleString()}€ générés
@@ -184,11 +218,15 @@ const PromoCard: React.FC<PromoCardProps> = ({ promoCode, onViewStats, onEdit, o
         {/* Barre de progression d'utilisation */}
         {promoCode.maxUses && (
           <div className="mb-6">
-            <div className="flex justify-between text-xs text-gray-500 mb-1">
+            <div className={`flex justify-between text-xs mb-1 ${
+              theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
+            }`}>
               <span>Utilisation</span>
               <span>{Math.round(usagePercentage)}%</span>
             </div>
-            <div className="w-full bg-gray-200 rounded-full h-2">
+            <div className={`w-full rounded-full h-2 ${
+              theme === 'dark' ? 'bg-gray-700' : 'bg-gray-200'
+            }`}>
               <motion.div
                 initial={{ width: 0 }}
                 animate={{ width: `${Math.min(usagePercentage, 100)}%` }}
@@ -203,15 +241,25 @@ const PromoCard: React.FC<PromoCardProps> = ({ promoCode, onViewStats, onEdit, o
 
         {/* Plans applicables */}
         <div className="mb-6">
-          <p className="text-xs text-gray-500 mb-2">Plans applicables :</p>
+          <p className={`text-xs mb-2 ${
+            theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
+          }`}>Plans applicables :</p>
           <div className="flex flex-wrap gap-1">
             {promoCode.applicablePlans.slice(0, 3).map((plan, idx) => (
-              <span key={idx} className="px-2 py-1 bg-gray-100 text-gray-600 text-xs rounded-md">
+              <span key={idx} className={`px-2 py-1 text-xs rounded-md ${
+                theme === 'dark' 
+                  ? 'bg-gray-700/50 text-gray-300 border border-gray-600/50' 
+                  : 'bg-gray-100 text-gray-600'
+              }`}>
                 {plan}
               </span>
             ))}
             {promoCode.applicablePlans.length > 3 && (
-              <span className="px-2 py-1 bg-gray-100 text-gray-600 text-xs rounded-md">
+              <span className={`px-2 py-1 text-xs rounded-md ${
+                theme === 'dark' 
+                  ? 'bg-gray-700/50 text-gray-300 border border-gray-600/50' 
+                  : 'bg-gray-100 text-gray-600'
+              }`}>
                 +{promoCode.applicablePlans.length - 3}
               </span>
             )}
@@ -219,13 +267,19 @@ const PromoCard: React.FC<PromoCardProps> = ({ promoCode, onViewStats, onEdit, o
         </div>
 
         {/* Actions */}
-        <div className="flex items-center justify-between pt-4 border-t border-gray-100">
+        <div className={`flex items-center justify-between pt-4 border-t ${
+          theme === 'dark' ? 'border-gray-700/50' : 'border-gray-100'
+        }`}>
           <div className="flex gap-2">
             <motion.button
               variants={iconVariants}
               whileHover="hover"
               onClick={onViewStats}
-              className="p-2.5 text-[#2b4a6a] bg-gray-50 rounded-lg hover:bg-[#2b4a6a] hover:text-white transition-all duration-300 shadow-sm hover:shadow-md"
+              className={`p-2.5 rounded-lg transition-all duration-300 shadow-sm hover:shadow-md ${
+                theme === 'dark'
+                  ? 'text-[#2b4a6a] bg-gray-700/50 hover:bg-[#2b4a6a] hover:text-white'
+                  : 'text-[#2b4a6a] bg-gray-50 hover:bg-[#2b4a6a] hover:text-white'
+              }`}
               title="Voir statistiques"
             >
               <ChartBarIcon className="h-4 w-4" />
@@ -235,7 +289,11 @@ const PromoCard: React.FC<PromoCardProps> = ({ promoCode, onViewStats, onEdit, o
               variants={iconVariants}
               whileHover="hover"
               onClick={onEdit}
-              className="p-2.5 text-[#f57c00] bg-orange-50 rounded-lg hover:bg-[#f57c00] hover:text-white transition-all duration-300 shadow-sm hover:shadow-md"
+              className={`p-2.5 rounded-lg transition-all duration-300 shadow-sm hover:shadow-md ${
+                theme === 'dark'
+                  ? 'text-[#f57c00] bg-orange-900/30 hover:bg-[#f57c00] hover:text-white'
+                  : 'text-[#f57c00] bg-orange-50 hover:bg-[#f57c00] hover:text-white'
+              }`}
               title="Modifier"
             >
               <PencilIcon className="h-4 w-4" />
@@ -247,8 +305,12 @@ const PromoCard: React.FC<PromoCardProps> = ({ promoCode, onViewStats, onEdit, o
               onClick={onToggleStatus}
               className={`p-2.5 rounded-lg transition-all duration-300 shadow-sm hover:shadow-md ${
                 promoCode.status === 'active' 
-                  ? 'text-yellow-600 bg-yellow-50 hover:bg-yellow-600 hover:text-white' 
-                  : 'text-green-600 bg-green-50 hover:bg-green-600 hover:text-white'
+                  ? theme === 'dark'
+                    ? 'text-yellow-400 bg-yellow-900/30 hover:bg-yellow-600 hover:text-white'
+                    : 'text-yellow-600 bg-yellow-50 hover:bg-yellow-600 hover:text-white'
+                  : theme === 'dark'
+                    ? 'text-green-400 bg-green-900/30 hover:bg-green-600 hover:text-white'
+                    : 'text-green-600 bg-green-50 hover:bg-green-600 hover:text-white'
               }`}
               title={promoCode.status === 'active' ? 'Mettre en pause' : 'Activer'}
             >
@@ -259,7 +321,11 @@ const PromoCard: React.FC<PromoCardProps> = ({ promoCode, onViewStats, onEdit, o
               variants={iconVariants}
               whileHover="hover"
               onClick={onDelete}
-              className="p-2.5 text-red-600 bg-red-50 rounded-lg hover:bg-red-600 hover:text-white transition-all duration-300 shadow-sm hover:shadow-md"
+              className={`p-2.5 rounded-lg transition-all duration-300 shadow-sm hover:shadow-md ${
+                theme === 'dark'
+                  ? 'text-red-400 bg-red-900/30 hover:bg-red-600 hover:text-white'
+                  : 'text-red-600 bg-red-50 hover:bg-red-600 hover:text-white'
+              }`}
               title="Supprimer"
             >
               <TrashIcon className="h-4 w-4" />
