@@ -252,10 +252,10 @@ export default function Hero() {
                 </span>
                 <span className="absolute inset-0 bg-gradient-to-r from-amber-600 to-orange-700 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></span>
               </Link>
-              <button className="flex items-center gap-2 rounded-xl bg-white px-4 py-3 text-lg font-medium text-gray-900 shadow-md hover:bg-gray-50 transition-all duration-300 group">
+              <Link href="/demo" className="flex items-center gap-2 rounded-xl bg-white px-4 py-3 text-lg font-medium text-gray-900 shadow-md hover:bg-gray-50 transition-all duration-300 group">
                 <PlayCircleIcon className="h-6 w-6 text-orange-500 group-hover:text-orange-600 transition-colors" />
                 <span>Voir la démo</span>
-              </button>
+              </Link>
             </motion.div>
             <motion.div
               initial={{ opacity: 0 }}
