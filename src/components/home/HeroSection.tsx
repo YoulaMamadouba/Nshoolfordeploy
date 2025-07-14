@@ -212,10 +212,7 @@ export default function Hero() {
   return (
     <section className="relative overflow-visible bg-gradient-to-b from-orange-50 via-white to-white pt-32 pb-20 md:pt-40 md:pb-28">
       <style>{globalStyles}</style>
-      <div className="absolute inset-0 overflow-hidden opacity-5">
-        <div className="absolute left-1/4 top-0 h-[500px] w-[500px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-gradient-to-r from-amber-400 to-orange-500 blur-3xl"></div>
-        <div className="absolute right-1/4 bottom-0 h-[500px] w-[500px] translate-x-1/2 translate-y-1/2 rounded-full bg-gradient-to-r from-amber-400 to-orange-500 blur-3xl"></div>
-      </div>
+      {/* Suppression du voile orange de fond */}
       <div className="relative mx-auto max-w-7xl px-6 lg:px-12">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-start">
           <div className="text-center lg:text-left">
@@ -320,35 +317,7 @@ export default function Hero() {
               
               {/* Effet Fresnel Light Move - Ultra Premium Enhanced */}
               <div className="absolute inset-0 pointer-events-none overflow-hidden">
-                {/* Halo lumineux principal intensifié */}
-                <motion.div
-                  className="absolute right-0 top-1/4 w-80 h-80 bg-gradient-to-br from-amber-400/30 via-orange-500/25 to-transparent rounded-full blur-3xl"
-                  animate={{
-                    scale: [1, 1.4, 1],
-                    opacity: [0.4, 0.8, 0.4],
-                    rotate: [0, 180, 360],
-                  }}
-                  transition={{
-                    scale: { duration: 3, repeat: Infinity, ease: "easeInOut" },
-                    opacity: { duration: 2.5, repeat: Infinity, ease: "easeInOut" },
-                    rotate: { duration: 15, repeat: Infinity, ease: "linear" },
-                  }}
-                />
-                
-                {/* Halo secondaire pour plus de profondeur */}
-                <motion.div
-                  className="absolute right-20 top-1/3 w-60 h-60 bg-gradient-to-br from-orange-500/20 via-amber-400/15 to-transparent rounded-full blur-2xl"
-                  animate={{
-                    scale: [1, 1.2, 1],
-                    opacity: [0.3, 0.6, 0.3],
-                    rotate: [0, -180, -360],
-                  }}
-                  transition={{
-                    scale: { duration: 4, repeat: Infinity, ease: "easeInOut", delay: 1 },
-                    opacity: { duration: 3, repeat: Infinity, ease: "easeInOut", delay: 1 },
-                    rotate: { duration: 18, repeat: Infinity, ease: "linear" },
-                  }}
-                />
+                {/* Suppression des halos orange qui créent le voile */}
                 
                 {/* Ligne de lumière traversante verticale intensifiée */}
                 <motion.div
@@ -427,20 +396,7 @@ export default function Hero() {
                   }}
                 />
                 
-                {/* Halo de profondeur amélioré */}
-                <motion.div
-                  className="absolute right-10 bottom-1/4 w-48 h-48 bg-gradient-to-tl from-orange-500/15 via-amber-400/10 to-transparent rounded-full blur-2xl"
-                  animate={{
-                    scale: [1, 1.4, 1],
-                    opacity: [0.3, 0.6, 0.3],
-                  }}
-                  transition={{
-                    duration: 4,
-                    repeat: Infinity,
-                    ease: "easeInOut",
-                    delay: 2,
-                  }}
-                />
+                {/* Suppression du halo de profondeur orange */}
                 
                 {/* Effet de brillance traversant */}
                 <motion.div
