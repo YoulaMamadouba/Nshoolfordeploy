@@ -110,6 +110,8 @@ export default function DemoPage() {
 
   // Gestion du clavier
   useEffect(() => {
+    if (typeof window === 'undefined') return;
+
     const handleKeyPress = (event: KeyboardEvent) => {
       switch (event.key) {
         case 'ArrowRight':

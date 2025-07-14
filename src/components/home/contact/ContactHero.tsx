@@ -1,8 +1,22 @@
 'use client';
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 
 const ContactHero: React.FC = () => {
+  const [windowSize, setWindowSize] = useState({ width: 0, height: 0 });
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+    setWindowSize({ width: window.innerWidth, height: window.innerHeight });
+    
+    const handleResize = () => {
+      setWindowSize({ width: window.innerWidth, height: window.innerHeight });
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
   const titleVariants = {
     initial: { opacity: 0, y: 30 },
     animate: { 
@@ -45,15 +59,15 @@ const ContactHero: React.FC = () => {
     <section className="relative overflow-hidden bg-gradient-to-br from-orange-50 via-white to-amber-50 py-20 lg:py-32">
       {/* Particules décoratives */}
       <div className="absolute inset-0 overflow-hidden">
-        {[...Array(6)].map((_, i) => (
+        {isClient && [...Array(6)].map((_, i) => (
           <motion.div
             key={i}
             initial={{ opacity: 0, scale: 0 }}
             animate={{ 
               opacity: [0, 0.3, 0], 
               scale: [0, 1, 0],
-              x: Math.random() * window.innerWidth,
-              y: Math.random() * window.innerHeight
+              x: Math.random() * windowSize.width,
+              y: Math.random() * windowSize.height
             }}
             transition={{
               duration: 8 + Math.random() * 4,

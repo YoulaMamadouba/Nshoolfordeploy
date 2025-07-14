@@ -45,7 +45,7 @@ const FinalCTA: React.FC<FinalCTAProps> = ({
 
   // Auto-advance après 10 secondes
   useEffect(() => {
-    if (isAutoPlaying) {
+    if (isAutoPlaying && typeof window !== 'undefined') {
       const timer = setTimeout(() => {
         // Rediriger vers la page d'accueil
         window.location.href = '/';
@@ -80,14 +80,14 @@ const FinalCTA: React.FC<FinalCTAProps> = ({
                 <motion.div
                   key={index}
                   initial={{
-                    x: Math.random() * (window.innerWidth || 1200),
+                    x: Math.random() * (typeof window !== 'undefined' ? window.innerWidth : 1200),
                     y: -50,
                     opacity: 0,
                     scale: 0,
                   }}
                   animate={{
-                    x: Math.random() * (window.innerWidth || 1200),
-                    y: (window.innerHeight || 800) + 50,
+                    x: Math.random() * (typeof window !== 'undefined' ? window.innerWidth : 1200),
+                    y: (typeof window !== 'undefined' ? window.innerHeight : 800) + 50,
                     opacity: [0, 1, 0],
                     scale: [0, 1, 0],
                   }}

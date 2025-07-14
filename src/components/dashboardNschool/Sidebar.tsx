@@ -12,6 +12,7 @@ import {
   Cog6ToothIcon,
   ChevronDownIcon,
   ChevronRightIcon,
+  XMarkIcon,
 } from '@heroicons/react/24/outline';
 import { useTheme } from '@/contexts/ThemeContext';
 
@@ -26,6 +27,8 @@ interface SidebarProps {
 const Sidebar = ({ onNavigation, onCollapseChange, currentView = 'overview' }: SidebarProps) => {
   const [expandedSection, setExpandedSection] = useState<string | null>(null);
   const [isCollapsed, setIsCollapsed] = useState(false);
+  const [showDrawer, setShowDrawer] = useState(false);
+  const [drawerItem, setDrawerItem] = useState<any>(null);
   const { theme } = useTheme();
 
   // Notifier le parent du changement d'état
@@ -54,7 +57,13 @@ const Sidebar = ({ onNavigation, onCollapseChange, currentView = 'overview' }: S
 
   const handleItemClick = (item: any) => {
     if (item.hasSubmenu) {
-      setExpandedSection(expandedSection === item.name ? null : item.name);
+      if (isCollapsed) {
+        // Ouvrir le drawer pour les sous-menus
+        setDrawerItem(item);
+        setShowDrawer(true);
+      } else {
+        setExpandedSection(expandedSection === item.name ? null : item.name);
+      }
     } else {
       item.onClick();
     }
@@ -347,6 +356,72 @@ const Sidebar = ({ onNavigation, onCollapseChange, currentView = 'overview' }: S
           </motion.div>
         </div>
       </div>
+
+      {/* Mini drawer pour les sous-menus en mode réduit */}
+      <AnimatePresence>
+        {showDrawer && drawerItem && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-40"
+            onClick={() => setShowDrawer(false)}
+          >
+            <motion.div
+              initial={{ x: -100, y: 0, scale: 0.8 }}
+              animate={{ x: 0, y: 0, scale: 1 }}
+              exit={{ x: -100, y: 0, scale: 0.8 }}
+              transition={{ type: 'spring', stiffness: 400, damping: 25 }}
+              className={`absolute left-16 top-1/2 transform -translate-y-1/2 w-48 shadow-2xl rounded-xl border ${
+                theme === 'dark'
+                  ? 'bg-gradient-to-br from-gray-800 to-gray-900 border-[#f57c00]/30'
+                  : 'bg-gradient-to-br from-[#2b4a6a] to-[#1a2332] border-[#f57c00]/20'
+              }`}
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Sous-menus compacts */}
+              <div className="p-3">
+                <div className="space-y-1">
+                  {drawerItem.subItems?.map((subItem: any, index: number) => {
+                    const isSubActive = isSubItemActive(subItem);
+                    return (
+                      <motion.button
+                        key={subItem.name}
+                        onClick={() => {
+                          subItem.onClick();
+                          setShowDrawer(false);
+                        }}
+                        initial={{ opacity: 0, x: -10 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: index * 0.1 }}
+                        className={`relative flex items-center gap-2 p-2 rounded-lg group transition-all duration-300 w-full text-left ${
+                          isSubActive
+                            ? 'bg-gradient-to-r from-[#f57c00]/25 to-[#f57c00]/15 text-white shadow-md shadow-orange-500/20 border border-[#f57c00]/30'
+                            : 'text-white/80 hover:text-white hover:bg-[#f57c00]/15 hover:shadow-md hover:shadow-orange-500/20'
+                        }`}
+                        title={subItem.name}
+                      >
+                        <div className={`w-1.5 h-1.5 rounded-full ${
+                          isSubActive ? 'bg-white' : 'bg-[#f57c00]'
+                        }`} />
+                        <span className="text-xs font-medium truncate">{subItem.name}</span>
+                        {isSubActive && (
+                          <motion.div
+                            initial={{ scale: 0 }}
+                            animate={{ scale: 1 }}
+                            transition={{ duration: 0.3 }}
+                            className="absolute left-0 top-1/2 transform -translate-y-1/2 w-0.5 h-3 rounded-r-full bg-white"
+                          />
+                        )}
+                      </motion.button>
+                    );
+                  })}
+                </div>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </motion.aside>
   );
 };

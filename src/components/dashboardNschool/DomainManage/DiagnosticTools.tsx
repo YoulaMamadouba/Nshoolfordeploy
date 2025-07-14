@@ -157,7 +157,7 @@ const DiagnosticTools: React.FC = () => {
         </div>
 
         {/* Domain Selection */}
-        <div className="flex items-center gap-4 mb-6">
+        <div className="flex items-end gap-4 mb-6">
           <div className="flex-1">
             <label className={`block text-sm font-semibold mb-2 ${
               theme === 'dark' ? 'text-gray-300' : 'text-[#2b4a6a]'
@@ -175,7 +175,7 @@ const DiagnosticTools: React.FC = () => {
               <option value="www.lycee-vhugo.edu">www.lycee-vhugo.edu</option>
               <option value="college-moliere.nschool.fr">college-moliere.nschool.fr</option>
             </select>
-      </div>
+          </div>
           
           <motion.button
             whileHover={{ scale: 1.02 }}
@@ -292,45 +292,83 @@ const DiagnosticTools: React.FC = () => {
               <DocumentTextIcon className="w-6 h-6 text-white" />
             </div>
             <div>
-              <h3 className="text-xl font-bold text-[#2b4a6a]">Résumé des Tests</h3>
-              <p className="text-gray-600">Synthèse des diagnostics effectués</p>
+              <h3 className={`text-xl font-bold ${
+                theme === 'dark' ? 'text-white' : 'text-[#2b4a6a]'
+              }`}>Résumé des Tests</h3>
+              <p className={`${
+                theme === 'dark' ? 'text-gray-300' : 'text-gray-600'
+              }`}>Synthèse des diagnostics effectués</p>
             </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="text-center p-4 bg-[#f57c00]/10 rounded-xl border border-[#f57c00]/20">
-              <div className="text-3xl font-bold text-[#f57c00] mb-2">
+            <div className={`text-center p-4 rounded-xl border ${
+              theme === 'dark' 
+                ? 'bg-gray-800/50 border-gray-600/50' 
+                : 'bg-gray-100 border-gray-200'
+            }`}>
+              <div className={`text-3xl font-bold mb-2 ${
+                theme === 'dark' ? 'text-green-400' : 'text-green-600'
+              }`}>
                 {results.filter(r => r.status === 'success').length}
               </div>
-              <p className="text-[#2b4a6a] font-semibold">Tests réussis</p>
+              <p className={`font-semibold ${
+                theme === 'dark' ? 'text-gray-300' : 'text-gray-700'
+              }`}>Tests réussis</p>
             </div>
             
-            <div className="text-center p-4 bg-[#f57c00]/10 rounded-xl border border-[#f57c00]/20">
-              <div className="text-3xl font-bold text-[#f57c00] mb-2">
+            <div className={`text-center p-4 rounded-xl border ${
+              theme === 'dark' 
+                ? 'bg-gray-800/50 border-gray-600/50' 
+                : 'bg-gray-100 border-gray-200'
+            }`}>
+              <div className={`text-3xl font-bold mb-2 ${
+                theme === 'dark' ? 'text-yellow-400' : 'text-yellow-600'
+              }`}>
                 {results.filter(r => r.status === 'warning').length}
               </div>
-              <p className="text-[#2b4a6a] font-semibold">Avertissements</p>
+              <p className={`font-semibold ${
+                theme === 'dark' ? 'text-gray-300' : 'text-gray-700'
+              }`}>Avertissements</p>
             </div>
             
-            <div className="text-center p-4 bg-[#f57c00]/10 rounded-xl border border-[#f57c00]/20">
-              <div className="text-3xl font-bold text-[#f57c00] mb-2">
+            <div className={`text-center p-4 rounded-xl border ${
+              theme === 'dark' 
+                ? 'bg-gray-800/50 border-gray-600/50' 
+                : 'bg-gray-100 border-gray-200'
+            }`}>
+              <div className={`text-3xl font-bold mb-2 ${
+                theme === 'dark' ? 'text-red-400' : 'text-red-600'
+              }`}>
                 {results.filter(r => r.status === 'error').length}
               </div>
-              <p className="text-[#2b4a6a] font-semibold">Erreurs</p>
+              <p className={`font-semibold ${
+                theme === 'dark' ? 'text-gray-300' : 'text-gray-700'
+              }`}>Erreurs</p>
             </div>
           </div>
 
-          <div className="mt-6 p-4 bg-[#f57c00]/10 rounded-xl border border-[#f57c00]/20">
+          <div className={`mt-6 p-4 rounded-xl border ${
+            theme === 'dark' 
+              ? 'bg-gray-800/50 border-gray-600/50' 
+              : 'bg-gray-100 border-gray-200'
+          }`}>
             <div className="flex items-center gap-3">
-              <GlobeAltIcon className="w-5 h-5 text-[#f57c00]" />
+              <GlobeAltIcon className={`w-5 h-5 ${
+                theme === 'dark' ? 'text-blue-400' : 'text-blue-600'
+              }`} />
               <div>
-                <p className="text-[#2b4a6a] font-semibold">Domaine testé : {selectedDomain}</p>
-                <p className="text-[#f57c00] text-sm">
+                <p className={`font-semibold ${
+                  theme === 'dark' ? 'text-gray-300' : 'text-gray-700'
+                }`}>Domaine testé : {selectedDomain}</p>
+                <p className={`text-sm ${
+                  theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
+                }`}>
                   Dernière vérification : {new Date().toLocaleString('fr-FR')}
                 </p>
               </div>
             </div>
-      </div>
+          </div>
     </motion.div>
       )}
     </div>
