@@ -94,24 +94,24 @@ export default function Step6Recap({ formData, prevStep }: Step6RecapProps) {
       transition={{ duration: 0.5 }}
       className="w-full"
     >
-      <Card className="border-0 bg-white/95 shadow-xl">
-        <CardHeader className="text-center pb-4">
+      <Card className="border-0 bg-white/95 shadow-2xl border border-amber-500/30">
+        <CardHeader className="text-center pb-3">
           <motion.div
             initial={{ scale: 0.8 }}
             animate={{ scale: 1 }}
             transition={{ duration: 0.3 }}
           >
-            <Icon icon="mdi:clipboard-check" className="w-12 h-12 text-amber-500 mx-auto mb-3" />
+            <Icon icon="mdi:clipboard-check" className="w-10 h-10 text-amber-500 mx-auto mb-2" />
           </motion.div>
-          <CardTitle className="text-2xl font-bold text-gray-800">
+          <CardTitle className="text-xl font-bold text-gray-800">
             Récapitulatif
           </CardTitle>
-          <CardDescription className="text-gray-600">
+          <CardDescription className="text-gray-600 text-sm">
             Vérifiez toutes les informations avant de créer votre établissement
           </CardDescription>
         </CardHeader>
         
-        <CardContent className="space-y-6">
+        <CardContent className="space-y-4">
           {/* Sections de récapitulatif */}
           <div className="space-y-4">
             {recapSections.map((section, sectionIndex) => (
@@ -147,14 +147,14 @@ export default function Step6Recap({ formData, prevStep }: Step6RecapProps) {
 
           {/* Message de confirmation */}
           <motion.div 
-            className="bg-green-50 border border-green-200 rounded-lg p-4"
+            className="bg-green-50 border border-green-200 rounded-lg p-2"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.5 }}
           >
             <div className="flex items-start gap-2">
-              <Icon icon="mdi:check-circle" className="w-5 h-5 text-green-600 mt-0.5 flex-shrink-0" />
-              <div className="text-sm text-green-800">
+              <Icon icon="mdi:check-circle" className="w-4 h-4 text-green-600 mt-0.5 flex-shrink-0" />
+              <div className="text-xs text-green-800">
                 <p className="font-medium mb-1">Prêt à créer votre établissement !</p>
                 <p>Une fois créé, vous recevrez un email de confirmation avec vos identifiants de connexion. 
                 Votre espace sera accessible à l'adresse : <span className="font-mono text-green-700">
@@ -166,13 +166,13 @@ export default function Step6Recap({ formData, prevStep }: Step6RecapProps) {
 
           {/* Conditions d'utilisation */}
           <motion.div 
-            className="bg-blue-50 border border-blue-200 rounded-lg p-4"
+            className="bg-blue-50 border border-blue-200 rounded-lg p-2"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.6 }}
           >
             <div className="flex items-start gap-2">
-              <Icon icon="mdi:information" className="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" />
+              <Icon icon="mdi:information" className="w-4 h-4 text-blue-600 mt-0.5 flex-shrink-0" />
               <div className="text-xs text-blue-800">
                 <p className="font-medium mb-1">Important :</p>
                 <p>En cliquant sur "Créer mon établissement", vous confirmez que toutes les informations sont correctes 
@@ -197,39 +197,47 @@ export default function Step6Recap({ formData, prevStep }: Step6RecapProps) {
               Modifier
             </Button>
             
-            <Button
-              onClick={handleSubmit}
-              disabled={isSubmitting}
-              className={`flex-1 h-11 text-sm font-medium transition-all duration-300 ${
-                submitStatus === 'success'
-                  ? 'bg-green-600 hover:bg-green-700 text-white'
-                  : submitStatus === 'error'
-                  ? 'bg-red-600 hover:bg-red-700 text-white'
-                  : 'bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white shadow-lg hover:shadow-xl'
-              }`}
+            <motion.div
+              whileHover={{ 
+                scale: 1.02,
+                boxShadow: "0px 5px 15px rgba(245, 158, 11, 0.4)"
+              }}
+              whileTap={{ scale: 0.98 }}
             >
-              {submitStatus === 'submitting' ? (
-                <>
-                  <Icon icon="mdi:loading" className="w-4 h-4 mr-2 animate-spin" />
-                  Création en cours...
-                </>
-              ) : submitStatus === 'success' ? (
-                <>
-                  <Icon icon="mdi:check-circle" className="w-4 h-4 mr-2" />
-                  Créé avec succès !
-                </>
-              ) : submitStatus === 'error' ? (
-                <>
-                  <Icon icon="mdi:close-circle" className="w-4 h-4 mr-2" />
-                  Erreur, réessayer
-                </>
-              ) : (
-                <>
-                  <Icon icon="mdi:school" className="w-4 h-4 mr-2" />
-                  Créer mon établissement
-                </>
-              )}
-            </Button>
+              <Button
+                onClick={handleSubmit}
+                disabled={isSubmitting}
+                className={`flex-1 h-11 text-sm font-medium transition-all duration-300 ${
+                  submitStatus === 'success'
+                    ? 'bg-green-600 hover:bg-green-700 text-white'
+                    : submitStatus === 'error'
+                    ? 'bg-red-600 hover:bg-red-700 text-white'
+                    : 'bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white shadow-md'
+                }`}
+              >
+                {submitStatus === 'submitting' ? (
+                  <>
+                    <Icon icon="mdi:loading" className="w-4 h-4 mr-2 animate-spin" />
+                    Création en cours...
+                  </>
+                ) : submitStatus === 'success' ? (
+                  <>
+                    <Icon icon="mdi:check-circle" className="w-4 h-4 mr-2" />
+                    Créé avec succès !
+                  </>
+                ) : submitStatus === 'error' ? (
+                  <>
+                    <Icon icon="mdi:close-circle" className="w-4 h-4 mr-2" />
+                    Erreur, réessayer
+                  </>
+                ) : (
+                  <>
+                    <Icon icon="mdi:school" className="w-4 h-4 mr-2" />
+                    Créer mon établissement
+                  </>
+                )}
+              </Button>
+            </motion.div>
           </motion.div>
 
           {/* Message de succès */}

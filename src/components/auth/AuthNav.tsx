@@ -9,8 +9,8 @@ export default function AuthNav() {
         <div className="flex justify-between h-16 items-center">
           <Link href="/" className="flex items-center">
             <span className="text-xl font-bold">
-              <span className="text-orange-500">Sol</span>
-              <span className="text-gray-800">Vex</span>
+              <span className="text-orange-500">N</span>
+              <span className="text-gray-800"> School</span>
             </span>
           </Link>
           <div className="flex items-center space-x-4">

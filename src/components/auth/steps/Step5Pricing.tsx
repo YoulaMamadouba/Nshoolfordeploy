@@ -83,24 +83,24 @@ export default function Step5Pricing({ formData, updateFormData, nextStep, prevS
       transition={{ duration: 0.5 }}
       className="w-full"
     >
-      <Card className="border-0 bg-white/95 shadow-xl">
-        <CardHeader className="text-center pb-4">
+      <Card className="border-0 bg-white/95 shadow-2xl border border-amber-500/30">
+        <CardHeader className="text-center pb-3">
           <motion.div
             initial={{ scale: 0.8 }}
             animate={{ scale: 1 }}
             transition={{ duration: 0.3 }}
           >
-            <Icon icon="mdi:package-variant" className="w-12 h-12 text-amber-500 mx-auto mb-3" />
+            <Icon icon="mdi:package-variant" className="w-10 h-10 text-amber-500 mx-auto mb-2" />
           </motion.div>
-          <CardTitle className="text-2xl font-bold text-gray-800">
+          <CardTitle className="text-xl font-bold text-gray-800">
             Choisir un Plan
           </CardTitle>
-          <CardDescription className="text-gray-600">
+          <CardDescription className="text-gray-600 text-sm">
             Sélectionnez le plan qui correspond à vos besoins
           </CardDescription>
         </CardHeader>
         
-        <CardContent className="space-y-6">
+        <CardContent className="space-y-4">
           {/* Plans */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {plans.map((plan, index) => (
@@ -207,13 +207,13 @@ export default function Step5Pricing({ formData, updateFormData, nextStep, prevS
 
           {/* Information sur les plans */}
           <motion.div 
-            className="bg-blue-50 border border-blue-200 rounded-lg p-4"
+            className="bg-blue-50 border border-blue-200 rounded-lg p-2"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.5 }}
           >
             <div className="flex items-start gap-2">
-              <Icon icon="mdi:information" className="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" />
+              <Icon icon="mdi:information" className="w-4 h-4 text-blue-600 mt-0.5 flex-shrink-0" />
               <div className="text-xs text-blue-800">
                 <p className="font-medium mb-1">À propos des plans :</p>
                 <p>Vous pouvez changer de plan à tout moment depuis votre tableau de bord. 
@@ -238,18 +238,26 @@ export default function Step5Pricing({ formData, updateFormData, nextStep, prevS
               Précédent
             </Button>
             
-            <Button
-              onClick={nextStep}
-              disabled={!isValid}
-              className={`flex-1 h-11 text-sm font-medium transition-all duration-300 ${
-                isValid 
-                  ? 'bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white shadow-lg hover:shadow-xl' 
-                  : 'bg-gray-300 text-gray-500 cursor-not-allowed'
-              }`}
+            <motion.div
+              whileHover={{ 
+                scale: 1.02,
+                boxShadow: "0px 5px 15px rgba(245, 158, 11, 0.4)"
+              }}
+              whileTap={{ scale: 0.98 }}
             >
-              <span>Suivant</span>
-              <Icon icon="mdi:arrow-right" className="w-4 h-4 ml-2" />
-            </Button>
+              <Button
+                onClick={nextStep}
+                disabled={!isValid}
+                className={`flex-1 h-11 text-sm font-medium transition-all duration-300 ${
+                  isValid 
+                    ? 'bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white shadow-md' 
+                    : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                }`}
+              >
+                <span>Suivant</span>
+                <Icon icon="mdi:arrow-right" className="w-4 h-4 ml-2" />
+              </Button>
+            </motion.div>
           </motion.div>
         </CardContent>
       </Card>

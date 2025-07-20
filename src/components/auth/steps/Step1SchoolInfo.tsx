@@ -129,35 +129,35 @@ export default function Step1SchoolInfo({ formData, updateFormData, nextStep }: 
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
+      initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
+      transition={{ duration: 0.3, ease: "easeOut" }}
       className="w-full"
     >
-      <Card className="border-0 bg-white/95 shadow-xl">
-        <CardHeader className="text-center pb-4">
+      <Card className="border-0 bg-white/95 shadow-2xl border border-amber-500/30">
+        <CardHeader className="text-center pb-3">
           <motion.div
             initial={{ scale: 0.8 }}
             animate={{ scale: 1 }}
             transition={{ duration: 0.3 }}
           >
-            <Icon icon="mdi:school" className="w-12 h-12 text-amber-500 mx-auto mb-3" />
+            <Icon icon="mdi:school" className="w-10 h-10 text-amber-500 mx-auto mb-2" />
           </motion.div>
-          <CardTitle className="text-2xl font-bold text-gray-800">
+          <CardTitle className="text-xl font-bold text-gray-800">
             Informations de l'Établissement
           </CardTitle>
-          <CardDescription className="text-gray-600">
+          <CardDescription className="text-gray-600 text-sm">
             Commençons par les informations de base de votre établissement
           </CardDescription>
         </CardHeader>
         
-        <CardContent className="space-y-6">
+        <CardContent className="space-y-4">
           {/* Nom de l'établissement */}
           <motion.div 
             className="space-y-2"
-            initial={{ opacity: 0, x: -20 }}
+            initial={{ opacity: 0, x: -10 }}
             animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.1 }}
+            transition={{ delay: 0.05, duration: 0.2 }}
           >
             <Label htmlFor="school_name" className="text-gray-700 text-sm font-medium">
               Nom de l'établissement *
@@ -186,9 +186,9 @@ export default function Step1SchoolInfo({ formData, updateFormData, nextStep }: 
           {/* Type d'établissement */}
           <motion.div 
             className="space-y-2"
-            initial={{ opacity: 0, x: -20 }}
+            initial={{ opacity: 0, x: -10 }}
             animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.2 }}
+            transition={{ delay: 0.1, duration: 0.2 }}
           >
             <Label htmlFor="school_type" className="text-gray-700 text-sm font-medium">
               Type d'établissement *
@@ -224,9 +224,9 @@ export default function Step1SchoolInfo({ formData, updateFormData, nextStep }: 
           {/* Sous-domaine */}
           <motion.div 
             className="space-y-2"
-            initial={{ opacity: 0, x: -20 }}
+            initial={{ opacity: 0, x: -10 }}
             animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.3 }}
+            transition={{ delay: 0.15, duration: 0.2 }}
           >
             <Label htmlFor="subdomain" className="text-gray-700 text-sm font-medium">
               Sous-domaine *
@@ -289,13 +289,13 @@ export default function Step1SchoolInfo({ formData, updateFormData, nextStep }: 
 
           {/* Explication du sous-domaine */}
           <motion.div 
-            className="bg-amber-50 border border-amber-200 rounded-lg p-3"
-            initial={{ opacity: 0, y: 20 }}
+            className="bg-amber-50 border border-amber-200 rounded-lg p-2"
+            initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4 }}
+            transition={{ delay: 0.2, duration: 0.2 }}
           >
             <div className="flex items-start gap-2">
-              <Icon icon="mdi:information" className="w-5 h-5 text-amber-600 mt-0.5 flex-shrink-0" />
+              <Icon icon="mdi:information" className="w-4 h-4 text-amber-600 mt-0.5 flex-shrink-0" />
               <div className="text-xs text-amber-800">
                 <p className="font-medium mb-1">À propos du sous-domaine :</p>
                 <p>Ce sera l'adresse unique de votre établissement sur la plateforme. 
@@ -306,23 +306,31 @@ export default function Step1SchoolInfo({ formData, updateFormData, nextStep }: 
 
           {/* Bouton Suivant */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.5 }}
+            transition={{ delay: 0.25, duration: 0.2 }}
             className="pt-4"
           >
-            <Button
-              onClick={nextStep}
-              disabled={!isValid}
-              className={`w-full h-11 text-sm font-medium transition-all duration-300 ${
-                isValid 
-                  ? 'bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white shadow-lg hover:shadow-xl' 
-                  : 'bg-gray-300 text-gray-500 cursor-not-allowed'
-              }`}
+            <motion.div
+              whileHover={{ 
+                scale: 1.02,
+                boxShadow: "0px 5px 15px rgba(245, 158, 11, 0.4)"
+              }}
+              whileTap={{ scale: 0.98 }}
             >
-              <span>Suivant</span>
-              <Icon icon="mdi:arrow-right" className="w-4 h-4 ml-2" />
-            </Button>
+              <Button
+                onClick={nextStep}
+                disabled={!isValid}
+                className={`w-full h-11 text-sm font-medium transition-all duration-300 ${
+                  isValid 
+                    ? 'bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white shadow-md' 
+                    : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                }`}
+              >
+                <span>Suivant</span>
+                <Icon icon="mdi:arrow-right" className="w-4 h-4 ml-2" />
+              </Button>
+            </motion.div>
           </motion.div>
         </CardContent>
       </Card>

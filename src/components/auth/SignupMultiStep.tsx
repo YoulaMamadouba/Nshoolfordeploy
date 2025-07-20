@@ -163,19 +163,19 @@ export default function SignupMultiStep() {
         ))}
 
         {/* Main container */}
-        <div className="relative w-full max-w-4xl z-10 mx-auto space-y-6">
+        <div className="relative w-full max-w-2xl z-10 mx-auto space-y-6 min-h-[600px]">
           {/* Progress Stepper */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="bg-white/90 backdrop-blur-sm rounded-xl p-4 shadow-lg border border-amber-500/30"
+            className="bg-white/90 backdrop-blur-sm rounded-xl p-3 shadow-lg border border-amber-500/30"
           >
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg font-semibold text-gray-800">
+            <div className="flex items-center justify-between mb-3">
+              <h2 className="text-base font-semibold text-gray-800">
                 Création de votre établissement
               </h2>
-              <span className="text-sm text-gray-600">
+              <span className="text-xs text-gray-600">
                 Étape {currentStep} sur {steps.length}
               </span>
             </div>
@@ -184,7 +184,7 @@ export default function SignupMultiStep() {
               {steps.map((step, index) => (
                 <div key={step.id} className="flex items-center flex-1">
                   <motion.div
-                    className={`flex items-center justify-center w-10 h-10 rounded-full border-2 transition-all duration-300 ${
+                    className={`flex items-center justify-center w-8 h-8 rounded-full border-2 transition-all duration-300 ${
                       currentStep >= step.id
                         ? "bg-amber-500 border-amber-500 text-white"
                         : "bg-white border-gray-300 text-gray-400"
@@ -196,14 +196,14 @@ export default function SignupMultiStep() {
                   >
                     <Icon 
                       icon={step.icon} 
-                      className={`w-5 h-5 ${
+                      className={`w-4 h-4 ${
                         currentStep >= step.id ? "text-white" : "text-gray-400"
                       }`} 
                     />
                   </motion.div>
                   
                   {index < steps.length - 1 && (
-                    <div className={`flex-1 h-0.5 mx-2 transition-all duration-300 ${
+                    <div className={`flex-1 h-0.5 mx-1 transition-all duration-300 ${
                       currentStep > step.id ? "bg-amber-500" : "bg-gray-300"
                     }`} />
                   )}
@@ -211,8 +211,8 @@ export default function SignupMultiStep() {
               ))}
             </div>
             
-            <div className="mt-3 text-center">
-              <span className="text-sm font-medium text-amber-600">
+            <div className="mt-2 text-center">
+              <span className="text-xs font-medium text-amber-600">
                 {steps[currentStep - 1]?.title}
               </span>
             </div>
@@ -222,10 +222,11 @@ export default function SignupMultiStep() {
           <AnimatePresence mode="wait">
             <motion.div
               key={currentStep}
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -20 }}
-              transition={{ duration: 0.3 }}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.2, ease: "easeOut" }}
+              className="w-full"
             >
               {renderStep()}
             </motion.div>
