@@ -210,11 +210,11 @@ export default function Hero() {
   };
 
   return (
-    <section className="relative overflow-visible bg-gradient-to-b from-orange-50 via-white to-white pt-32 pb-20 md:pt-40 md:pb-28">
+    <section className="relative overflow-visible bg-gradient-to-b from-orange-50 via-white to-white pt-20 pb-16 md:pt-40 md:pb-28">
       <style>{globalStyles}</style>
       {/* Suppression du voile orange de fond */}
-      <div className="relative mx-auto max-w-7xl px-6 lg:px-12">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-start">
+      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-12">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-24 items-start">
           <div className="text-center lg:text-left">
             <motion.h1
               initial={{ opacity: 0, y: 20 }}
@@ -287,7 +287,7 @@ export default function Hero() {
               />
             </motion.div>
           </div>
-          <div className="relative w-full max-w-[1500px] mx-auto -mx-6 lg:-mx-12 lg:max-w-none lg:justify-self-end lg:-mt-4 overflow-visible">
+          <div className="relative w-full max-w-[1500px] mx-auto -mx-4 sm:-mx-6 lg:-mx-12 lg:max-w-none lg:justify-self-end lg:-mt-4 overflow-visible">
                         <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ 
@@ -308,7 +308,7 @@ export default function Hero() {
                 alt="Fille pointant vers la solution scolaire"
                 width={2400}
                 height={1600}
-                className="object-cover w-full h-[600px]"
+                className="object-cover w-full h-[400px] sm:h-[500px] md:h-[600px]"
                 style={{ objectPosition: '50% 100%', background: 'transparent' }}
                 quality={100}
                 priority
