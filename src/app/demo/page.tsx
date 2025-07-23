@@ -281,23 +281,6 @@ export default function DemoPage() {
           </div>
         </div>
       </motion.div>
-
-      {/* Raccourcis clavier - Supprimé sur mobile */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 2 }}
-        className="hidden sm:block fixed bottom-6 right-6 z-50"
-      >
-        <div className="px-3 py-2 rounded-lg backdrop-blur-md border text-xs bg-white/80 border-gray-200 text-gray-600">
-          <div className="space-y-1">
-            <div>← → Navigation</div>
-            <div>Espace Pause</div>
-            <div>A Auto-play</div>
-            <div>Échap Stop</div>
-          </div>
-        </div>
-      </motion.div>
     </div>
   );
 } 
