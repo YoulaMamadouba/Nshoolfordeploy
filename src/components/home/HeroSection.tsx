@@ -308,7 +308,7 @@ export default function Hero() {
                 alt="Fille pointant vers la solution scolaire"
                 width={2400}
                 height={1600}
-                className="object-cover w-full h-[400px] sm:h-[500px] md:h-[600px]"
+                className="object-cover w-full h-[500px] sm:h-[550px] md:h-[600px]"
                 style={{ objectPosition: '50% 100%', background: 'transparent' }}
                 quality={100}
                 priority
