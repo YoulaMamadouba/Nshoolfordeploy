@@ -168,7 +168,7 @@ const HeroIntro: React.FC<HeroIntroProps> = ({
                   repeat: Infinity,
                   ease: 'easeInOut',
                 }}
-                className="text-5xl md:text-7xl font-extrabold mb-6 bg-gradient-to-r from-orange-600 via-amber-500 to-orange-600 bg-clip-text text-transparent bg-[length:200%_100%]"
+                className="text-4xl sm:text-5xl md:text-7xl font-extrabold mb-4 sm:mb-6 bg-gradient-to-r from-orange-600 via-amber-500 to-orange-600 bg-clip-text text-transparent bg-[length:200%_100%]"
               >
                 N School
               </motion.h1>
@@ -177,7 +177,7 @@ const HeroIntro: React.FC<HeroIntroProps> = ({
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.5, duration: 1 }}
-                className="text-xl md:text-2xl text-gray-600 mb-8 font-medium"
+                className="text-lg sm:text-xl md:text-2xl text-gray-600 mb-6 sm:mb-8 font-medium"
               >
                 Réinventez la gestion scolaire. Aujourd'hui.
               </motion.p>
@@ -186,7 +186,7 @@ const HeroIntro: React.FC<HeroIntroProps> = ({
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: 1, duration: 0.8 }}
-                className="text-lg text-gray-500 max-w-2xl mx-auto leading-relaxed"
+                className="text-base sm:text-lg text-gray-500 max-w-2xl mx-auto leading-relaxed px-4 sm:px-0"
               >
                 Découvrez comment notre plateforme révolutionne la gestion des établissements 
                 éducatifs en Afrique avec une solution tout-en-un intuitive et puissante.
@@ -212,19 +212,20 @@ const HeroIntro: React.FC<HeroIntroProps> = ({
                 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={onNext}
-                className="relative overflow-hidden group bg-gradient-to-r from-orange-500 to-amber-500 text-white px-8 py-4 rounded-2xl font-bold text-lg shadow-2xl transition-all duration-300"
+                className="relative overflow-hidden group bg-gradient-to-r from-orange-500 to-amber-500 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-2xl font-bold text-base sm:text-lg shadow-2xl transition-all duration-300"
               >
-                <span className="relative z-10 flex items-center gap-3">
+                <span className="relative z-10 flex items-center gap-2 sm:gap-3">
                   <motion.span
                     animate={{ x: [0, 5, 0] }}
                     transition={{ duration: 1, repeat: Infinity }}
                   >
-                    Commencer la démonstration
+                    <span className="hidden sm:inline">Commencer la démonstration</span>
+                    <span className="sm:hidden">Commencer</span>
                   </motion.span>
                   <motion.svg
                     animate={{ x: [0, 5, 0] }}
                     transition={{ duration: 1, repeat: Infinity, delay: 0.2 }}
-                    className="w-6 h-6"
+                    className="w-5 h-5 sm:w-6 sm:h-6"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -263,26 +264,6 @@ const HeroIntro: React.FC<HeroIntroProps> = ({
           )}
         </AnimatePresence>
       </div>
-
-      {/* Indicateur de progression */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 2, duration: 0.8 }}
-        className="absolute bottom-6 right-6 z-50"
-      >
-        <div className="flex items-center gap-3 text-sm text-gray-500">
-          <span>Étape {currentStep + 1} sur {totalSteps}</span>
-          <div className="w-24 h-1 bg-gray-200 rounded-full overflow-hidden">
-            <motion.div
-              className="h-full bg-gradient-to-r from-orange-500 to-amber-500"
-              initial={{ width: '0%' }}
-              animate={{ width: `${((currentStep + 1) / totalSteps) * 100}%` }}
-              transition={{ duration: 0.5, ease: 'easeOut' }}
-            />
-          </div>
-        </div>
-      </motion.div>
     </div>
   );
 };

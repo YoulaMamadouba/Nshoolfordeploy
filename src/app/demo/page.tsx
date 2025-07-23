@@ -147,27 +147,27 @@ export default function DemoPage() {
 
   return (
     <div className="min-h-screen relative overflow-hidden bg-gradient-to-br from-orange-50 via-white to-amber-50">
-      {/* Navigation flottante */}
+      {/* Navigation flottante - Adaptée pour mobile */}
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.5 }}
-        className="fixed top-6 right-6 z-50"
+        className="fixed top-4 right-4 z-50"
       >
-        <div className="flex items-center gap-2 px-4 py-2 rounded-full backdrop-blur-md border bg-white/80 border-gray-200 text-gray-800">
+        <div className="flex items-center gap-2 px-3 py-2 rounded-full backdrop-blur-md border bg-white/80 border-gray-200 text-gray-800">
           {/* Bouton Auto-play */}
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={() => setIsAutoPlaying(!isAutoPlaying)}
-            className={`p-2 rounded-full transition-all duration-300 ${
+            className={`p-1.5 rounded-full transition-all duration-300 ${
               isAutoPlaying
                 ? 'bg-orange-500 text-white'
                 : 'bg-gray-200 text-gray-600 hover:bg-orange-100'
             }`}
             title={isAutoPlaying ? 'Arrêter l\'auto-play (A)' : 'Démarrer l\'auto-play (A)'}
           >
-            <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+            <svg className="w-3 h-3 sm:w-4 sm:h-4" fill="currentColor" viewBox="0 0 20 20">
               {isAutoPlaying ? (
                 <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zM7 8a1 1 0 012 0v4a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v4a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" />
               ) : (
@@ -176,8 +176,8 @@ export default function DemoPage() {
             </svg>
           </motion.button>
 
-          {/* Indicateurs d'étapes */}
-          <div className="flex items-center gap-1">
+          {/* Indicateurs d'étapes - Simplifiés sur mobile */}
+          <div className="hidden sm:flex items-center gap-1">
             {demoSteps.map((step, index) => (
               <motion.button
                 key={step.id}
@@ -196,7 +196,7 @@ export default function DemoPage() {
             ))}
           </div>
 
-          {/* Contrôles de navigation */}
+          {/* Contrôles de navigation - Simplifiés sur mobile */}
           <div className="flex items-center gap-1">
             <motion.button
               whileHover={{ scale: 1.05 }}
@@ -210,13 +210,13 @@ export default function DemoPage() {
               }`}
               title="Étape précédente (←)"
             >
-              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+              <svg className="w-3 h-3 sm:w-4 sm:h-4" fill="currentColor" viewBox="0 0 20 20">
                 <path fillRule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clipRule="evenodd" />
               </svg>
             </motion.button>
 
-            <span className="text-xs font-medium px-2">
-              {currentStep + 1} / {demoSteps.length}
+            <span className="text-xs font-medium px-1 sm:px-2">
+              {currentStep + 1}/{demoSteps.length}
             </span>
 
             <motion.button
@@ -231,7 +231,7 @@ export default function DemoPage() {
               }`}
               title="Étape suivante (→)"
             >
-              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+              <svg className="w-3 h-3 sm:w-4 sm:h-4" fill="currentColor" viewBox="0 0 20 20">
                 <path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd" />
               </svg>
             </motion.button>
@@ -259,12 +259,12 @@ export default function DemoPage() {
         </motion.div>
       </AnimatePresence>
 
-      {/* Indicateur de progression */}
+      {/* Indicateur de progression - Supprimé sur mobile */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1 }}
-        className="fixed bottom-6 left-6 z-50"
+        className="hidden sm:block fixed bottom-6 left-6 z-50"
       >
         <div className="px-4 py-2 rounded-full backdrop-blur-md border bg-white/80 border-gray-200 text-gray-800">
           <div className="flex items-center gap-2 text-sm">
@@ -282,12 +282,12 @@ export default function DemoPage() {
         </div>
       </motion.div>
 
-      {/* Raccourcis clavier */}
+      {/* Raccourcis clavier - Supprimé sur mobile */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 2 }}
-        className="fixed bottom-6 right-6 z-50"
+        className="hidden sm:block fixed bottom-6 right-6 z-50"
       >
         <div className="px-3 py-2 rounded-lg backdrop-blur-md border text-xs bg-white/80 border-gray-200 text-gray-600">
           <div className="space-y-1">
